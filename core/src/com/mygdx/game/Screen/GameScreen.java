@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
 import com.mygdx.game.Characters.MovingImageActor;
@@ -29,12 +30,14 @@ public class GameScreen implements Screen{
     SpriteBatch batch;
     ShapeRenderer renderer;
     ArrayList<Actor> entities = new ArrayList<>();
+    Viewport viewport;
 
     public GameScreen(){
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(screenWidth,screenHeight);
-        this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, camera));
+        this.camera = new OrthographicCamera(screenWidth,screenHeight);
+        this.viewport = new StretchViewport(screenWidth, screenHeight,camera);
+        this.stage = new Stage(viewport);
 
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
@@ -97,7 +100,8 @@ public class GameScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         // TODO Auto-generated method stub
-        
+        stage.getViewport().update(width, height);
+        camera.update(); 
     }
 
     @Override
