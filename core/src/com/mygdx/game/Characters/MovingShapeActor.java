@@ -1,7 +1,6 @@
 package com.mygdx.game.Characters;
 
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -126,8 +125,8 @@ public class MovingShapeActor extends Actor{
     }
 
     public boolean exceedingBorder(){
-        float maxX = Gdx.graphics.getWidth() - this.getWidth();
-        float maxY = Gdx.graphics.getHeight() - this.getHeight();
+        float maxX = this.getStage().getViewport().getWorldWidth() - this.getWidth();
+        float maxY = this.getStage().getViewport().getWorldHeight() - this.getHeight();
         if(this.getX() > maxX || this.getY() > maxY || this.getX() < 0 || this.getY() < 0){
             return true;
         }
@@ -135,8 +134,8 @@ public class MovingShapeActor extends Actor{
     }
 
     public void correctMovement(){
-        float maxX = Gdx.graphics.getWidth() - this.getWidth();
-        float maxY = Gdx.graphics.getHeight() - this.getHeight();
+        float maxX = this.getStage().getViewport().getWorldWidth() - this.getWidth();
+        float maxY = this.getStage().getViewport().getWorldHeight() - this.getHeight();
         this.setX(Math.min(maxX, Math.max(this.getX(), 0)));
         this.setY(Math.min(maxY, Math.max(this.getY(), 0)));
     }
