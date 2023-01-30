@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
+import com.mygdx.game.Characters.CollidableActor;
 import com.mygdx.game.Characters.MovingImageActor;
 import com.mygdx.game.Characters.MovingShapeActor;
 import com.mygdx.game.Characters.Pen;
@@ -51,11 +52,11 @@ public class GameScreen implements Screen{
         Ball ball1 = new Ball(this.renderer, 20.0f, Color.RED, c1);
         // faster moving ball
         Controls c2 = new Controls(Input.Keys.E, Input.Keys.W, Input.Keys.Q, Input.Keys.R);
-        Ball ball2 = new Ball(this.renderer, 20.0f, 0, Gdx.graphics.getHeight(), Color.YELLOW, 20,  c2);
+        Ball ball2 = new Ball(this.renderer, 20.0f, 0, Gdx.graphics.getHeight(), Color.YELLOW, 200,  c2);
 
         // medium moving pen
         Controls c3 = new Controls(Input.Keys.O, Input.Keys.I, Input.Keys.U, Input.Keys.P);
-        Pen pen1 = new Pen(80, 80, 10, c3);
+        Pen pen1 = new Pen(80, 80,200 ,0,100, c3);
 
         // default controls car
         Car car1 = new Car(80, 80);
@@ -71,6 +72,60 @@ public class GameScreen implements Screen{
 
     }
 
+    private void governCollisions(){
+
+        ArrayList<CollidableActor> collidables = new ArrayList<>();
+        for(Actor actor:entities){
+            if(actor instanceof CollidableActor){
+                collidables.add((CollidableActor)actor);
+            }
+        }
+        for(CollidableActor subject: collidables){
+            for(CollidableActor collidableActor: collidables){
+                if (subject.collidesWith(collidableActor)){
+                    subject.handleCollision(collidableActor);
+                }
+            }
+        }
+    }
+
+
+    public void governBorders(){
+        for(Actor actor:entities){
+            if (exceedingBorder(actor)){
+                correctMovement(actor);
+            }
+        }
+    }
+
+    // determine if actors exceed game bounds
+    public boolean exceedingBorder(Actor actor){
+        float maxX = stage.getViewport().getWorldWidth() - actor.getWidth();
+        float maxY = stage.getViewport().getWorldHeight() - actor.getHeight();
+        if(actor instanceof Ball){
+            // specially handle for circles as x starts from middle
+            maxX = stage.getViewport().getWorldWidth() - actor.getWidth()*2;
+            maxY = stage.getViewport().getWorldHeight() - actor.getHeight()*2;
+        }
+        if(actor.getX() > maxX || actor.getY() > maxY || actor.getX() < 0 || actor.getY() < 0){
+            return true;
+        }
+        return false;
+    }
+
+    public void correctMovement(Actor actor){
+        float maxX = stage.getViewport().getWorldWidth() - actor.getWidth();
+        float maxY = stage.getViewport().getWorldHeight() - actor.getHeight();
+        if(actor instanceof Ball){
+            // specially handle for circles as x starts from middle
+            maxX = stage.getViewport().getWorldWidth() - actor.getWidth()*2;
+            maxY = stage.getViewport().getWorldHeight() - actor.getHeight()*2;
+        }
+        actor.setX(Math.min(maxX, Math.max(actor.getX(), 0)));
+        actor.setY(Math.min(maxY, Math.max(actor.getY(), 0)));
+    }
+
+
     @Override
     public void show() {
         // TODO Auto-generated method stub
@@ -83,18 +138,19 @@ public class GameScreen implements Screen{
         ScreenUtils.clear(169, 169, 169, 0);
 
         for (Actor actor: entities){
-            Class c = actor.getClass().getSuperclass();
-            if (c == MovingImageActor.class){
+            if (actor instanceof MovingImageActor){
                 MovingImageActor movingImageActor = (MovingImageActor) actor;
                 movingImageActor.processKeyStrokes();
-            } else if (c == MovingShapeActor.class){
+            } else if (actor instanceof MovingShapeActor){
                 MovingShapeActor movingShapeActor = (MovingShapeActor) actor;
                 movingShapeActor.processKeyStrokes();
-            }
+            } 
         }
 
-        stage.draw();
         stage.act(delta);
+        governBorders();
+        governCollisions();
+        stage.draw();
     }
 
     @Override

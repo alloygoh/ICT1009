@@ -1,6 +1,8 @@
 package com.mygdx.game.Characters;
 
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Utils.Controls;
+import com.mygdx.game.Utils.Direction;
 
 public class MovingShapeActor extends Actor{
     String shape;
@@ -16,23 +19,24 @@ public class MovingShapeActor extends Actor{
     Color color;
     float movementSpeed;
     Controls control;
+    ArrayList<Direction> directions = new ArrayList<>();
 
     ShapeRenderer renderer;
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, Color color){
-        this(renderer, shape, width, height, 0, 0, color, 1, Controls.Presets.DEFAULT);
+        this(renderer, shape, width, height, 0, 0, color, 100, Controls.Presets.DEFAULT);
     }
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, Color color, Controls control){
-        this(renderer, shape, width, height, 0, 0, color, 1, control);
+        this(renderer, shape, width, height, 0, 0, color, 100, control);
     }
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, float x, float y, Color color){
-        this(renderer, shape, width, height, x, y, color, 1, Controls.Presets.DEFAULT);
+        this(renderer, shape, width, height, x, y, color, 100, Controls.Presets.DEFAULT);
     }
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, float x, float y, Color color, Controls control){
-        this(renderer, shape, width, height, x, y, color, 1, control);
+        this(renderer, shape, width, height, x, y, color, 100, control);
     }
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, float x, float y, Color color, float movementSpeed, Controls control){
@@ -52,8 +56,6 @@ public class MovingShapeActor extends Actor{
     public void draw(Batch batch, float parentAlpha){
         batch.end();
 
-        // Vector2 coords = new Vector2(getX(),getY());
-        // renderer.setProjectionMatrix(batch.getProjectionMatrix());
         renderer.setAutoShapeType(true);
         renderer.begin(ShapeType.Filled);
 
@@ -81,63 +83,47 @@ public class MovingShapeActor extends Actor{
     }
 
     public void drop(float delta){
-        this.setY(this.getY() - delta*movementSpeed*10);
+        if(this.getY() <= 0){
+            return;
+        }
+        this.setY(this.getY() - delta*(movementSpeed/2));
     }
 
     public void moveUp(){
-        this.setY(this.getY() + this.movementSpeed);
+        this.setY(this.getY() + this.movementSpeed*Gdx.graphics.getDeltaTime());
     }
 
     public void moveDown(){
-        this.setY(this.getY() - this.movementSpeed);
+        this.setY(this.getY() - this.movementSpeed*Gdx.graphics.getDeltaTime());
     }
 
     public void moveLeft(){
-        this.setX(this.getX() - this.movementSpeed);
+        this.setX(this.getX() - this.movementSpeed*Gdx.graphics.getDeltaTime());
     }
 
     public void moveRight(){
-        this.setX(this.getX() + this.movementSpeed);
+        this.setX(this.getX() + this.movementSpeed*Gdx.graphics.getDeltaTime());
     }
 
-    public void processKeyStrokes(){
-        if (Gdx.input.isKeyPressed(control.getUp())){
+    public void processKeyStrokes() {
+        if (Gdx.input.isKeyPressed(control.getUp())) {
             this.moveUp();
+            this.directions.add(Direction.UP);
         }
 
-        if (Gdx.input.isKeyPressed(control.getDown())){
+        if (Gdx.input.isKeyPressed(control.getDown())) {
             this.moveDown();
+            this.directions.add(Direction.DOWN);
         }
 
-        if (Gdx.input.isKeyPressed(control.getLeft())){
+        if (Gdx.input.isKeyPressed(control.getLeft())) {
             this.moveLeft();
+            this.directions.add(Direction.LEFT);
         }
 
-        if (Gdx.input.isKeyPressed(control.getRight())){
+        if (Gdx.input.isKeyPressed(control.getRight())) {
             this.moveRight();
+            this.directions.add(Direction.RIGHT);
         }
-
-        // detects if collided with border
-        if (exceedingBorder()){
-            correctMovement();
-        }
-
     }
-
-    public boolean exceedingBorder(){
-        float maxX = this.getStage().getViewport().getWorldWidth() - this.getWidth();
-        float maxY = this.getStage().getViewport().getWorldHeight() - this.getHeight();
-        if(this.getX() > maxX || this.getY() > maxY || this.getX() < 0 || this.getY() < 0){
-            return true;
-        }
-        return false;
-    }
-
-    public void correctMovement(){
-        float maxX = this.getStage().getViewport().getWorldWidth() - this.getWidth();
-        float maxY = this.getStage().getViewport().getWorldHeight() - this.getHeight();
-        this.setX(Math.min(maxX, Math.max(this.getX(), 0)));
-        this.setY(Math.min(maxY, Math.max(this.getY(), 0)));
-    }
-
 }
