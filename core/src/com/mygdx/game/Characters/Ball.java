@@ -9,11 +9,11 @@ public class Ball extends MovingShapeActor{
     ShapeRenderer renderer;
 
     public Ball(ShapeRenderer renderer, float radius, Color color){
-        this(renderer, radius, 0, 0, color, 1, Controls.Presets.DEFAULT);
+        this(renderer, radius, 0, 0, color, 100, Controls.Presets.DEFAULT);
     }
 
     public Ball(ShapeRenderer renderer, float radius, Color color, Controls control){
-        this(renderer, radius, 0, 0, color, 1, control);
+        this(renderer, radius, 0, 0, color, 100, control);
     }
 
     public Ball(ShapeRenderer renderer, float radius, Color color, float movementSpeed, Controls control){
@@ -21,11 +21,11 @@ public class Ball extends MovingShapeActor{
     }
 
     public Ball(ShapeRenderer renderer, float radius, float x, float y, Color color){
-        this(renderer, radius, x, y, color, 1, Controls.Presets.DEFAULT);
+        this(renderer, radius, x, y, color, 100, Controls.Presets.DEFAULT);
     }
 
     public Ball(ShapeRenderer renderer, float radius, float x, float y, Color color, Controls control){
-        this(renderer, radius, x, y, color, 1, control);
+        this(renderer, radius, x, y, color, 100, control);
     }
 
     public Ball(ShapeRenderer renderer, float radius, float x, float y, Color color, float movementSpeed){
