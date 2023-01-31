@@ -75,7 +75,7 @@ public class MovingShapeActor extends Actor{
 
     @Override
     public void act(float delta){
-        if (this.getClass() == (Class)Ball.class){
+        if (this instanceof Ball){
             drop(delta);
             return;
         }

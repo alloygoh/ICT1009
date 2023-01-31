@@ -54,7 +54,7 @@ public class MovingImageActor extends Actor {
         texture.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
-    public ArrayList getDirections(){
+    public ArrayList<Direction> getDirections(){
         return this.directions;
     }
 
