@@ -6,6 +6,7 @@ import java.util.Arrays;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -33,7 +34,7 @@ public class GameScreen implements Screen{
     ArrayList<Actor> entities = new ArrayList<>();
     Viewport viewport;
 
-    public GameScreen(){
+    public GameScreen(AssetManager assetManager){
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera(screenWidth,screenHeight);

@@ -3,6 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,8 +24,9 @@ public class MainScreen implements Screen {
     OrthographicCamera camera;
     SpriteBatch batch;
     Game game;
+    AssetManager assetManager;
 
-    public MainScreen(Game game) {
+    public MainScreen(Game game, AssetManager assetManager) {
         this.game = game;
         this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
@@ -33,6 +35,7 @@ public class MainScreen implements Screen {
         float screenHeight = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera(screenWidth, screenHeight);
         this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
+        this.assetManager = assetManager;
         camera.update();
     }
 
@@ -57,7 +60,7 @@ public class MainScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(assetManager));
             }
         });
 

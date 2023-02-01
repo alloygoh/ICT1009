@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
+import com.mygdx.game.Screen.LoadingScreen;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 
 public class Car extends CollidableActor {
-
     static TextureRegionDrawable drawable = new TextureRegionDrawable(
-            new TextureRegion(new Texture(Gdx.files.internal("car.png"))));
-
+            new TextureRegion((LoadingScreen.assetManager.get("assets/car.png", Texture.class))));
+//            new TextureRegion(new Texture(Gdx.files.internal("car.png"))));
     public Car(float width, float height) {
         this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
     }
