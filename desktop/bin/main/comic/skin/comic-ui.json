@@ -72,16 +72,16 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: font
-		fontColor: black
+		fontColor: white
 	}
 	narration: {
 		font: font
-		fontColor: black
+		fontColor: white
 		background: narration-box
 	}
 	big: {
 		font: button
-		fontColor: black
+		fontColor: white
 	}
 	title: {
 		font: title
@@ -89,12 +89,12 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	}
 	alt: {
 		font: font
-		fontColor: black
+		fontColor: white
 		background: window
 	}
 	half-tone: {
 		font: button
-		fontColor: black
+		fontColor: white
 		background: half-tone-box
 	}
 }
