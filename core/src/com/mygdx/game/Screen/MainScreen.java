@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Manager.SettingsManager;
 
 public class MainScreen implements Screen {
 
@@ -23,11 +24,13 @@ public class MainScreen implements Screen {
     OrthographicCamera camera;
     SpriteBatch batch;
     Game game;
+    SettingsManager settingsManager;
 
-    public MainScreen(Game game) {
+    public MainScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
         this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
+        this.settingsManager = settingsManager;
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -57,7 +60,7 @@ public class MainScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(settingsManager));
             }
         });
 

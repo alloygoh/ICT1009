@@ -95,7 +95,7 @@ public class SettingsScreen implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                game.setScreen(new MainScreen(game));
+                game.setScreen(new MainScreen(game, settingsManager));
             }
         });
 
