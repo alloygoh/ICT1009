@@ -17,12 +17,12 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class MainScreen implements Screen {
 
-    TextureAtlas atlas;
-    Skin skin;
-    Stage stage;
-    OrthographicCamera camera;
-    SpriteBatch batch;
-    Game game;
+    private TextureAtlas atlas;
+    private Skin skin;
+    private Stage stage;
+    private OrthographicCamera camera;
+    private SpriteBatch batch;
+    private Game game;
 
     public MainScreen(Game game) {
         this.game = game;

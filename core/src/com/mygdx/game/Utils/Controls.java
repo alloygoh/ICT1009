@@ -4,10 +4,10 @@ import com.badlogic.gdx.Input;
 
 // allow custom controls
 public class Controls {
-    int up;
-    int down;
-    int left;
-    int right;
+    private int up;
+    private int down;
+    private int left;
+    private int right;
 
     public Controls(int up, int down, int left, int right){
         this.up = up;
