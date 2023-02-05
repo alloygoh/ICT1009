@@ -26,12 +26,12 @@ import com.mygdx.game.Utils.Controls;
 
 public class GameScreen implements Screen{
 
-    Stage stage;
-    OrthographicCamera camera;
-    SpriteBatch batch;
-    ShapeRenderer renderer;
-    ArrayList<Actor> entities = new ArrayList<>();
-    Viewport viewport;
+    private Stage stage;
+    private OrthographicCamera camera;
+    private SpriteBatch batch;
+    private ShapeRenderer renderer;
+    private ArrayList<Actor> entities = new ArrayList<>();
+    private Viewport viewport;
 
     public GameScreen(){
         float screenWidth = Gdx.graphics.getWidth();
