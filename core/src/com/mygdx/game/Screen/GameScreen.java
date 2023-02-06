@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -59,8 +57,8 @@ public class GameScreen implements Screen{
 
         // medium moving pen
         // Controls c3 = new Controls(Input.Keys.O, Input.Keys.I, Input.Keys.U, Input.Keys.P);
-        Controls p1 = settingsManager.getControlOf(1);
-        Controls p2 = settingsManager.getControlOf(2);
+        Controls p1 = settingsManager.getControlSettings().getControlOf(1);
+        Controls p2 = settingsManager.getControlSettings().getControlOf(2);
         Pen pen1 = new Pen(80, 80,200 ,0,100, p1);
 
         // default controls car
