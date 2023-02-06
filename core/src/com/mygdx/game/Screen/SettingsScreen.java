@@ -72,8 +72,8 @@ public class SettingsScreen implements Screen {
         Label p2LeftLabel = new Label("Left Key",skin);
         Label p2RightLabel = new Label("Right Key",skin);
 
-        final Controls player1Controls = settingsManager.getControlOf(1);
-        final Controls player2Controls = settingsManager.getControlOf(2);
+        final Controls player1Controls = settingsManager.getControlSettings().getControlOf(1);
+        final Controls player2Controls = settingsManager.getControlSettings().getControlOf(2);
 
         // button creation
         final TextButton player1UpButton = new TextButton(Input.Keys.toString(player1Controls.getUp()), skin);
@@ -88,13 +88,17 @@ public class SettingsScreen implements Screen {
 
         TextButton backButton = new TextButton("Back", skin);
 
-        final Dialog configDialog = new Dialog("Configuration", skin);
-        configDialog.add("Enter new prefered key!");
+        final Dialog configDialog = new Dialog("Configuration", skin,"dialog");
+        configDialog.row().expandY();
+        configDialog.add(new Label("Enter desired key!", skin,"big")).height(400);
+        configDialog.row().expandY();
+        configDialog.setColor(0,0,0,0);
 
         // add listeners to buttons
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
+                settingsManager.writeToConfig();
                 game.setScreen(new MainScreen(game, settingsManager));
             }
         });

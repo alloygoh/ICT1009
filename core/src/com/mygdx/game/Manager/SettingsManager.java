@@ -5,31 +5,48 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.print.attribute.HashAttributeSet;
+
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Input;
+import com.mygdx.game.Interfaces.iSettings;
+import com.mygdx.game.Settings.ControlSettings;
 import com.mygdx.game.Utils.Controls;
 
 public class SettingsManager{
 
-    private HashMap<Integer, Controls> settingsMap;
+    private ControlSettings controlSettings;
+    private ArrayList<iSettings> masterSettings;
 
     public SettingsManager(Game game) {
-        this.settingsMap = new HashMap<>();
+        masterSettings = new ArrayList<iSettings>();
+
+        this.controlSettings = new ControlSettings();
+
+        masterSettings.add(controlSettings);
     }
 
-    public void addControlSetting(int index, Controls control){
-        settingsMap.put(index, control);
+    public ControlSettings getControlSettings() {
+        return controlSettings;
     }
 
-    public void changeControlSetting(int index, Controls controls){
-        settingsMap.remove(index);
-        settingsMap.put(index, controls);
+    private void populateSettings(){
+        this.controlSettings = new ControlSettings((HashMap<Integer, Controls>)masterSettings.get(0));
+
+        // re-add into masterSettings with proper types to allow for proper serialization
+        masterSettings.clear();
+        masterSettings.add(controlSettings);
     }
 
-    public Controls getControlOf(int index){
-        return settingsMap.get(index);
+    private ArrayList serializeAllSettings(){
+        ArrayList serializedData = new ArrayList<>();
+        for(iSettings data: masterSettings){
+            serializedData.add(data.getSerializableValue());
+        }
+        return serializedData;
     }
 
     public void readFromConfig(){
@@ -37,15 +54,13 @@ public class SettingsManager{
         try{
             inputStream = new FileInputStream("settings.config");
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            settingsMap = (HashMap<Integer,Controls>) objectInputStream.readObject();
+            masterSettings = (ArrayList)objectInputStream.readObject();
             objectInputStream.close();
+            populateSettings();
         } catch(ClassNotFoundException| IOException e){
             // no previous config or error reading config
             // populate with default
-            Controls player1Controls = new Controls(Input.Keys.UP,Input.Keys.DOWN ,Input.Keys.LEFT ,Input.Keys.RIGHT);
-            Controls player2Controls = new Controls(Input.Keys.W,Input.Keys.S ,Input.Keys.A ,Input.Keys.D);
-            settingsMap.put(1, player1Controls);
-            settingsMap.put(2, player2Controls);
+            controlSettings.initDefaultControls();
         }
         return;
     }
@@ -55,7 +70,7 @@ public class SettingsManager{
         try{
             outputStream = new FileOutputStream("settings.config");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(settingsMap);
+            objectOutputStream.writeObject(serializeAllSettings());
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch(IOException e){

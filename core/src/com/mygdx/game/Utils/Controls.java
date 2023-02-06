@@ -1,9 +1,11 @@
 package com.mygdx.game.Utils;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Input;
 
 // allow custom controls
-public class Controls {
+public class Controls implements Serializable{
     private int up;
     private int down;
     private int left;
