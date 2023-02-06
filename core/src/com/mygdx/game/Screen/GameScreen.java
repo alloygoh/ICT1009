@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -51,23 +51,20 @@ public class GameScreen implements Screen{
     }
 
     private void initStage(){
-        // Controls c1 = new Controls(Input.Keys.K, Input.Keys.J, Input.Keys.H, Input.Keys.L);
-        // Ball ball1 = new Ball(this.renderer, 20.0f, Color.RED, c1);
+        Controls c1 = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
+        Ball ball1 = new Ball(this.renderer, 20.0f, Color.RED, c1);
         // faster moving ball
         // Controls c2 = new Controls(Input.Keys.E, Input.Keys.W, Input.Keys.Q, Input.Keys.R);
         // Ball ball2 = new Ball(this.renderer, 20.0f, 0, Gdx.graphics.getHeight(), Color.YELLOW, 200,  c2);
 
         // medium moving pen
-        // Controls c3 = new Controls(Input.Keys.O, Input.Keys.I, Input.Keys.U, Input.Keys.P);
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
         Controls p2 = settingsManager.getControlSettings().getControlOf(2);
         Pen pen1 = new Pen(80, 80,200 ,0,100, p1);
-
-        // default controls car
         Car car1 = new Car(80, 80,p2);
 
         // entities.addAll(Arrays.asList(ball1, ball2, car1, pen1));
-        entities.addAll(Arrays.asList(car1, pen1));
+        entities.addAll(Arrays.asList(car1, pen1, ball1));
 
         for(Actor actor: entities){
             stage.addActor(actor);
@@ -186,8 +183,9 @@ public class GameScreen implements Screen{
 
     @Override
     public void dispose() {
-    //    renderer.dispose(); 
-    //    batch.dispose();
+       renderer.dispose(); 
+       batch.dispose();
+       stage.dispose();
     }
     
 }

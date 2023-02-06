@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -21,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
+import com.mygdx.game.Utils.Globals;
 
 public class SettingsScreen implements Screen {
 
@@ -28,14 +28,13 @@ public class SettingsScreen implements Screen {
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
-    SpriteBatch batch;
     Game game;
     SettingsManager settingsManager;
 
     public SettingsScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
-        this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
-        this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
+        this.atlas = Globals.getAssetManager().get("comic/skin/comic-ui.atlas", TextureAtlas.class);
+        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
         this.settingsManager = settingsManager;
 
         float screenWidth = Gdx.graphics.getWidth();
@@ -311,8 +310,6 @@ public class SettingsScreen implements Screen {
         camera.setToOrtho(false, width, height);
         stage.getViewport().setWorldSize(width, height);
         stage.getViewport().update(width, height, true);
-        // camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2,0);
-        // camera.update();
     }
 
     @Override
@@ -335,8 +332,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void dispose() {
-        skin.dispose();
-        atlas.dispose();
+        stage.dispose();
     }
 
 }
