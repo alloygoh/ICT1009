@@ -18,8 +18,12 @@ public class Leaderboard {
         return this.entries.toString();
     }
 
-    public LeaderboardEntry getLeaderboardEntryOf(int index){
-        return this.entries.get(index);
+    public LeaderboardEntry getLeaderboardEntryOfPosition(int position){
+        if (1 <= position && position <= 10){
+            return this.entries.get(position-1);
+        }
+        // return last position if any other number
+        return this.entries.get(MAX_ENTRIES-1);
     }
 
     public void reviseScoreboard(LeaderboardEntry entry){
