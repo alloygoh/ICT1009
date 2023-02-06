@@ -53,6 +53,7 @@ public class MainScreen implements Screen {
         // button creation
         TextButton playButton = new TextButton("Start", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
+        TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         // add listeners to buttons
@@ -61,6 +62,13 @@ public class MainScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
                 game.setScreen(new GameScreen(settingsManager));
+            }
+        });
+
+        settingsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y){
+                game.setScreen(new SettingsScreen(game, settingsManager));
             }
         });
 
@@ -76,6 +84,8 @@ public class MainScreen implements Screen {
         mainTable.add(playButton);
         mainTable.row();
         mainTable.add(instructionsButton);
+        mainTable.row();
+        mainTable.add(settingsButton);
         mainTable.row();
         mainTable.add(exitButton);
         stage.addActor(mainTable);

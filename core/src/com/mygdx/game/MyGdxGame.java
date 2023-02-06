@@ -5,7 +5,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Screen.MainScreen;
-import com.mygdx.game.Screen.SettingsScreen;
 
 public class MyGdxGame extends Game {
 	
@@ -16,7 +15,7 @@ public class MyGdxGame extends Game {
 	public void create () {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		initAssets();
-		this.setScreen(new SettingsScreen(this,this.settingsManager));	
+		this.setScreen(new MainScreen(this, settingsManager));	
 	}
 
 	@Override
