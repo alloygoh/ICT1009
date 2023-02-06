@@ -14,20 +14,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Manager.SettingsManager;
 
 public class MainScreen implements Screen {
 
-    private TextureAtlas atlas;
-    private Skin skin;
-    private Stage stage;
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
-    private Game game;
+    TextureAtlas atlas;
+    Skin skin;
+    Stage stage;
+    OrthographicCamera camera;
+    SpriteBatch batch;
+    Game game;
+    SettingsManager settingsManager;
 
-    public MainScreen(Game game) {
+    public MainScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
         this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
+        this.settingsManager = settingsManager;
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -50,6 +53,7 @@ public class MainScreen implements Screen {
         // button creation
         TextButton playButton = new TextButton("Start", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
+        TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         // add listeners to buttons
@@ -57,7 +61,14 @@ public class MainScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(settingsManager));
+            }
+        });
+
+        settingsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y){
+                game.setScreen(new SettingsScreen(game, settingsManager));
             }
         });
 
@@ -73,6 +84,8 @@ public class MainScreen implements Screen {
         mainTable.add(playButton);
         mainTable.row();
         mainTable.add(instructionsButton);
+        mainTable.row();
+        mainTable.add(settingsButton);
         mainTable.row();
         mainTable.add(exitButton);
         stage.addActor(mainTable);
