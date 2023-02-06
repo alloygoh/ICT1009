@@ -18,6 +18,10 @@ public class Leaderboard {
         return this.entries.toString();
     }
 
+    public LeaderboardEntry getLeaderboardEntryOf(int index){
+        return this.entries.get(index);
+    }
+
     public void reviseScoreboard(LeaderboardEntry entry){
         if(this.entries.size() < MAX_ENTRIES){
             this.entries.add(entry);

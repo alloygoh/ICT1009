@@ -15,6 +15,10 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry>{
         return this.score;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
     @Override
     public int compareTo(LeaderboardEntry o) { 
         return  o.getScore() - this.getScore();
