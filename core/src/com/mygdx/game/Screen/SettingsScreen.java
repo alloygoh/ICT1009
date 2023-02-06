@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,7 +23,6 @@ import com.mygdx.game.Utils.Globals;
 
 public class SettingsScreen implements Screen {
 
-    TextureAtlas atlas;
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
@@ -33,7 +31,6 @@ public class SettingsScreen implements Screen {
 
     public SettingsScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
-        this.atlas = Globals.getAssetManager().get("comic/skin/comic-ui.atlas", TextureAtlas.class);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
         this.settingsManager = settingsManager;
 
@@ -95,7 +92,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 settingsManager.writeToConfig();
-                game.setScreen(new MainScreen(game, settingsManager));
+                game.setScreen(new MainScreen(game));
             }
         });
 
