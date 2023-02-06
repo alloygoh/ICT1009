@@ -208,6 +208,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		background: window
 		titleFont: font
 	}
+	dialog: {
+		background: window
+		titleFont: title
+	}
 	alt: {
 		background: narration-box
 		titleFont: font
