@@ -3,38 +3,45 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.mygdx.game.Manager.SettingsManager;
-import com.mygdx.game.Utils.Globals;
+import com.mygdx.game.Leaderboard.Leaderboard;
+import com.mygdx.game.Leaderboard.LeaderboardEntry;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class MainScreen implements Screen {
-
+public class LeaderboardScreen implements Screen {
+    TextureAtlas atlas;
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
     SpriteBatch batch;
     Game game;
-    SettingsManager settingsManager;
 
-    public MainScreen(Game game, SettingsManager settingsManager) {
+    public LeaderboardScreen(Game game){
         this.game = game;
-        this.settingsManager = settingsManager;
-        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
+        this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
+        this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera(screenWidth, screenHeight);
         this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
         camera.update();
+
+        
     }
 
     @Override
@@ -46,59 +53,59 @@ public class MainScreen implements Screen {
         // set table to fill stage
         mainTable.setFillParent(true); 
         // set alignment of contents in table
-        mainTable.top();
-
-        // button creation
-        TextButton playButton = new TextButton("Start", skin);
-        TextButton scoreButton = new TextButton("Leaderboard", skin);
-        TextButton instructionsButton = new TextButton("Instructions", skin);
-        TextButton settingsButton = new TextButton("Settings", skin);
-        TextButton exitButton = new TextButton("Exit", skin);
-
-        // add listeners to buttons
-        // create new game screen if clicked
-        playButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new GameScreen(settingsManager));
-            }
-        });
-
-        settingsButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new SettingsScreen(game, settingsManager));
-            }
-        });
-        // enter leaderboard screen if clicked
-        scoreButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new LeaderboardScreen(game));
-            }
-        });
+        mainTable.bottom();
         
-        // exit when exit button is clicked
-        exitButton.addListener(new ClickListener(){
+        // button creation
+        TextButton backButton = new TextButton("Go Back", skin);
+
+        Leaderboard scoreBoard = new Leaderboard();
+
+        // Mock Samples for testing
+        LeaderboardEntry entry1 = new LeaderboardEntry("John", 50);
+        LeaderboardEntry entry2 = new LeaderboardEntry("Bobby", 30);
+        LeaderboardEntry entry3 = new LeaderboardEntry("Gabe", 60);
+        LeaderboardEntry entry4 = new LeaderboardEntry("Daniel", 53);
+        LeaderboardEntry entry5 = new LeaderboardEntry("Sammy", 80);
+        LeaderboardEntry entry6 = new LeaderboardEntry("Dixie Normas",100);
+        
+        scoreBoard.reviseScoreboard(entry1);
+        scoreBoard.reviseScoreboard(entry2);
+        scoreBoard.reviseScoreboard(entry3);
+        scoreBoard.reviseScoreboard(entry4);
+        scoreBoard.reviseScoreboard(entry5);
+        scoreBoard.reviseScoreboard(entry6);
+        // End of mock samples and code
+
+        Table scoreTable = new Table(skin);
+        scoreTable.setFillParent(true);
+        scoreTable.top();
+        // add listeners to buttons
+        // go to main screen if clicked
+        backButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                Gdx.app.exit();
+                game.setScreen(new MainScreen(game));
             }
         });
 
         // add buttons to table
-        mainTable.add(playButton);
+        for (int i = 1; i < scoreBoard.size()+1; i++)
+        {
+        TextField nameField = new TextField((String.valueOf(i) + ". " + scoreBoard.getLeaderboardEntryOfPosition(i).getName()), skin);
+        TextField scoreField = new TextField(String.valueOf(scoreBoard.getLeaderboardEntryOfPosition(i).getScore()), skin);
+        scoreTable.add(nameField);
+        scoreTable.add(scoreField);
+        scoreTable.row();
+        }
+
         mainTable.row();
-        mainTable.add(scoreButton);
-        mainTable.row();
-        mainTable.add(instructionsButton);
-        mainTable.row();
-        mainTable.add(settingsButton);
-        mainTable.row();
-        mainTable.add(exitButton);
+        mainTable.add(backButton);
+
+
+        stage.addActor(scoreTable);
         stage.addActor(mainTable);
     }
-
+    
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
@@ -135,8 +142,8 @@ public class MainScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        stage.dispose();
+        skin.dispose();
+        atlas.dispose();
     }
 
 }
