@@ -32,7 +32,6 @@ public class LeaderboardScreen implements Screen {
 
     public LeaderboardScreen(Game game){
         this.game = game;
-        this.batch = batch;
         this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
 
@@ -54,7 +53,7 @@ public class LeaderboardScreen implements Screen {
         // set table to fill stage
         mainTable.setFillParent(true); 
         // set alignment of contents in table
-        mainTable.center();
+        mainTable.bottom();
         
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
@@ -65,14 +64,18 @@ public class LeaderboardScreen implements Screen {
         LeaderboardEntry entry1 = new LeaderboardEntry("John", 50);
         LeaderboardEntry entry2 = new LeaderboardEntry("Bobby", 30);
         LeaderboardEntry entry3 = new LeaderboardEntry("Gabe", 60);
+        LeaderboardEntry entry4 = new LeaderboardEntry("Daniel", 53);
+        LeaderboardEntry entry5 = new LeaderboardEntry("Sammy", 80);
+        LeaderboardEntry entry6 = new LeaderboardEntry("Dixie Normas",100);
         
         scoreBoard.reviseScoreboard(entry1);
         scoreBoard.reviseScoreboard(entry2);
         scoreBoard.reviseScoreboard(entry3);
-        System.out.println(scoreBoard);
+        scoreBoard.reviseScoreboard(entry4);
+        scoreBoard.reviseScoreboard(entry5);
+        scoreBoard.reviseScoreboard(entry6);
         // End of mock samples and code
 
-        TextField scoreList = new TextField(scoreBoard.toString(), skin);
         Table scoreTable = new Table(skin);
         scoreTable.setFillParent(true);
         scoreTable.top();
@@ -86,9 +89,14 @@ public class LeaderboardScreen implements Screen {
         });
 
         // add buttons to table
-        scoreTable.add("Top 10 Scores");
+        for (int i = 1; i < scoreBoard.size()+1; i++)
+        {
+        TextField nameField = new TextField(scoreBoard.getLeaderboardEntryOfPosition(i).getName(), skin);
+        TextField scoreField = new TextField(String.valueOf(scoreBoard.getLeaderboardEntryOfPosition(i).getScore()), skin);
+        scoreTable.add(nameField);
+        scoreTable.add(scoreField);
         scoreTable.row();
-        scoreTable.add(scoreList);
+        }
 
         mainTable.row();
         mainTable.add(backButton);
@@ -97,15 +105,6 @@ public class LeaderboardScreen implements Screen {
         stage.addActor(scoreTable);
         stage.addActor(mainTable);
     }
-    
-
-    // BitmapFont font = new BitmapFont();
-
-    // public void draw(SpriteBatch batch, float parentAlpha){
-    //     font.setColor(238,130,238,1);
-    //     font.draw(batch,"Score", parentAlpha, parentAlpha);
-    //     System.out.println("Draw success");
-    // }
     
     @Override
     public void render(float delta) {

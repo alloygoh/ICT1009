@@ -18,6 +18,9 @@ public class Leaderboard {
         return this.entries.toString();
     }
 
+    public int size(){
+        return this.entries.size();
+    }
     public LeaderboardEntry getLeaderboardEntryOfPosition(int position){
         if (1 <= position && position <= 10){
             return this.entries.get(position-1);
