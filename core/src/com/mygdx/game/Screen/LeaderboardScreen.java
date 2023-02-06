@@ -3,13 +3,9 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -20,10 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Leaderboard.Leaderboard;
 import com.mygdx.game.Leaderboard.LeaderboardEntry;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Utils.Globals;
 
 public class LeaderboardScreen implements Screen {
-    TextureAtlas atlas;
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
@@ -32,16 +27,13 @@ public class LeaderboardScreen implements Screen {
 
     public LeaderboardScreen(Game game){
         this.game = game;
-        this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
-        this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
+        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera(screenWidth, screenHeight);
         this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
         camera.update();
-
-        
     }
 
     @Override
@@ -79,6 +71,7 @@ public class LeaderboardScreen implements Screen {
         Table scoreTable = new Table(skin);
         scoreTable.setFillParent(true);
         scoreTable.top();
+
         // add listeners to buttons
         // go to main screen if clicked
         backButton.addListener(new ClickListener(){
@@ -143,7 +136,7 @@ public class LeaderboardScreen implements Screen {
     @Override
     public void dispose() {
         skin.dispose();
-        atlas.dispose();
+        stage.dispose();
     }
 
 }

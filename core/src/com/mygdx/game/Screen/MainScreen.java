@@ -25,9 +25,9 @@ public class MainScreen implements Screen {
     Game game;
     SettingsManager settingsManager;
 
-    public MainScreen(Game game, SettingsManager settingsManager) {
+    public MainScreen(Game game) {
         this.game = game;
-        this.settingsManager = settingsManager;
+        this.settingsManager = Globals.getSettingsManager();
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
 
         float screenWidth = Gdx.graphics.getWidth();
