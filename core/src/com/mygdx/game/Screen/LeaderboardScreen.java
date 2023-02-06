@@ -91,7 +91,7 @@ public class LeaderboardScreen implements Screen {
         // add buttons to table
         for (int i = 1; i < scoreBoard.size()+1; i++)
         {
-        TextField nameField = new TextField(scoreBoard.getLeaderboardEntryOfPosition(i).getName(), skin);
+        TextField nameField = new TextField((String.valueOf(i) + ". " + scoreBoard.getLeaderboardEntryOfPosition(i).getName()), skin);
         TextField scoreField = new TextField(String.valueOf(scoreBoard.getLeaderboardEntryOfPosition(i).getScore()), skin);
         scoreTable.add(nameField);
         scoreTable.add(scoreField);
