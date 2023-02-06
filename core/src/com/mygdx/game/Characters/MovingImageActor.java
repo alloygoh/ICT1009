@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
+import com.mygdx.game.Utils.Globals;
 
 public class MovingImageActor extends Actor {
     float width;
@@ -16,7 +18,8 @@ public class MovingImageActor extends Actor {
     float y;
     float movementSpeed;
     Controls control;
-    ArrayList<Direction> directions = new ArrayList<>();
+    ArrayList<Direction> directions;
+    static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
 
     TextureRegionDrawable texture;
 
@@ -47,6 +50,7 @@ public class MovingImageActor extends Actor {
         this.setY(y);
         this.control = control;
         this.movementSpeed = movementSpeed;
+        this.directions = new ArrayList<>();
     }
 
     @Override

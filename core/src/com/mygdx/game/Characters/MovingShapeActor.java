@@ -19,7 +19,7 @@ public class MovingShapeActor extends Actor{
     Color color;
     float movementSpeed;
     Controls control;
-    ArrayList<Direction> directions = new ArrayList<>();
+    ArrayList<Direction> directions;
 
     ShapeRenderer renderer;
 
@@ -50,6 +50,7 @@ public class MovingShapeActor extends Actor{
         this.color = color;
         this.movementSpeed = movementSpeed;
         this.control = control;
+        this.directions = new ArrayList<>();
     }
 
     @Override

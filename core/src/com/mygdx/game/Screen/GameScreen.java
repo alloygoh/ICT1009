@@ -34,7 +34,7 @@ public class GameScreen implements Screen{
     ArrayList<Actor> entities = new ArrayList<>();
     Viewport viewport;
 
-    public GameScreen(AssetManager assetManager){
+    public GameScreen(){
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera(screenWidth,screenHeight);

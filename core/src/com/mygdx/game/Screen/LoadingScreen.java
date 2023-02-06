@@ -17,9 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Utils.Globals;
 
 public class LoadingScreen implements Screen {
-    public static AssetManager assetManager;
     Skin skin;
     Game game;
     ProgressBar progressBar;
@@ -27,34 +27,38 @@ public class LoadingScreen implements Screen {
     Stage stage;
     OrthographicCamera camera;
     Label loadingLabel;
-    public LoadingScreen(Game game) {
+    OnLoadListener onLoadListener;
+    AssetManager assetManager;
+
+    public interface OnLoadListener{
+        void onLoad();
+    }
+
+    public LoadingScreen(Game game, OnLoadListener onLoadListener) {
         this.game = game;
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         this.camera = new OrthographicCamera(screenWidth, screenHeight);
         this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
+        this.onLoadListener = onLoadListener;
+        this.assetManager = Globals.getAssetManager();
+
         camera.update();
-        assetManager = new AssetManager();
         batch = new SpriteBatch();
-        skin = new Skin();
-        skin.addRegions(new TextureAtlas(Gdx.files.internal("comic/skin/comic-ui.atlas")));
-        skin.load(Gdx.files.internal("comic/skin/comic-ui.json"));
-        progressBar = new ProgressBar(0, 1, 0.1f, false, skin);
-        loadingLabel = new Label("Loading...", skin);
+        this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
+        // skin.addRegions(new TextureAtlas(Gdx.files.internal("comic/skin/comic-ui.atlas")));
+        // skin.load(Gdx.files.internal("comic/skin/comic-ui.json"));
+        this.progressBar = new ProgressBar(0, 1, 0.1f, false, skin);
+        this.loadingLabel = new Label("Loading...", skin);
+
+        stage.addActor(progressBar);
+        stage.addActor(loadingLabel);
     }
     @Override
     public void show() {
-        FileHandle folder = Gdx.files.internal("assets");
-        FileHandle[] files = folder.list();
-        for (FileHandle file : files) {
-            if (file.extension().equals("png")) { // Change this to include sounds and etc later on
-                System.out.print(file.path());
-                assetManager.load(file.path(), Texture.class);
-            }
-        }
-        assetManager.finishLoading();
-        stage.addActor(progressBar);
-        stage.addActor(loadingLabel);
+        // assetManager.finishLoading();
+        // stage.addActor(progressBar);
+        // stage.addActor(loadingLabel);
     }
 
     @Override
@@ -62,14 +66,10 @@ public class LoadingScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (assetManager.update()) {
-            // transition to the next screen
-            game.setScreen(new MainScreen(game, assetManager));
+            onLoadListener.onLoad();
         }
-//        batch.begin();
         progressBar.setValue(assetManager.getProgress());
         loadingLabel.setText("Loading... " + (int)(assetManager.getProgress() * 100) + "%");
-//        progressBar.draw(batch, 1);
-//        batch.end();
         stage.draw();
     }
 
