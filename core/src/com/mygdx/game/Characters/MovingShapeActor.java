@@ -13,15 +13,12 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 
 public class MovingShapeActor extends Actor{
-    String shape;
-    float x;
-    float y;
-    Color color;
-    float movementSpeed;
-    Controls control;
-    ArrayList<Direction> directions = new ArrayList<>();
-
-    ShapeRenderer renderer;
+    private String shape;
+    private Color color;
+    private float movementSpeed;
+    private Controls control;
+    private ArrayList<Direction> directions = new ArrayList<>();
+    private ShapeRenderer renderer;
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, Color color){
         this(renderer, shape, width, height, 0, 0, color, 100, Controls.Presets.DEFAULT);

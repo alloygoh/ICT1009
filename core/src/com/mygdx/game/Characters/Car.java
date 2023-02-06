@@ -12,7 +12,7 @@ import com.mygdx.game.Utils.Direction;
 
 public class Car extends CollidableActor {
 
-    static TextureRegionDrawable drawable = new TextureRegionDrawable(
+    private static TextureRegionDrawable drawable = new TextureRegionDrawable(
             new TextureRegion(new Texture(Gdx.files.internal("car.png"))));
 
     public Car(float width, float height) {
@@ -98,8 +98,8 @@ public class Car extends CollidableActor {
                 }
             }
             // mark as idle to prevent re-positioning
-            this.directions.clear();
-            this.directions.add(Direction.IDLE);
+            this.getDirections().clear();
+            this.getDirections().add(Direction.IDLE);
 
         }
 

@@ -10,15 +10,10 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 
 public class MovingImageActor extends Actor {
-    float width;
-    float height;
-    float x;
-    float y;
-    float movementSpeed;
-    Controls control;
-    ArrayList<Direction> directions = new ArrayList<>();
-
-    TextureRegionDrawable texture;
+    private float movementSpeed;
+    private Controls control;
+    private ArrayList<Direction> directions = new ArrayList<>();
+    private TextureRegionDrawable texture;
 
     public MovingImageActor(TextureRegionDrawable texture, float width, float height) {
         this(texture, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
