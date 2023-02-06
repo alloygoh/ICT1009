@@ -14,12 +14,10 @@ import com.mygdx.game.Utils.Direction;
 
 public class MovingShapeActor extends Actor{
     String shape;
-    float x;
-    float y;
     Color color;
     float movementSpeed;
     Controls control;
-    ArrayList<Direction> directions = new ArrayList<>();
+    ArrayList<Direction> directions;
 
     ShapeRenderer renderer;
 
@@ -50,6 +48,7 @@ public class MovingShapeActor extends Actor{
         this.color = color;
         this.movementSpeed = movementSpeed;
         this.control = control;
+        this.directions = new ArrayList<>();
     }
 
     @Override
@@ -75,19 +74,9 @@ public class MovingShapeActor extends Actor{
 
     @Override
     public void act(float delta){
-        if (this.getClass() == (Class)Ball.class){
-            drop(delta);
-            return;
-        }
         super.act(delta);
     }
 
-    public void drop(float delta){
-        if(this.getY() <= 0){
-            return;
-        }
-        this.setY(this.getY() - delta*(movementSpeed/2));
-    }
 
     public void moveUp(){
         this.setY(this.getY() + this.movementSpeed*Gdx.graphics.getDeltaTime());

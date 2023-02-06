@@ -6,7 +6,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,20 +13,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Manager.SettingsManager;
+import com.mygdx.game.Utils.Globals;
 
 public class MainScreen implements Screen {
 
-    TextureAtlas atlas;
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
     SpriteBatch batch;
     Game game;
+    SettingsManager settingsManager;
 
-    public MainScreen(Game game) {
+    public MainScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
-        this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
-        this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
+        this.settingsManager = settingsManager;
+        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -51,6 +52,7 @@ public class MainScreen implements Screen {
         TextButton playButton = new TextButton("Start", skin);
         TextButton scoreButton = new TextButton("Leaderboard", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
+        TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         // add listeners to buttons
@@ -58,7 +60,14 @@ public class MainScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(settingsManager));
+            }
+        });
+
+        settingsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y){
+                game.setScreen(new SettingsScreen(game, settingsManager));
             }
         });
         // enter leaderboard screen if clicked
@@ -83,6 +92,8 @@ public class MainScreen implements Screen {
         mainTable.add(scoreButton);
         mainTable.row();
         mainTable.add(instructionsButton);
+        mainTable.row();
+        mainTable.add(settingsButton);
         mainTable.row();
         mainTable.add(exitButton);
         stage.addActor(mainTable);
@@ -124,8 +135,8 @@ public class MainScreen implements Screen {
 
     @Override
     public void dispose() {
-        skin.dispose();
-        atlas.dispose();
+        batch.dispose();
+        stage.dispose();
     }
 
 }

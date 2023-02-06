@@ -1,13 +1,15 @@
 package com.mygdx.game.Utils;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Input;
 
 // allow custom controls
-public class Controls {
-    int up;
-    int down;
-    int left;
-    int right;
+public class Controls implements Serializable{
+    private int up;
+    private int down;
+    private int left;
+    private int right;
 
     public Controls(int up, int down, int left, int right){
         this.up = up;
@@ -35,6 +37,22 @@ public class Controls {
 
     public int getRight() {
         return right;
+    }
+
+    public void setUp(int up) {
+        this.up = up;
+    }
+
+    public void setDown(int down) {
+        this.down = down;
+    }
+
+    public void setLeft(int left) {
+        this.left = left;
+    }
+
+    public void setRight(int right) {
+        this.right = right;
     }
 
 }
