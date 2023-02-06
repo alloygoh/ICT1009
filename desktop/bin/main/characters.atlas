@@ -1,0 +1,20 @@
+
+characters.png
+size: 2048, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+car
+  rotate: false
+  xy: 2, 168
+  size: 792, 301
+  orig: 900, 900
+  offset: 45, 299
+  index: -1
+pen
+  rotate: false
+  xy: 796, 2
+  size: 467, 467
+  orig: 468, 468
+  offset: 1, 0
+  index: -1
