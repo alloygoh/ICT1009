@@ -12,6 +12,7 @@ import com.mygdx.game.Utils.Globals;
 public class Car extends CollidableActor {
     static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
     static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("car"));
+
     public Car(float width, float height) {
         this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
     }

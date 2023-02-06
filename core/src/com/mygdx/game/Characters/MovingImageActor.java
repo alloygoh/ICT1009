@@ -20,7 +20,6 @@ public class MovingImageActor extends Actor {
     Controls control;
     ArrayList<Direction> directions;
     static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
-
     TextureRegionDrawable texture;
 
     public MovingImageActor(TextureRegionDrawable texture, float width, float height) {
