@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Globals;
 
 public class MainScreen implements Screen {
@@ -24,9 +25,11 @@ public class MainScreen implements Screen {
     OrthographicCamera camera;
     SpriteBatch batch;
     Game game;
+    SettingsManager settingsManager;
 
-    public MainScreen(Game game) {
+    public MainScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
+        this.settingsManager = settingsManager;
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
 
         float screenWidth = Gdx.graphics.getWidth();
@@ -50,6 +53,7 @@ public class MainScreen implements Screen {
         // button creation
         TextButton playButton = new TextButton("Start", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
+        TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         // add listeners to buttons
@@ -57,7 +61,14 @@ public class MainScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new GameScreen());
+                game.setScreen(new GameScreen(settingsManager));
+            }
+        });
+
+        settingsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y){
+                game.setScreen(new SettingsScreen(game, settingsManager));
             }
         });
 
@@ -73,6 +84,8 @@ public class MainScreen implements Screen {
         mainTable.add(playButton);
         mainTable.row();
         mainTable.add(instructionsButton);
+        mainTable.row();
+        mainTable.add(settingsButton);
         mainTable.row();
         mainTable.add(exitButton);
         stage.addActor(mainTable);

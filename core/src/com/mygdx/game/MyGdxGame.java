@@ -13,8 +13,12 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 	private AssetManager assetManager;
 	private Globals globals;
 	
+	SettingsManager settingsManager;
+	
+
 	@Override
 	public void create () {
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		this.globals = new Globals();
         this.assetManager = Globals.getAssetManager();
 		initAssets();
@@ -27,6 +31,8 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 		// load other assets
 		assetManager.load("comic/skin/comic-ui.atlas",TextureAtlas.class);
 		assetManager.load("comic/skin/comic-ui.json",Skin.class);
+    this.settingsManager = new SettingsManager(this);
+		settingsManager.readFromConfig();
 	}
 
 	// when assets are done loading

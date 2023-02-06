@@ -95,8 +95,8 @@ public class Car extends CollidableActor {
                 }
             }
             // mark as idle to prevent re-positioning
-            this.directions.clear();
-            this.directions.add(Direction.IDLE);
+            this.getDirections().clear();
+            this.getDirections().add(Direction.IDLE);
 
         }
 

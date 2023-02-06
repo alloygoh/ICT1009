@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.Utils.Controls;
 
 public class Ball extends MovingShapeActor{
-    float radius;
-    ShapeRenderer renderer;
+    private float radius;
+    private ShapeRenderer renderer;
 
     public Ball(ShapeRenderer renderer, float radius, Color color){
         this(renderer, radius, 0, 0, color, 100, Controls.Presets.DEFAULT);
