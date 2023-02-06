@@ -3,6 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,10 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Manager.SettingsManager;
+import com.mygdx.game.Utils.Globals;
 
 public class MainScreen implements Screen {
 
-    TextureAtlas atlas;
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
@@ -28,9 +29,8 @@ public class MainScreen implements Screen {
 
     public MainScreen(Game game, SettingsManager settingsManager) {
         this.game = game;
-        this.atlas = new TextureAtlas("comic/skin/comic-ui.atlas");
-        this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
         this.settingsManager = settingsManager;
+        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -128,7 +128,6 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
         skin.dispose();
-        atlas.dispose();
     }
 
 }

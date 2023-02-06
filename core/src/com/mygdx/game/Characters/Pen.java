@@ -2,18 +2,17 @@ package com.mygdx.game.Characters;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
+import com.mygdx.game.Utils.Globals;
 
 public class Pen extends CollidableActor {
 
-    private static TextureRegionDrawable drawable = new TextureRegionDrawable(
-            new TextureRegion(new Texture(Gdx.files.internal("pen.png"))));
+    static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
+    static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("pen"));
 
     public Pen(float width, float height) {
         this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
