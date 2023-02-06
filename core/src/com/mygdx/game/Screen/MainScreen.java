@@ -77,6 +77,13 @@ public class MainScreen implements Screen {
                 game.setScreen(new LeaderboardScreen(game));
             }
         });
+
+        instructionsButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y){
+                game.setScreen(new InstructionScreen(game));
+            }
+        });
         
         // exit when exit button is clicked
         exitButton.addListener(new ClickListener(){
