@@ -5,21 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Utils.Globals;
-import org.w3c.dom.Text;
 
 public class InstructionScreen implements Screen {
     Skin skin;
     Stage stage;
     OrthographicCamera camera;
-    SpriteBatch batch;
     Game game;
 
     public InstructionScreen(Game game){
@@ -35,7 +31,7 @@ public class InstructionScreen implements Screen {
 
     @Override
     public void show() {
-        //Stage should controll input:
+        //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
         Table mainTable = new Table();
@@ -50,7 +46,7 @@ public class InstructionScreen implements Screen {
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
         Label title = new Label("Game Instructions",skin);
-        title.setFontScale((float)5);
+        title.setFontScale(5f);
 
         Label instructions1 = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est velit egestas dui id ornare arcu odio ut sem. Viverra nibh cras pulvinar mattis. Lacinia quis vel eros donec ac odio tempor. Massa tincidunt dui ut ornare lectus. Mi eget mauris pharetra et ultrices neque ornare aenean. Eget velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Vestibulum lectus mauris ultrices eros in cursus turpis massa tincidunt. Eleifend mi in nulla posuere. Cras fermentum odio eu feugiat. Mattis rhoncus urna neque viverra justo nec ultrices. Leo in vitae turpis massa sed elementum tempus egestas sed. Fames ac turpis egestas integer eget aliquet nibh praesent. Lacinia at quis risus sed. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Ac tincidunt vitae semper quis lectus. Non arcu risus quis varius quam quisque id diam vel.\n" +
                 "\n" +
@@ -107,8 +103,6 @@ public class InstructionScreen implements Screen {
         camera.setToOrtho(false, width, height);
         stage.getViewport().setWorldSize(width, height);
         stage.getViewport().update(width, height, true);
-        // camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2,0);
-        // camera.update();
     }
 
     @Override
@@ -131,7 +125,6 @@ public class InstructionScreen implements Screen {
 
     @Override
     public void dispose() {
-        skin.dispose();
         stage.dispose();
     }
 
