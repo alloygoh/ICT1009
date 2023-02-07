@@ -50,6 +50,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 	
 	@Override
 	public void dispose () {
+		assetManager.dispose();
 	}
 
 }
