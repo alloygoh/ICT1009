@@ -2,38 +2,65 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Utils.Globals;
 
-public class InstructionScreen implements Screen {
+public class InstructionScreen extends AbstractScreen {
     Skin skin;
-    Stage stage;
-    OrthographicCamera camera;
-    Game game;
 
     public InstructionScreen(Game game){
-        this.game = game;
+        super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
-
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        this.camera = new OrthographicCamera(screenWidth, screenHeight);
-        this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
-        camera.update();
+        this.getCamera().update();
+        initStage();
     }
 
     @Override
     public void show() {
         //Stage should control input:
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(this.getStage());
+    }
+    
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
+        this.getStage().act();
+        this.getStage().draw();
+    }
 
+    @Override
+    public void resize(int width, int height) {
+        this.getCamera().setToOrtho(false, width, height);
+        this.getStage().getViewport().setWorldSize(width, height);
+        this.getStage().getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
+
+    }
+
+    // disposing of stage is handled by parent class
+    // only overwrite when screen has additional objects to dispose
+
+    @Override
+    public void initStage() {
         Table mainTable = new Table();
         Table buttons = new Table();
         // set table to fill stage
@@ -76,7 +103,7 @@ public class InstructionScreen implements Screen {
         backButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent inputEvent, float x, float y){
-                game.setScreen(new MainScreen(game));
+                getGame().setScreen(new MainScreen(getGame()));
             }
         });
 
@@ -85,47 +112,10 @@ public class InstructionScreen implements Screen {
         mainTable.row();
         buttons.row();
         buttons.add(backButton);
-        stage.addActor(instructions1);
-        stage.addActor(mainTable);
-        stage.addActor(buttons);
 
-    }
-    
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
-        stage.getViewport().setWorldSize(width, height);
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void hide() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
+        this.getStage().addActor(instructions1);
+        this.getStage().addActor(mainTable);
+        this.getStage().addActor(buttons);
     }
 
 }
