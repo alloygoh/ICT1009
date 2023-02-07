@@ -129,6 +129,12 @@ public class GameScreen extends AbstractScreen{
         this.getStage().draw();
     }
 
+    // to remove actor from stage
+    private void freeActor(Actor actor){
+        actor.remove();
+        entities.remove(actor);
+    }
+
     @Override
     public void resize(int width, int height) {
         this.getStage().getViewport().update(width, height,true);
