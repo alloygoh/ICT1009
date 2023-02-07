@@ -1,51 +1,76 @@
 package com.mygdx.game.Screen;
 
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
-public class SettingsScreen implements Screen {
-
+public class SettingsScreen extends AbstractScreen {
     Skin skin;
-    Stage stage;
-    OrthographicCamera camera;
-    Game game;
     SettingsManager settingsManager;
 
     public SettingsScreen(Game game, SettingsManager settingsManager) {
-        this.game = game;
+        super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
         this.settingsManager = settingsManager;
-
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        this.camera = new OrthographicCamera(screenWidth, screenHeight);
-        this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
-        camera.update();
+        this.getCamera().update();
+        initStage();
     }
 
     @Override
     public void show() {
-        // Stage should controll input:
-        Gdx.input.setInputProcessor(stage);
+        // Stage should control input:
+        Gdx.input.setInputProcessor(this.getStage());
+    }
 
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
+        this.getStage().act();
+        this.getStage().draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        this.getCamera().setToOrtho(false, width, height);
+        this.getStage().getViewport().setWorldSize(width, height);
+        this.getStage().getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
+
+    }
+
+    // disposing of stage is handled by parent class
+    // only overwrite when screen has additional objects to dispose
+
+    @Override
+    public void initStage() {
         Table mainTable = new Table();
         // set table to fill stage
         mainTable.setFillParent(true);
@@ -53,17 +78,17 @@ public class SettingsScreen implements Screen {
         mainTable.top();
 
         // labels
-        Label player1Label = new Label("Player 1 Controls",skin,"big");
-        Label player2Label = new Label("Player 2 Controls", skin,"big");
-        Label p1UpLabel = new Label("Up Key",skin);
-        Label p1DownLabel = new Label("Down Key",skin);
-        Label p1LeftLabel = new Label("Left Key",skin);
-        Label p1RightLabel = new Label("Right Key",skin);
+        Label player1Label = new Label("Player 1 Controls", skin, "big");
+        Label player2Label = new Label("Player 2 Controls", skin, "big");
+        Label p1UpLabel = new Label("Up Key", skin);
+        Label p1DownLabel = new Label("Down Key", skin);
+        Label p1LeftLabel = new Label("Left Key", skin);
+        Label p1RightLabel = new Label("Right Key", skin);
 
-        Label p2UpLabel = new Label("Up Key",skin);
-        Label p2DownLabel = new Label("Down Key",skin);
-        Label p2LeftLabel = new Label("Left Key",skin);
-        Label p2RightLabel = new Label("Right Key",skin);
+        Label p2UpLabel = new Label("Up Key", skin);
+        Label p2DownLabel = new Label("Down Key", skin);
+        Label p2LeftLabel = new Label("Left Key", skin);
+        Label p2RightLabel = new Label("Right Key", skin);
 
         final Controls player1Controls = settingsManager.getControlSettings().getControlOf(1);
         final Controls player2Controls = settingsManager.getControlSettings().getControlOf(2);
@@ -81,18 +106,18 @@ public class SettingsScreen implements Screen {
 
         TextButton backButton = new TextButton("Back", skin);
 
-        final Dialog configDialog = new Dialog("Configuration", skin,"dialog");
+        final Dialog configDialog = new Dialog("Configuration", skin, "dialog");
         configDialog.row().expandY();
-        configDialog.add(new Label("Enter desired key!", skin,"big")).height(400);
+        configDialog.add(new Label("Enter desired key!", skin, "big")).height(400);
         configDialog.row().expandY();
-        configDialog.setColor(0,0,0,0);
+        configDialog.setColor(0, 0, 0, 0);
 
         // add listeners to buttons
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 settingsManager.writeToConfig();
-                game.setScreen(new MainScreen(game));
+                getGame().setScreen(new MainScreen(getGame()));
             }
         });
 
@@ -101,16 +126,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player1Controls.setUp(keycode);
                             configDialog.hide();
                             player1UpButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -121,16 +146,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player1Controls.setDown(keycode);
                             configDialog.hide();
                             player1DownButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -141,16 +166,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player1Controls.setLeft(keycode);
                             configDialog.hide();
                             player1LeftButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -161,16 +186,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player1Controls.setRight(keycode);
                             configDialog.hide();
                             player1RightButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -181,16 +206,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player2Controls.setUp(keycode);
                             configDialog.hide();
                             player2UpButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -202,16 +227,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player2Controls.setDown(keycode);
                             configDialog.hide();
                             player2DownButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -223,16 +248,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player2Controls.setLeft(keycode);
                             configDialog.hide();
                             player2LeftButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -244,16 +269,16 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 // display dialog asking for new key
-                configDialog.show(stage);
-                stage.addListener(new InputListener() {
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
                     @Override
                     public boolean keyDown(InputEvent event, int keycode) {
-                        if(keycode != Input.Keys.ESCAPE){
+                        if (keycode != Input.Keys.ESCAPE) {
                             player2Controls.setRight(keycode);
                             configDialog.hide();
                             player2RightButton.setText(Input.Keys.toString(keycode));
                         }
-                        stage.removeListener(this);
+                        getStage().removeListener(this);
                         configDialog.hide();
                         return super.keyDown(event, keycode);
                     }
@@ -292,44 +317,8 @@ public class SettingsScreen implements Screen {
         mainTable.row();
         mainTable.add(backButton);
         mainTable.row();
-        stage.addActor(mainTable);
-    }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
-        stage.getViewport().setWorldSize(width, height);
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void hide() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
+        this.getStage().addActor(mainTable);
     }
 
 }

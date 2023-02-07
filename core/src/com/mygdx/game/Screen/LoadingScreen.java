@@ -2,7 +2,6 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,15 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Utils.Globals;
 
-public class LoadingScreen implements Screen {
+public class LoadingScreen extends AbstractScreen{
     Skin skin;
-    Game game;
     ProgressBar progressBar;
-    Stage stage;
-    OrthographicCamera camera;
     Label loadingLabel;
     OnLoadListener onLoadListener;
     AssetManager assetManager;
@@ -28,21 +23,13 @@ public class LoadingScreen implements Screen {
     }
 
     public LoadingScreen(Game game, OnLoadListener onLoadListener) {
-        this.game = game;
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        this.camera = new OrthographicCamera(screenWidth, screenHeight);
-        this.stage = new Stage(new StretchViewport(screenWidth, screenHeight, this.camera));
+        super(game);
         this.onLoadListener = onLoadListener;
         this.assetManager = Globals.getAssetManager();
 
-        camera.update();
+        this.getCamera().update();
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
-        this.progressBar = new ProgressBar(0, 1, 0.1f, false, skin);
-        this.loadingLabel = new Label("Loading...", skin);
-
-        stage.addActor(progressBar);
-        stage.addActor(loadingLabel);
+        initStage();
     }
     @Override
     public void show() {
@@ -57,7 +44,7 @@ public class LoadingScreen implements Screen {
         }
         progressBar.setValue(assetManager.getProgress());
         loadingLabel.setText("Loading... " + (int)(assetManager.getProgress() * 100) + "%");
-        stage.draw();
+        this.getStage().draw();
     }
 
     @Override
@@ -80,8 +67,14 @@ public class LoadingScreen implements Screen {
 
     }
 
+    // disposing of stage is handled by parent class
+    // only overwrite when screen has additional objects to dispose
+
     @Override
-    public void dispose() {
-        stage.dispose();
+    public void initStage() {
+        this.progressBar = new ProgressBar(0, 1, 0.1f, false, skin);
+        this.loadingLabel = new Label("Loading...", skin);
+        this.getStage().addActor(progressBar);
+        this.getStage().addActor(loadingLabel);
     }
 }
