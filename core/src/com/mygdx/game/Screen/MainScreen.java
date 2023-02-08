@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Globals;
 
@@ -15,10 +16,12 @@ public class MainScreen extends AbstractScreen {
 
     Skin skin;
     SettingsManager settingsManager;
+    ScreenManager screenManager;
 
     public MainScreen(Game game) {
         super(game);
         this.settingsManager = Globals.getSettingsManager();
+        this.screenManager = Globals.getScreenManager();
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
         this.getCamera().update();
         initStage();
@@ -85,28 +88,41 @@ public class MainScreen extends AbstractScreen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                getGame().setScreen(new GameScreen(getGame(),settingsManager));
+                if (screenManager.getScreen((GameScreen.class)) == null){
+                    screenManager.addScreen(new GameScreen(getGame(), settingsManager));
+                }
+                screenManager.setScreen(GameScreen.class);
+
             }
         });
 
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                getGame().setScreen(new SettingsScreen(getGame(), settingsManager));
+                if (screenManager.getScreen((SettingsScreen.class)) == null){
+                    screenManager.addScreen(new SettingsScreen(getGame(), settingsManager));
+                }
+                screenManager.setScreen(SettingsScreen.class);
             }
         });
         // enter leaderboard screen if clicked
         scoreButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                getGame().setScreen(new LeaderboardScreen(getGame()));
+                if (screenManager.getScreen((LeaderboardScreen.class)) == null){
+                    screenManager.addScreen(new LeaderboardScreen(getGame()));
+                }
+                screenManager.setScreen(LeaderboardScreen.class);
             }
         });
 
         instructionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                getGame().setScreen(new InstructionScreen(getGame()));
+                if (screenManager.getScreen((InstructionScreen.class)) == null){
+                    screenManager.addScreen(new InstructionScreen(getGame()));
+                }
+                screenManager.setScreen(InstructionScreen.class);
             }
         });
 
@@ -114,6 +130,7 @@ public class MainScreen extends AbstractScreen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
+                screenManager.disposeAll();
                 Gdx.app.exit();
             }
         });
