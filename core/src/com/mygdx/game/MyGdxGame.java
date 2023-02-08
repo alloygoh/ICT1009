@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Screen.LoadingScreen;
 import com.mygdx.game.Screen.MainScreen;
@@ -16,7 +17,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 	private Globals globals;
 	
 	SettingsManager settingsManager;
-	
+	ScreenManager screenManager;
 
 	@Override
 	public void create () {
@@ -24,8 +25,10 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 		this.globals = new Globals(this);
         this.assetManager = Globals.getAssetManager();
 		this.settingsManager = Globals.getSettingsManager();
+		this.screenManager = Globals.getScreenManager();
+		screenManager.addScreen(new LoadingScreen(this, this));
 		initAssets();
-		this.setScreen(new LoadingScreen(this, this));
+		screenManager.setScreen(LoadingScreen.class);
 	}
 
 	private void initAssets(){
@@ -40,7 +43,8 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 	// when assets are done loading
 	@Override
 	public void onLoad() {
-		this.setScreen(new MainScreen(this));
+		screenManager.addScreen(new MainScreen(this));
+		this.screenManager.setScreen(MainScreen.class);
 	}
 	
 	@Override

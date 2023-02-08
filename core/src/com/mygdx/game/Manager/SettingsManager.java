@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-import com.badlogic.gdx.Game;
 import com.mygdx.game.Interfaces.iSettings;
 import com.mygdx.game.Settings.ControlSettings;
 import com.mygdx.game.Utils.Controls;
@@ -19,7 +18,7 @@ public class SettingsManager{
     private ControlSettings controlSettings;
     private ArrayList<iSettings> masterSettings;
 
-    public SettingsManager(Game game) {
+    public SettingsManager() {
         masterSettings = new ArrayList<iSettings>();
 
         this.controlSettings = new ControlSettings();
