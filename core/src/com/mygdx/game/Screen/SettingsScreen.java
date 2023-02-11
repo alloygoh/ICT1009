@@ -17,8 +17,8 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
 public class SettingsScreen extends AbstractScreen {
-    Skin skin;
-    SettingsManager settingsManager;
+    private Skin skin;
+    private SettingsManager settingsManager;
 
     public SettingsScreen(Game game, SettingsManager settingsManager) {
         super(game);

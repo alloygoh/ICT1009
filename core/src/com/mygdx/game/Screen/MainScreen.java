@@ -14,9 +14,9 @@ import com.mygdx.game.Utils.Globals;
 
 public class MainScreen extends AbstractScreen {
 
-    Skin skin;
-    SettingsManager settingsManager;
-    ScreenManager screenManager;
+    private Skin skin;
+    private SettingsManager settingsManager;
+    private ScreenManager screenManager;
 
     public MainScreen(Game game) {
         super(game);
