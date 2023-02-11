@@ -14,21 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Characters.AbstractActor;
 import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
 import com.mygdx.game.Characters.CollidableActor;
-import com.mygdx.game.Characters.MovingImageActor;
-import com.mygdx.game.Characters.MovingShapeActor;
 import com.mygdx.game.Characters.Pen;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
 
 public class GameScreen extends AbstractScreen{
-    SpriteBatch batch;
-    ShapeRenderer renderer;
-    ArrayList<Actor> entities;
-    Viewport viewport;
-    SettingsManager settingsManager;
+    private SpriteBatch batch;
+    private ShapeRenderer renderer;
+    private ArrayList<AbstractActor> entities;
+    private Viewport viewport;
+    private SettingsManager settingsManager;
 
     public GameScreen(Game game, SettingsManager settingsManager){
         super(game);
@@ -59,7 +58,7 @@ public class GameScreen extends AbstractScreen{
         for(CollidableActor subject: collidables){
             for(CollidableActor collidableActor: collidables){
                 if (subject.collidesWith(collidableActor)){
-                    subject.handleCollision(collidableActor);
+                    subject.reactToEvent("collision", collidableActor);
                 }
             }
         }
@@ -113,14 +112,8 @@ public class GameScreen extends AbstractScreen{
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         ScreenUtils.clear(169, 169, 169, 0);
 
-        for (Actor actor: entities){
-            if (actor instanceof MovingImageActor){
-                MovingImageActor movingImageActor = (MovingImageActor) actor;
-                movingImageActor.processKeyStrokes();
-            } else if (actor instanceof MovingShapeActor){
-                MovingShapeActor movingShapeActor = (MovingShapeActor) actor;
-                movingShapeActor.processKeyStrokes();
-            } 
+        for (AbstractActor actor: entities){
+            actor.processKeyStrokes();
         }
 
         this.getStage().act(delta);
