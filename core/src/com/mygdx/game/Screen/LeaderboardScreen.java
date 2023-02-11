@@ -14,7 +14,7 @@ import com.mygdx.game.Leaderboard.LeaderboardEntry;
 import com.mygdx.game.Utils.Globals;
 
 public class LeaderboardScreen extends AbstractScreen {
-    Skin skin;
+    private Skin skin;
 
     public LeaderboardScreen(Game game) {
         super(game);

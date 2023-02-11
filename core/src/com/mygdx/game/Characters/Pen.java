@@ -11,8 +11,8 @@ import com.mygdx.game.Utils.Globals;
 
 public class Pen extends CollidableActor {
 
-    static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
-    static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("pen"));
+    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
+    private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("pen"));
 
     public Pen(float width, float height) {
         this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);

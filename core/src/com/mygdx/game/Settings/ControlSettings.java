@@ -9,7 +9,7 @@ import com.mygdx.game.Utils.Controls;
 
 public class ControlSettings implements iSettings{
 
-    HashMap<Integer, Controls> controlSettingsMap;
+    private HashMap<Integer, Controls> controlSettingsMap;
 
     public ControlSettings() {
         this.controlSettingsMap = new HashMap<>();

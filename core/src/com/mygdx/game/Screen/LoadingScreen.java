@@ -10,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Utils.Globals;
 
 public class LoadingScreen extends AbstractScreen{
-    Skin skin;
-    ProgressBar progressBar;
-    Label loadingLabel;
-    OnLoadListener onLoadListener;
-    AssetManager assetManager;
+    private Skin skin;
+    private ProgressBar progressBar;
+    private Label loadingLabel;
+    private OnLoadListener onLoadListener;
+    private AssetManager assetManager;
 
     public interface OnLoadListener{
         void onLoad();

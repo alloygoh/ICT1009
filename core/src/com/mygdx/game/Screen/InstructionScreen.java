@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Utils.Globals;
 
 public class InstructionScreen extends AbstractScreen {
-    Skin skin;
+    private Skin skin;
 
     public InstructionScreen(Game game){
         super(game);

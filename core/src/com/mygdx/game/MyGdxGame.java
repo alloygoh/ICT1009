@@ -16,8 +16,8 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 	private AssetManager assetManager;
 	private Globals globals;
 	
-	SettingsManager settingsManager;
-	ScreenManager screenManager;
+	private SettingsManager settingsManager;
+	private ScreenManager screenManager;
 
 	@Override
 	public void create () {
