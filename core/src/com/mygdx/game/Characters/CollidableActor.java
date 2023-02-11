@@ -28,4 +28,13 @@ public abstract class CollidableActor extends MovingImageActor implements iColli
             return false;
         return getBounds().overlaps(collidable.getBounds());
     }
+
+    @Override
+    public void reactToEvent(String event, Object others){
+        if (event.equals("collision")){
+            iCollidable temp = (iCollidable) others;
+            handleCollision(temp);
+        }
+    }
+
 }

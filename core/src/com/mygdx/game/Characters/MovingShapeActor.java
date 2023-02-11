@@ -1,25 +1,16 @@
 package com.mygdx.game.Characters;
 
 
-import java.util.ArrayList;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Utils.Controls;
-import com.mygdx.game.Utils.Direction;
 
-public class MovingShapeActor extends Actor{
-    String shape;
-    Color color;
-    float movementSpeed;
-    Controls control;
-    ArrayList<Direction> directions;
-
-    ShapeRenderer renderer;
+public class MovingShapeActor extends AbstractActor{
+    private String shape;
+    private Color color;
+    private ShapeRenderer renderer;
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, Color color){
         this(renderer, shape, width, height, 0, 0, color, 100, Controls.Presets.DEFAULT);
@@ -38,17 +29,10 @@ public class MovingShapeActor extends Actor{
     }
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, float x, float y, Color color, float movementSpeed, Controls control){
-        super();
+        super(width, height, x, y, movementSpeed, control);
         this.renderer = renderer;
         this.shape = shape;
-        this.setWidth(width);
-        this.setHeight(height);
-        this.setX(x);
-        this.setY(y);
         this.color = color;
-        this.movementSpeed = movementSpeed;
-        this.control = control;
-        this.directions = new ArrayList<>();
     }
 
     @Override
@@ -77,42 +61,8 @@ public class MovingShapeActor extends Actor{
         super.act(delta);
     }
 
-
-    public void moveUp(){
-        this.setY(this.getY() + this.movementSpeed*Gdx.graphics.getDeltaTime());
+    public void reactToEvent(String event, Object others){
+        return;
     }
 
-    public void moveDown(){
-        this.setY(this.getY() - this.movementSpeed*Gdx.graphics.getDeltaTime());
-    }
-
-    public void moveLeft(){
-        this.setX(this.getX() - this.movementSpeed*Gdx.graphics.getDeltaTime());
-    }
-
-    public void moveRight(){
-        this.setX(this.getX() + this.movementSpeed*Gdx.graphics.getDeltaTime());
-    }
-
-    public void processKeyStrokes() {
-        if (Gdx.input.isKeyPressed(control.getUp())) {
-            this.moveUp();
-            this.directions.add(Direction.UP);
-        }
-
-        if (Gdx.input.isKeyPressed(control.getDown())) {
-            this.moveDown();
-            this.directions.add(Direction.DOWN);
-        }
-
-        if (Gdx.input.isKeyPressed(control.getLeft())) {
-            this.moveLeft();
-            this.directions.add(Direction.LEFT);
-        }
-
-        if (Gdx.input.isKeyPressed(control.getRight())) {
-            this.moveRight();
-            this.directions.add(Direction.RIGHT);
-        }
-    }
 }
