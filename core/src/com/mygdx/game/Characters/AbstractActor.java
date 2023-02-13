@@ -10,6 +10,7 @@ import com.mygdx.game.Utils.Direction;
 public abstract class AbstractActor extends Actor {
     protected ArrayList<Direction> directions;
     protected float movementSpeed;
+
     private Controls control;
 
     public AbstractActor(float width, float height, float x, float y,
@@ -27,6 +28,10 @@ public abstract class AbstractActor extends Actor {
 
     public ArrayList<Direction> getDirections() {
         return this.directions;
+    }
+
+    public float getMovementSpeed() {
+        return movementSpeed;
     }
 
     // provide basic movments
