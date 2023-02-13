@@ -2,12 +2,8 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -74,14 +70,11 @@ public class MainScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table titleTable = new Table();
         Table mainTable = new Table();
-        titleTable.setFillParent(true);
         // set table to fill stage
         mainTable.setFillParent(true);
         // set alignment of contents in table
-        titleTable.top();
-        mainTable.center();
+        mainTable.top();
 
         // button creation
         TextButton playButton = new TextButton("Start", skin);
@@ -89,20 +82,6 @@ public class MainScreen extends AbstractScreen {
         TextButton instructionsButton = new TextButton("Instructions", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
-
-        // fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        generator.dispose();
-        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
-
-        Label title = new Label("MAIN MENU",labelStyle2);
-        titleTable.add(title);
 
         // add listeners to buttons
         // create new game screen if clicked
@@ -168,7 +147,6 @@ public class MainScreen extends AbstractScreen {
         mainTable.add(exitButton);
 
         this.getStage().addActor(mainTable);
-        this.getStage().addActor(titleTable);
     }
 
 }

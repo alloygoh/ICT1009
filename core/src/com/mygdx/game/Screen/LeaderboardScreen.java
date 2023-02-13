@@ -2,10 +2,7 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -70,13 +67,10 @@ public class LeaderboardScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table titleTable = new Table();
         Table mainTable = new Table();
         // set table to fill stage
-        titleTable.setFillParent(true);
         mainTable.setFillParent(true);
         // set alignment of contents in table
-        titleTable.top();
         mainTable.bottom();
 
         // button creation
@@ -100,25 +94,9 @@ public class LeaderboardScreen extends AbstractScreen {
         scoreBoard.reviseScoreboard(entry6);
         // End of mock samples and code
 
-        // fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        generator.dispose();
-        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
-        // end of fonts config
-        Label title = new Label("Leaderboards",labelStyle2);
-        titleTable.add(title);
-
         Table scoreTable = new Table(skin);
         scoreTable.setFillParent(true);
-//        scoreTable.setColor(230,230,130,5);
-        scoreTable.center();
-
+        scoreTable.top();
 
         // add listeners to buttons
         // go to main screen if clicked
@@ -143,7 +121,6 @@ public class LeaderboardScreen extends AbstractScreen {
         mainTable.row();
         mainTable.add(backButton);
 
-        this.getStage().addActor(titleTable);
         this.getStage().addActor(scoreTable);
         this.getStage().addActor(mainTable);
     }

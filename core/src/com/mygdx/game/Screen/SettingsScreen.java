@@ -3,10 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -74,14 +71,11 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table titleTable = new Table();
         Table mainTable = new Table();
         // set table to fill stage
         mainTable.setFillParent(true);
-        titleTable.setFillParent(true);
         // set alignment of contents in table
-        titleTable.top();
-        mainTable.center();
+        mainTable.top();
 
         // labels
         Label player1Label = new Label("Player 1 Controls", skin, "big");
@@ -117,20 +111,6 @@ public class SettingsScreen extends AbstractScreen {
         configDialog.add(new Label("Enter desired key!", skin, "big")).height(400);
         configDialog.row().expandY();
         configDialog.setColor(0, 0, 0, 0);
-
-        // Fonts for Title
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        generator.dispose();
-        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
-        // end of fonts config
-        Label title = new Label("Settings",labelStyle2);
-        titleTable.add(title);
 
         // add listeners to buttons
         backButton.addListener(new ClickListener() {
@@ -339,7 +319,6 @@ public class SettingsScreen extends AbstractScreen {
         mainTable.row();
 
         this.getStage().addActor(mainTable);
-        this.getStage().addActor(titleTable);
     }
 
 }
