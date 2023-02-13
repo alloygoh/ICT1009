@@ -86,16 +86,19 @@ public class InstructionScreen extends AbstractScreen {
         parameter.size = 130;
         parameter.borderWidth = 1;
         parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        parameter.size = 16;
-        BitmapFont font16 = generator.generateFont(parameter);
-        generator.dispose();
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = font16;
-
+        BitmapFont titleFont = generator.generateFont(parameter);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
+        labelStyle2.font = titleFont;
+
+        parameter.size = 15;
+        parameter.color = Color.WHITE;
+        BitmapFont contentFont = generator.generateFont(parameter);
+        generator.dispose();
+        Label.LabelStyle labelStyleContent = new Label.LabelStyle();
+        labelStyleContent.font = contentFont;
+
+
+        // end of fonts config
 
         Label title = new Label("Game Instructions",labelStyle2);
         title.setFontScale(1f);
@@ -116,9 +119,9 @@ public class InstructionScreen extends AbstractScreen {
                 "\n" +
                 "Ut morbi tincidunt augue interdum velit. Integer vitae justo eget magna fermentum iaculis. Ullamcorper sit amet risus nullam eget. Quam elementum pulvinar etiam non quam. Non consectetur a erat nam at lectus urna duis. In vitae turpis massa sed elementum tempus egestas sed sed. Risus sed vulputate odio ut enim. Cursus turpis massa tincidunt dui ut. Vehicula ipsum a arcu cursus vitae congue. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum. Orci dapibus ultrices in iaculis nunc sed augue lacus viverra. Donec massa sapien faucibus et molestie ac. Risus in hendrerit gravida rutrum. Eros in cursus turpis massa tincidunt. Ipsum faucibus vitae aliquet nec ullamcorper sit amet risus. Nulla at volutpat diam ut venenatis.\n" +
                 "\n" +
-                "Euismod in pellentesque massa placerat duis ultricies lacus sed. Turpis egestas pretium aenean pharetra magna ac. Facilisis volutpat est velit egestas dui id. Morbi tincidunt ornare massa eget egestas purus. Fames ac turpis egestas maecenas. Rutrum quisque non tellus orci ac auctor augue. Egestas egestas fringilla phasellus faucibus scelerisque. Luctus accumsan tortor posuere ac ut consequat semper. In ante metus dictum at tempor commodo. Velit dignissim sodales ut eu sem integer vitae. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa. Ornare suspendisse sed nisi lacus sed viverra tellus in.\n", skin);
+                "Euismod in pellentesque massa placerat duis ultricies lacus sed. Turpis egestas pretium aenean pharetra magna ac. Facilisis volutpat est velit egestas dui id. Morbi tincidunt ornare massa eget egestas purus. Fames ac turpis egestas maecenas. Rutrum quisque non tellus orci ac auctor augue. Egestas egestas fringilla phasellus faucibus scelerisque. Luctus accumsan tortor posuere ac ut consequat semper. In ante metus dictum at tempor commodo. Velit dignissim sodales ut eu sem integer vitae. Porttitor leo a diam sollicitudin tempor id eu nisl nunc. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa. Ornare suspendisse sed nisi lacus sed viverra tellus in.\n", labelStyleContent);
         // End of mock samples and code
-        instructions1.setWidth(750);
+        instructions1.setWidth(1300);
         instructions1.setWrap(true);
         instructions1.setY((Gdx.graphics.getHeight() - instructions1.getHeight()) / 2);
         instructions1.setX((Gdx.graphics.getWidth() - instructions1.getWidth()) / 2);
