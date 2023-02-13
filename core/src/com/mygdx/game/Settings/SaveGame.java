@@ -7,7 +7,6 @@ import com.mygdx.game.Leaderboard.Leaderboard;
 public class SaveGame extends Leaderboard {
     private static final String PREFERENCES_NAME = "saved_game";
     private static final String KEY_SCORE = "key_score";
-    private static final String KEY_LEVEL = "key_level";
 
     private int score;
 
