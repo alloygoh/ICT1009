@@ -2,7 +2,12 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -15,6 +20,8 @@ public class InstructionScreen extends AbstractScreen {
         super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
         this.getCamera().update();
+
+
         initStage();
     }
 
@@ -72,8 +79,26 @@ public class InstructionScreen extends AbstractScreen {
 
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
-        Label title = new Label("Game Instructions",skin);
-        title.setFontScale(5f);
+
+        // fonts
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 130;
+        parameter.borderWidth = 1;
+        parameter.color = Color.YELLOW;
+        BitmapFont font30 = generator.generateFont(parameter);
+        parameter.size = 16;
+        BitmapFont font16 = generator.generateFont(parameter);
+        generator.dispose();
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font16;
+
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = font30;
+
+        Label title = new Label("Game Instructions",labelStyle2);
+        title.setFontScale(1f);
 
         Label instructions1 = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est velit egestas dui id ornare arcu odio ut sem. Viverra nibh cras pulvinar mattis. Lacinia quis vel eros donec ac odio tempor. Massa tincidunt dui ut ornare lectus. Mi eget mauris pharetra et ultrices neque ornare aenean. Eget velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Vestibulum lectus mauris ultrices eros in cursus turpis massa tincidunt. Eleifend mi in nulla posuere. Cras fermentum odio eu feugiat. Mattis rhoncus urna neque viverra justo nec ultrices. Leo in vitae turpis massa sed elementum tempus egestas sed. Fames ac turpis egestas integer eget aliquet nibh praesent. Lacinia at quis risus sed. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Ac tincidunt vitae semper quis lectus. Non arcu risus quis varius quam quisque id diam vel.\n" +
                 "\n" +
