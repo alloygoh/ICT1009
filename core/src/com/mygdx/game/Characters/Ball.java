@@ -2,6 +2,7 @@ package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.game.Addons.Gravity;
 import com.mygdx.game.Utils.Controls;
 
 public class Ball extends MovingShapeActor{
@@ -36,14 +37,7 @@ public class Ball extends MovingShapeActor{
 
     @Override
     public void act(float delta){
-        drop(delta);
+        Gravity.invokeGravity(this, delta);
         super.act(delta);
-    }
-
-    public void drop(float delta){
-        if(this.getY() <= 0){
-            return;
-        }
-        this.setY(this.getY() - delta*(movementSpeed/2));
     }
 }
