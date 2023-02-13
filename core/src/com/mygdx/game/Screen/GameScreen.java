@@ -20,10 +20,10 @@ import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
 import com.mygdx.game.Characters.CollidableActor;
 import com.mygdx.game.Characters.Pen;
+import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
-import javafx.scene.input.InputMethodTextRun;
 
 public class GameScreen extends AbstractScreen{
     private SpriteBatch batch;
@@ -31,6 +31,7 @@ public class GameScreen extends AbstractScreen{
     private ArrayList<AbstractActor> entities;
     private Viewport viewport;
     private SettingsManager settingsManager;
+    private ScreenManager screenManager;
 
     public GameScreen(Game game, SettingsManager settingsManager){
         super(game);
@@ -39,6 +40,7 @@ public class GameScreen extends AbstractScreen{
         this.viewport = new StretchViewport(screenWidth, screenHeight,this.getCamera());
         this.getStage().setViewport(viewport);
         this.settingsManager = settingsManager;
+        this.screenManager = Globals.getScreenManager();
 
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
@@ -124,10 +126,13 @@ public class GameScreen extends AbstractScreen{
         governCollisions();
         this.getStage().draw();
 
-        // to go back to main screen
+        // to go to Pause screen
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
         {
-            Globals.getScreenManager().setScreen(MainScreen.class);
+            if (screenManager.getScreen((PauseScreen.class)) == null){
+                screenManager.addScreen(new PauseScreen(getGame()));
+            }
+            screenManager.setScreen(PauseScreen.class);
         }
     }
 
