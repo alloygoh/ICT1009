@@ -1,5 +1,6 @@
 package com.mygdx.game.Screen;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,6 +22,8 @@ import com.mygdx.game.Characters.CollidableActor;
 import com.mygdx.game.Characters.Pen;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
+import com.mygdx.game.Utils.Globals;
+import javafx.scene.input.InputMethodTextRun;
 
 public class GameScreen extends AbstractScreen{
     private SpriteBatch batch;
@@ -120,6 +123,12 @@ public class GameScreen extends AbstractScreen{
         governBorders();
         governCollisions();
         this.getStage().draw();
+
+        // to go back to main screen
+        if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
+        {
+            Globals.getScreenManager().setScreen(MainScreen.class);
+        }
     }
 
     // to remove actor from stage
@@ -170,19 +179,17 @@ public class GameScreen extends AbstractScreen{
         // medium moving pen
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
         Controls p2 = settingsManager.getControlSettings().getControlOf(2);
-        Pen pen1 = new Pen(80, 80,200 ,0,100, p1);
-        Car car1 = new Car(80, 80,p2);
+        Pen pen1 = new Pen(80, 80, 200, 0, 100, p1);
+        Car car1 = new Car(80, 80, p2);
 
         // entities.addAll(Arrays.asList(ball1, ball2, car1, pen1));
         entities.addAll(Arrays.asList(car1, pen1, ball1));
 
-        for(Actor actor: entities){
+        for (Actor actor : entities) {
             this.getStage().addActor(actor);
         }
 
         // read keystrokes
         Gdx.input.setInputProcessor(this.getStage());
-
     }
-    
 }
