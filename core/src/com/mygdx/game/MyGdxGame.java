@@ -4,7 +4,15 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
@@ -37,6 +45,24 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 		// load other assets
 		assetManager.load("comic/skin/comic-ui.atlas",TextureAtlas.class);
 		assetManager.load("comic/skin/comic-ui.json",Skin.class);
+
+		// fonts
+		FileHandleResolver resolver = new InternalFileHandleResolver();
+		assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+		assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+		FreeTypeFontLoaderParameter titleFont = new FreeTypeFontLoaderParameter();
+		titleFont.fontFileName = "GamePlayed.ttf";
+		titleFont.fontParameters.size = 130;
+		titleFont.fontParameters.borderWidth = 1;
+		titleFont.fontParameters.color = Color.YELLOW;
+		assetManager.load("GamePlayedTitle.ttf", BitmapFont.class, titleFont);
+
+		FreeTypeFontLoaderParameter contentFont = new FreeTypeFontLoaderParameter();
+		contentFont.fontFileName = "GamePlayed.ttf";
+		contentFont.fontParameters.size = 15;
+		contentFont.fontParameters.color = Color.WHITE;
+		assetManager.load("GamePlayedContent.ttf", BitmapFont.class, contentFont);
+
 		this.settingsManager.readFromConfig();
 	}
 

@@ -2,10 +2,8 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,7 +15,6 @@ import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Globals;
 
 public class MainScreen extends AbstractScreen {
-
     private Skin skin;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
@@ -91,15 +88,9 @@ public class MainScreen extends AbstractScreen {
         TextButton exitButton = new TextButton("Exit", skin);
 
         // fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        generator.dispose();
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
+        labelStyle2.font = titleFont;
 
         Label title = new Label("MAIN MENU",labelStyle2);
         titleTable.add(title);

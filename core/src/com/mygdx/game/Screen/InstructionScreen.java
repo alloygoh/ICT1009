@@ -2,12 +2,8 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,7 +16,6 @@ public class InstructionScreen extends AbstractScreen {
         super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
         this.getCamera().update();
-
 
         initStage();
     }
@@ -81,19 +76,11 @@ public class InstructionScreen extends AbstractScreen {
         TextButton backButton = new TextButton("Go Back", skin);
 
         // fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont titleFont = generator.generateFont(parameter);
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
 
-        parameter.size = 15;
-        parameter.color = Color.WHITE;
-        BitmapFont contentFont = generator.generateFont(parameter);
-        generator.dispose();
+        BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedContent.ttf", BitmapFont.class);
         Label.LabelStyle labelStyleContent = new Label.LabelStyle();
         labelStyleContent.font = contentFont;
 

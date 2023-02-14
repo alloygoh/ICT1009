@@ -101,15 +101,9 @@ public class LeaderboardScreen extends AbstractScreen {
         // End of mock samples and code
 
         // fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        generator.dispose();
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
+        labelStyle2.font = titleFont;
         // end of fonts config
         Label title = new Label("Leaderboards",labelStyle2);
         titleTable.add(title);

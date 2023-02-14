@@ -119,15 +119,9 @@ public class SettingsScreen extends AbstractScreen {
         configDialog.setColor(0, 0, 0, 0);
 
         // Fonts for Title
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GamePlayed.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;
-        parameter.borderWidth = 1;
-        parameter.color = Color.YELLOW;
-        BitmapFont font30 = generator.generateFont(parameter);
-        generator.dispose();
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
-        labelStyle2.font = font30;
+        labelStyle2.font = titleFont;
         // end of fonts config
         Label title = new Label("Settings",labelStyle2);
         titleTable.add(title);
