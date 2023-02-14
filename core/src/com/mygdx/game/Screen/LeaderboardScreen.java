@@ -68,13 +68,10 @@ public class LeaderboardScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table titleTable = new Table();
         Table mainTable = new Table();
         // set table to fill stage
-        titleTable.setFillParent(true);
         mainTable.setFillParent(true);
         // set alignment of contents in table
-        titleTable.top();
         mainTable.bottom();
 
         // button creation
@@ -108,9 +105,7 @@ public class LeaderboardScreen extends AbstractScreen {
 
         Table scoreTable = new Table(skin);
         scoreTable.setFillParent(true);
-//        scoreTable.setColor(230,230,130,5);
-        scoreTable.center();
-
+        scoreTable.top();
 
         // add listeners to buttons
         // go to main screen if clicked
@@ -135,7 +130,6 @@ public class LeaderboardScreen extends AbstractScreen {
         mainTable.row();
         mainTable.add(backButton);
 
-        this.getStage().addActor(titleTable);
         this.getStage().addActor(scoreTable);
         this.getStage().addActor(mainTable);
     }

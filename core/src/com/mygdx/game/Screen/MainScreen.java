@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -71,14 +70,11 @@ public class MainScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table titleTable = new Table();
         Table mainTable = new Table();
-        titleTable.setFillParent(true);
         // set table to fill stage
         mainTable.setFillParent(true);
         // set alignment of contents in table
-        titleTable.top();
-        mainTable.center();
+        mainTable.top();
 
         // button creation
         TextButton playButton = new TextButton("Start", skin);
@@ -159,7 +155,6 @@ public class MainScreen extends AbstractScreen {
         mainTable.add(exitButton);
 
         this.getStage().addActor(mainTable);
-        this.getStage().addActor(titleTable);
     }
 
 }

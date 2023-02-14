@@ -72,14 +72,11 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table titleTable = new Table();
         Table mainTable = new Table();
         // set table to fill stage
         mainTable.setFillParent(true);
-        titleTable.setFillParent(true);
         // set alignment of contents in table
-        titleTable.top();
-        mainTable.center();
+        mainTable.top();
 
         // labels
         Label player1Label = new Label("Player 1 Controls", skin, "big");
@@ -331,7 +328,6 @@ public class SettingsScreen extends AbstractScreen {
         mainTable.row();
 
         this.getStage().addActor(mainTable);
-        this.getStage().addActor(titleTable);
     }
 
 }
