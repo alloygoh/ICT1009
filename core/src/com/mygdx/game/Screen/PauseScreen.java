@@ -3,7 +3,9 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -84,6 +86,13 @@ public class PauseScreen extends AbstractScreen {
         TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
+        // fonts
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = titleFont;
+
+        Label title = new Label("GAME PAUSED",labelStyle2);
+
         // add listeners to buttons
         resumeButton.addListener(new ClickListener() {
             @Override
@@ -133,6 +142,8 @@ public class PauseScreen extends AbstractScreen {
         });
 
         // add buttons to table
+        mainTable.add(title);
+        mainTable.row();
         mainTable.add(resumeButton);
         mainTable.row();
         mainTable.add(scoreButton);
