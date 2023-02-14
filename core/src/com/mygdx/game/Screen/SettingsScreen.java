@@ -119,7 +119,9 @@ public class SettingsScreen extends AbstractScreen {
         labelStyle2.font = titleFont;
         // end of fonts config
         Label title = new Label("Settings",labelStyle2);
-        titleTable.add(title);
+        mainTable.add(title).colspan(2);
+        mainTable.row();
+        // mainTable.setDebug(true);
 
         // add listeners to buttons
         backButton.addListener(new ClickListener() {
@@ -324,7 +326,7 @@ public class SettingsScreen extends AbstractScreen {
         mainTable.add(p2RightLabel);
         mainTable.add(player2RightButton);
         mainTable.row();
-        mainTable.add(backButton);
+        mainTable.add(backButton).colspan(2);
         mainTable.row();
 
         this.getStage().addActor(mainTable);

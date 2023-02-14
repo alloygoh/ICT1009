@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -89,7 +90,6 @@ public class MainScreen extends AbstractScreen {
         labelStyle2.font = titleFont;
 
         Label title = new Label("MAIN MENU",labelStyle2);
-        titleTable.add(title);
 
         // add listeners to buttons
         // create new game screen if clicked
@@ -144,6 +144,8 @@ public class MainScreen extends AbstractScreen {
         });
 
         // add buttons to table
+        mainTable.add(title);
+        mainTable.row();
         mainTable.add(playButton);
         mainTable.row();
         mainTable.add(scoreButton);

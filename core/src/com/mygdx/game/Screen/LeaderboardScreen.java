@@ -72,7 +72,7 @@ public class LeaderboardScreen extends AbstractScreen {
         // set table to fill stage
         mainTable.setFillParent(true);
         // set alignment of contents in table
-        mainTable.bottom();
+        mainTable.top();
 
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
@@ -101,10 +101,10 @@ public class LeaderboardScreen extends AbstractScreen {
         labelStyle2.font = titleFont;
         // end of fonts config
         Label title = new Label("Leaderboards",labelStyle2);
-        titleTable.add(title);
+        mainTable.add(title);
+        mainTable.row();
 
         Table scoreTable = new Table(skin);
-        scoreTable.setFillParent(true);
         scoreTable.top();
 
         // add listeners to buttons
@@ -128,9 +128,10 @@ public class LeaderboardScreen extends AbstractScreen {
         }
 
         mainTable.row();
+        mainTable.add(scoreTable);
+        mainTable.row();
         mainTable.add(backButton);
 
-        this.getStage().addActor(scoreTable);
         this.getStage().addActor(mainTable);
     }
 
