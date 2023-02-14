@@ -117,7 +117,7 @@ public class SettingsScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
                 settingsManager.writeToConfig();
-                Globals.getScreenManager().setScreen(MainScreen.class);
+                Globals.getScreenManager().setScreen(Globals.getScreenManager().getPreviousScreen().getClass());
             }
         });
 

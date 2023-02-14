@@ -35,6 +35,7 @@ public class PauseScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         this.getStage().act();
         this.getStage().draw();
@@ -77,20 +78,16 @@ public class PauseScreen extends AbstractScreen {
         mainTable.top();
 
         // button creation
-        TextButton playButton = new TextButton("Resume", skin);
+        TextButton resumeButton = new TextButton("Resume", skin);
         TextButton scoreButton = new TextButton("Leaderboard", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         // add listeners to buttons
-        // create new game screen if clicked
-        playButton.addListener(new ClickListener() {
+        resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((GameScreen.class)) == null){
-                    screenManager.addScreen(new GameScreen(getGame(), settingsManager));
-                }
                 screenManager.setScreen(GameScreen.class);
 
             }
@@ -136,7 +133,7 @@ public class PauseScreen extends AbstractScreen {
         });
 
         // add buttons to table
-        mainTable.add(playButton);
+        mainTable.add(resumeButton);
         mainTable.row();
         mainTable.add(scoreButton);
         mainTable.row();

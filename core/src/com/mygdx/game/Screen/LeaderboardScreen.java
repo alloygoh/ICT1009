@@ -103,7 +103,7 @@ public class LeaderboardScreen extends AbstractScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                Globals.getScreenManager().setScreen(MainScreen.class);
+                Globals.getScreenManager().setScreen(Globals.getScreenManager().getPreviousScreen().getClass());
             }
         });
 

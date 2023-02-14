@@ -1,6 +1,5 @@
 package com.mygdx.game.Screen;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -115,6 +114,16 @@ public class GameScreen extends AbstractScreen{
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
+        // to go to Pause screen
+        if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
+        {
+            delta = 0;
+            if (screenManager.getScreen((PauseScreen.class)) == null){
+                screenManager.addScreen(new PauseScreen(getGame()));
+            }
+            screenManager.setScreen(PauseScreen.class);
+        }
+        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         ScreenUtils.clear(169, 169, 169, 0);
 
         for (AbstractActor actor: entities){
@@ -126,14 +135,6 @@ public class GameScreen extends AbstractScreen{
         governCollisions();
         this.getStage().draw();
 
-        // to go to Pause screen
-        if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
-        {
-            if (screenManager.getScreen((PauseScreen.class)) == null){
-                screenManager.addScreen(new PauseScreen(getGame()));
-            }
-            screenManager.setScreen(PauseScreen.class);
-        }
     }
 
     // to remove actor from stage
