@@ -3,6 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,7 +14,6 @@ import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Globals;
 
 public class MainScreen extends AbstractScreen {
-
     private Skin skin;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
@@ -82,6 +82,14 @@ public class MainScreen extends AbstractScreen {
         TextButton instructionsButton = new TextButton("Instructions", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
+
+        // fonts
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = titleFont;
+
+        Label title = new Label("MAIN MENU",labelStyle2);
+        titleTable.add(title);
 
         // add listeners to buttons
         // create new game screen if clicked

@@ -3,6 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -15,6 +16,7 @@ public class InstructionScreen extends AbstractScreen {
         super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
         this.getCamera().update();
+
         initStage();
     }
 
@@ -72,8 +74,21 @@ public class InstructionScreen extends AbstractScreen {
 
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
-        Label title = new Label("Game Instructions",skin);
-        title.setFontScale(5f);
+
+        // fonts
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = titleFont;
+
+        BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedContent.ttf", BitmapFont.class);
+        Label.LabelStyle labelStyleContent = new Label.LabelStyle();
+        labelStyleContent.font = contentFont;
+
+
+        // end of fonts config
+
+        Label title = new Label("Game Instructions",labelStyle2);
+        title.setFontScale(1f);
 
         Label instructions1 = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est velit egestas dui id ornare arcu odio ut sem. Viverra nibh cras pulvinar mattis. Lacinia quis vel eros donec ac odio tempor. Massa tincidunt dui ut ornare lectus. Mi eget mauris pharetra et ultrices neque ornare aenean. Eget velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Vestibulum lectus mauris ultrices eros in cursus turpis massa tincidunt. Eleifend mi in nulla posuere. Cras fermentum odio eu feugiat. Mattis rhoncus urna neque viverra justo nec ultrices. Leo in vitae turpis massa sed elementum tempus egestas sed. Fames ac turpis egestas integer eget aliquet nibh praesent. Lacinia at quis risus sed. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Ac tincidunt vitae semper quis lectus. Non arcu risus quis varius quam quisque id diam vel.\n" +
                 "\n" +

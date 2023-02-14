@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -111,6 +112,14 @@ public class SettingsScreen extends AbstractScreen {
         configDialog.add(new Label("Enter desired key!", skin, "big")).height(400);
         configDialog.row().expandY();
         configDialog.setColor(0, 0, 0, 0);
+
+        // Fonts for Title
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = titleFont;
+        // end of fonts config
+        Label title = new Label("Settings",labelStyle2);
+        titleTable.add(title);
 
         // add listeners to buttons
         backButton.addListener(new ClickListener() {

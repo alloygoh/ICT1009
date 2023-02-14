@@ -3,6 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -93,6 +94,14 @@ public class LeaderboardScreen extends AbstractScreen {
         scoreBoard.reviseScoreboard(entry5);
         scoreBoard.reviseScoreboard(entry6);
         // End of mock samples and code
+
+        // fonts
+        BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle();
+        labelStyle2.font = titleFont;
+        // end of fonts config
+        Label title = new Label("Leaderboards",labelStyle2);
+        titleTable.add(title);
 
         Table scoreTable = new Table(skin);
         scoreTable.setFillParent(true);
