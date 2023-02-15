@@ -11,6 +11,13 @@ public class Controls implements Serializable{
     private int left;
     private int right;
 
+    public Controls(){
+        this.up = -1;
+        this.down = -1;
+        this.left = -1;
+        this.right = -1;
+    }
+
     public Controls(int up, int down, int left, int right){
         this.up = up;
         this.down = down;
@@ -21,6 +28,7 @@ public class Controls implements Serializable{
     // presets
     public static final class Presets{
         public static final Controls DEFAULT = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
+        public static final Controls NONE = new Controls();
     }
 
     public int getUp() {
