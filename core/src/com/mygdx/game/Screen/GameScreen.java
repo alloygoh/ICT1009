@@ -9,8 +9,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -18,6 +20,7 @@ import com.mygdx.game.Characters.AbstractActor;
 import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
 import com.mygdx.game.Characters.CollidableActor;
+import com.mygdx.game.Characters.MovingAI;
 import com.mygdx.game.Characters.Pen;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
@@ -127,7 +130,10 @@ public class GameScreen extends AbstractScreen{
         ScreenUtils.clear(169, 169, 169, 0);
 
         for (AbstractActor actor: entities){
-            actor.processKeyStrokes();
+            if (actor instanceof MovingAI){
+                continue;
+            }
+            actor.processKeyStrokes(delta);
         }
 
         this.getStage().act(delta);
@@ -178,9 +184,11 @@ public class GameScreen extends AbstractScreen{
     public void initStage() {
         Controls c1 = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
         Ball ball1 = new Ball(this.renderer, 20.0f, Color.RED, c1);
-        // faster moving ball
-        // Controls c2 = new Controls(Input.Keys.E, Input.Keys.W, Input.Keys.Q, Input.Keys.R);
-        // Ball ball2 = new Ball(this.renderer, 20.0f, 0, Gdx.graphics.getHeight(), Color.YELLOW, 200,  c2);
+        // faster moving car
+        TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
+        TextureRegionDrawable carDrawable = new TextureRegionDrawable(atlas.findRegion("car"));
+
+        MovingAI carAI = new MovingAI(carDrawable,80, 80,150,100,150);
 
         // medium moving pen
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
@@ -189,7 +197,7 @@ public class GameScreen extends AbstractScreen{
         Car car1 = new Car(80, 80, p2);
 
         // entities.addAll(Arrays.asList(ball1, ball2, car1, pen1));
-        entities.addAll(Arrays.asList(car1, pen1, ball1));
+        entities.addAll(Arrays.asList(car1, pen1, ball1, carAI));
 
         for (Actor actor : entities) {
             this.getStage().addActor(actor);

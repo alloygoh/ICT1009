@@ -35,41 +35,41 @@ public abstract class AbstractActor extends Actor {
     }
 
     // provide basic movments
-    public void moveUp() {
-        this.setY(this.getY() + this.movementSpeed * Gdx.graphics.getDeltaTime());
+    public void moveUp(float delta) {
+        this.setY(this.getY() + this.movementSpeed * delta);
     }
 
-    public void moveDown() {
-        this.setY(this.getY() - this.movementSpeed * Gdx.graphics.getDeltaTime());
+    public void moveDown(float delta) {
+        this.setY(this.getY() - this.movementSpeed * delta);
     }
 
-    public void moveLeft() {
-        this.setX(this.getX() - this.movementSpeed * Gdx.graphics.getDeltaTime());
+    public void moveLeft(float delta) {
+        this.setX(this.getX() - this.movementSpeed * delta);
     }
 
-    public void moveRight() {
-        this.setX(this.getX() + this.movementSpeed * Gdx.graphics.getDeltaTime());
+    public void moveRight(float delta) {
+        this.setX(this.getX() + this.movementSpeed * delta);
     }
 
-    public void processKeyStrokes() {
+    public void processKeyStrokes(float delta) {
         directions.clear();
         if (Gdx.input.isKeyPressed(control.getUp())) {
-            this.moveUp();
+            this.moveUp(delta);
             this.directions.add(Direction.UP);
         }
 
         if (Gdx.input.isKeyPressed(control.getDown())) {
-            this.moveDown();
+            this.moveDown(delta);
             this.directions.add(Direction.DOWN);
         }
 
         if (Gdx.input.isKeyPressed(control.getLeft())) {
-            this.moveLeft();
+            this.moveLeft(delta);
             this.directions.add(Direction.LEFT);
         }
 
         if (Gdx.input.isKeyPressed(control.getRight())) {
-            this.moveRight();
+            this.moveRight(delta);
             this.directions.add(Direction.RIGHT);
         }
         if (directions.size() == 0) {
