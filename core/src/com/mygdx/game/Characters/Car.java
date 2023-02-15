@@ -1,15 +1,17 @@
 package com.mygdx.game.Characters;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
+import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 import com.mygdx.game.Utils.Globals;
 
-public class Car extends CollidableActor {
+public class Car extends CollidableActor implements iSaveable<Car>{
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("car"));
 
@@ -101,5 +103,28 @@ public class Car extends CollidableActor {
 
         }
 
+    }
+
+    @Override
+    public Car createInstanceOf(HashMap<String, Object> options) {
+        float x = (float)options.get("x");
+        float y = (float)options.get("y");
+        float width = (float)options.get("width");
+        float height = (float)options.get("height");
+        float movementSpeed = (float)options.get("speed");
+        Controls controls = (Controls)options.get("controls");
+        return new Car(width, height, x, y, movementSpeed, controls);
+    }
+
+    @Override
+    public HashMap<String, Object> stashOptions() {
+        HashMap<String, Object> options = new HashMap<>();
+        options.put("x", this.getX());
+        options.put("y", this.getY());
+        options.put("width", this.getWidth());
+        options.put("height", this.getHeight());
+        options.put("speed", this.getMovementSpeed());
+        options.put("controls", this.getControl());
+        return options;
     }
 }

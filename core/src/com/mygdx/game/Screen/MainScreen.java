@@ -1,5 +1,7 @@
 package com.mygdx.game.Screen;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Globals;
@@ -78,7 +81,7 @@ public class MainScreen extends AbstractScreen {
         mainTable.top();
 
         // button creation
-        TextButton playButton = new TextButton("Start", skin);
+        TextButton playButton = new TextButton("Start New Game", skin);
         TextButton scoreButton = new TextButton("Leaderboard", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
@@ -148,6 +151,23 @@ public class MainScreen extends AbstractScreen {
         mainTable.row();
         mainTable.add(playButton);
         mainTable.row();
+        
+
+        if (Globals.getGameStateManager().hasSavedState()){
+            TextButton resumeButton = new TextButton("Resume Saved Game", skin);
+            resumeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent inputEvent, float x, float y) {
+                    ArrayList<iSaveable> saveables = Globals.getGameStateManager().loadState();
+                    screenManager.addScreen(new GameScreen(getGame(), settingsManager, saveables));
+                    screenManager.setScreen(GameScreen.class);
+
+                }
+            });
+            mainTable.add(resumeButton);
+            mainTable.row();
+        }
+        
         mainTable.add(scoreButton);
         mainTable.row();
         mainTable.add(instructionsButton);

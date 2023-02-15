@@ -21,7 +21,10 @@ import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
 import com.mygdx.game.Characters.CollidableActor;
 import com.mygdx.game.Characters.MovingAI;
+import com.mygdx.game.Characters.MovingImageActor;
+import com.mygdx.game.Characters.MovingShapeActor;
 import com.mygdx.game.Characters.Pen;
+import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
@@ -34,8 +37,8 @@ public class GameScreen extends AbstractScreen{
     private Viewport viewport;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
-
-    public GameScreen(Game game, SettingsManager settingsManager){
+    
+    public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities){
         super(game);
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -46,11 +49,21 @@ public class GameScreen extends AbstractScreen{
 
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
-        this.entities = new ArrayList<>();
+        // this.entities = new ArrayList<>();
+        this.entities = (ArrayList<AbstractActor>)entities;
 
         initStage();
         this.getCamera().update();
         this.getStage().setDebugAll(true);
+
+        for(Actor actor:this.entities){
+            if(actor instanceof MovingShapeActor){
+                ((MovingShapeActor)actor).setRenderer(renderer);
+            } 
+        }
+    }
+    public GameScreen(Game game, SettingsManager settingsManager){
+        this(game, settingsManager, new ArrayList<>());
     }
 
 
@@ -116,11 +129,17 @@ public class GameScreen extends AbstractScreen{
 
     @Override
     public void render(float delta) {
+        Globals.incrementScore();
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         // to go to Pause screen
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE)))
         {
             delta = 0;
+            ArrayList<iSaveable> saveables = new ArrayList<>();
+            saveables.add((iSaveable)this.entities.get(0));
+            saveables.add((iSaveable)this.entities.get(1));
+            Globals.getGameStateManager().updateSaveables(saveables);
+            Globals.getGameStateManager().saveState();
             if (screenManager.getScreen((PauseScreen.class)) == null){
                 screenManager.addScreen(new PauseScreen(getGame()));
             }
@@ -193,11 +212,28 @@ public class GameScreen extends AbstractScreen{
         // medium moving pen
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
         Controls p2 = settingsManager.getControlSettings().getControlOf(2);
-        Pen pen1 = new Pen(80, 80, 200, 0, 100, p1);
-        Car car1 = new Car(80, 80, p2);
+        Pen player1;
+        Car player2;
+        if (this.entities.size() == 0){
+            player1 = new Pen(80, 80, 200, 0, 100, p1);
+            player2 = new Car(80, 80, p2);
+        } else{
+            if(this.entities.get(0) instanceof Pen){
+                player1 = (Pen)this.entities.get(0);
+                player1.setControl(p1);
+                player2 = (Car)this.entities.get(1);
+                player2.setControl(p2);
+            } else{
+                player1 = (Pen)this.entities.get(1);
+                player1.setControl(p1);
+                player2 = (Car)this.entities.get(0);
+                player2.setControl(p2);
+            }
+        }
 
         // entities.addAll(Arrays.asList(ball1, ball2, car1, pen1));
-        entities.addAll(Arrays.asList(car1, pen1, ball1, carAI));
+            entities.clear();
+            entities.addAll(Arrays.asList(player1, player2,ball1, carAI));
 
         for (Actor actor : entities) {
             this.getStage().addActor(actor);

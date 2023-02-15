@@ -34,6 +34,14 @@ public abstract class AbstractActor extends Actor {
         return movementSpeed;
     }
 
+    public Controls getControl() {
+        return control;
+    }
+
+    public void setControl(Controls control) {
+        this.control = control;
+    }
+
     // provide basic movments
     public void moveUp(float delta) {
         this.setY(this.getY() + this.movementSpeed * delta);

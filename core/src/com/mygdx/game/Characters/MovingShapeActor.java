@@ -56,6 +56,10 @@ public class MovingShapeActor extends AbstractActor{
         batch.begin();
 	}
 
+    public void setRenderer(ShapeRenderer renderer) {
+        this.renderer = renderer;
+    }
+
     @Override
     public void act(float delta){
         super.act(delta);

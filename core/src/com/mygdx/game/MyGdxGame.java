@@ -34,6 +34,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         this.assetManager = Globals.getAssetManager();
 		this.settingsManager = Globals.getSettingsManager();
 		this.screenManager = Globals.getScreenManager();
+
 		screenManager.addScreen(new LoadingScreen(this, this));
 		initAssets();
 		screenManager.setScreen(LoadingScreen.class);
