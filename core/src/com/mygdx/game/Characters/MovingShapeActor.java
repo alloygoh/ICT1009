@@ -60,11 +60,6 @@ public class MovingShapeActor extends AbstractActor{
         this.renderer = renderer;
     }
 
-    @Override
-    public void act(float delta){
-        super.act(delta);
-    }
-
     public void reactToEvent(String event, Object others){
         return;
     }
