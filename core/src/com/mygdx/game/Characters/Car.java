@@ -11,9 +11,13 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 import com.mygdx.game.Utils.Globals;
 
-public class Car extends CollidableActor implements iSaveable<Car>{
+public class Car extends CollidableActor implements iSaveable{
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("car"));
+
+    public Car() {
+        this(drawable.getMinWidth(), drawable.getMinHeight());
+    }
 
     public Car(float width, float height) {
         this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
@@ -106,14 +110,19 @@ public class Car extends CollidableActor implements iSaveable<Car>{
     }
 
     @Override
-    public Car createInstanceOf(HashMap<String, Object> options) {
+    public void populate(HashMap<String, Object> options) {
         float x = (float)options.get("x");
         float y = (float)options.get("y");
         float width = (float)options.get("width");
         float height = (float)options.get("height");
         float movementSpeed = (float)options.get("speed");
         Controls controls = (Controls)options.get("controls");
-        return new Car(width, height, x, y, movementSpeed, controls);
+        this.setX(x);
+        this.setY(y);    
+        this.setWidth(width);
+        this.setHeight(height);
+        this.setMovementSpeed(movementSpeed);
+        this.setControl(controls);
     }
 
     @Override

@@ -6,15 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g3d.shaders.BaseShader.GlobalSetter;
-import com.mygdx.game.Characters.Ball;
-import com.mygdx.game.Characters.Car;
-import com.mygdx.game.Characters.Pen;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Utils.Globals;
 
@@ -32,6 +28,7 @@ public class GameStateManager {
     }
     
     private void buildStash(){
+        stash.clear();
         for(iSaveable saveable: saveables){
             ArrayList<HashMap> temp = stash.get(saveable.getClass());
             if (temp == null){
@@ -55,6 +52,10 @@ public class GameStateManager {
     public void saveState(){
         FileOutputStream outputStream;
         try{
+            File file = new File("game.state");
+            if (file.exists()){
+                file.delete();
+            }
             outputStream = new FileOutputStream("game.state", false);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(saveables.size());
@@ -73,20 +74,9 @@ public class GameStateManager {
         }
     }
     
-    private void initSaveable(Class saveableClass, HashMap<String,Object>options){
-        if(saveableClass == Ball.class){
-           Ball tempBall = new Ball(null,0,Color.BLACK);
-           Ball trueBall = tempBall.createInstanceOf(options);
-           saveables.add(trueBall);
-        } else if(saveableClass == Pen.class){
-           Pen tempPen = new Pen(0, 0);
-           Pen truePen = tempPen.createInstanceOf(options);
-           saveables.add(truePen);
-        }else if(saveableClass == Car.class){
-           Car tempCar = new Car(0, 0);
-           Car trueCar = tempCar.createInstanceOf(options);
-           saveables.add(trueCar);
-        }
+    private void initSaveable(Class<? extends iSaveable> saveableClass, HashMap<String,Object>options) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+        saveables.add((iSaveable)saveableClass.getConstructor().newInstance());
+        saveables.get(saveables.size()-1).populate(options);
     }
     
     public ArrayList<iSaveable> loadState(){
@@ -102,7 +92,7 @@ public class GameStateManager {
             }
             Globals.setScore((int)objectInputStream.readObject());
             objectInputStream.close();
-        } catch(ClassNotFoundException| IOException e){
+        } catch(Exception e){
             // unable to load config
             return new ArrayList<>();
         }

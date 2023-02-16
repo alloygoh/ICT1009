@@ -11,10 +11,14 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 import com.mygdx.game.Utils.Globals;
 
-public class Pen extends CollidableActor implements iSaveable<Pen>{
+public class Pen extends CollidableActor implements iSaveable{
 
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("pen"));
+
+    public Pen() {
+        this(drawable.getMinWidth(), drawable.getMinHeight());
+    }
 
     public Pen(float width, float height) {
         this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
@@ -107,14 +111,19 @@ public class Pen extends CollidableActor implements iSaveable<Pen>{
     }
 
     @Override
-    public Pen createInstanceOf(HashMap options) {
+    public void populate(HashMap<String, Object> options) {
         float x = (float)options.get("x");
         float y = (float)options.get("y");
         float width = (float)options.get("width");
         float height = (float)options.get("height");
         float movementSpeed = (float)options.get("speed");
         Controls controls = (Controls)options.get("controls");
-        return new Pen(width, height, x, y, movementSpeed, controls);
+        this.setX(x);
+        this.setY(y);    
+        this.setWidth(width);
+        this.setHeight(height);
+        this.setMovementSpeed(movementSpeed);
+        this.setControl(controls);
     }
 
     @Override

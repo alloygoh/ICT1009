@@ -21,7 +21,6 @@ import com.mygdx.game.Characters.Ball;
 import com.mygdx.game.Characters.Car;
 import com.mygdx.game.Characters.CollidableActor;
 import com.mygdx.game.Characters.MovingAI;
-import com.mygdx.game.Characters.MovingImageActor;
 import com.mygdx.game.Characters.MovingShapeActor;
 import com.mygdx.game.Characters.Pen;
 import com.mygdx.game.Interfaces.iSaveable;

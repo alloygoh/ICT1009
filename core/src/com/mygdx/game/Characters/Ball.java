@@ -8,7 +8,11 @@ import com.mygdx.game.Addons.Gravity;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Utils.Controls;
 
-public class Ball extends MovingShapeActor implements iSaveable<Ball>{
+public class Ball extends MovingShapeActor implements iSaveable{
+    
+    public Ball(){
+        this(null,0,Color.CLEAR);
+    }
 
     public Ball(ShapeRenderer renderer, float radius, Color color){
         this(renderer, radius, 0, 0, color, 100, Controls.Presets.DEFAULT);
@@ -58,7 +62,7 @@ public class Ball extends MovingShapeActor implements iSaveable<Ball>{
     }
 
     @Override
-    public Ball createInstanceOf(HashMap<String, Object>options) {
+    public void populate(HashMap<String, Object>options) {
         float x = (float)options.get("x");
         float y = (float)options.get("y");
         float radius = (float)options.get("radius");
@@ -66,6 +70,13 @@ public class Ball extends MovingShapeActor implements iSaveable<Ball>{
         float movementSpeed = (float)options.get("speed");
         ShapeRenderer renderer = (ShapeRenderer)options.get("renderer");
         Controls controls = (Controls)options.get("controls");
-        return new Ball(renderer, radius, x, y, color, movementSpeed);
+        this.setX(x);    
+        this.setY(y);    
+        this.setWidth(radius*2);
+        this.setHeight(radius*2);
+        this.setMovementSpeed(movementSpeed);
+        this.setColor(color);
+        this.setRenderer(renderer);
+        this.setControl(controls);
     }
 }
