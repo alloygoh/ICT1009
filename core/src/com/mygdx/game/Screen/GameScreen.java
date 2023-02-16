@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -67,7 +68,6 @@ public class GameScreen extends AbstractScreen{
 
 
     private void governCollisions(){
-
         ArrayList<CollidableActor> collidables = new ArrayList<>();
         for(Actor actor:entities){
             if(actor instanceof CollidableActor){
@@ -85,7 +85,7 @@ public class GameScreen extends AbstractScreen{
 
 
     public void governBorders(){
-        for(Actor actor:entities){
+        for(AbstractActor actor:entities){
             if (exceedingBorder(actor)){
                 correctMovement(actor);
             }
@@ -93,7 +93,7 @@ public class GameScreen extends AbstractScreen{
     }
 
     // determine if actors exceed game bounds
-    public boolean exceedingBorder(Actor actor){
+    public boolean exceedingBorder(AbstractActor actor){
         float maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth();
         float maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight();
         if(actor instanceof Ball){
@@ -101,7 +101,9 @@ public class GameScreen extends AbstractScreen{
             maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth()*2;
             maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight()*2;
         }
-        if(actor.getX() > maxX || actor.getY() > maxY || actor.getX() < 0 || actor.getY() < 0){
+        
+        Vector2 forecastedPosition = actor.getForecastedPosition();
+        if(forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0 || forecastedPosition.y < 0){
             return true;
         }
         return false;
@@ -154,9 +156,9 @@ public class GameScreen extends AbstractScreen{
             actor.processKeyStrokes(delta);
         }
 
-        this.getStage().act(delta);
         governBorders();
         governCollisions();
+        this.getStage().act(delta);
         this.getStage().draw();
 
     }
