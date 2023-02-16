@@ -19,6 +19,7 @@ public class PauseScreen extends AbstractScreen {
     private Skin skin;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
+    private Label score;
 
     public PauseScreen(Game game) {
         super(game);
@@ -40,6 +41,7 @@ public class PauseScreen extends AbstractScreen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         this.getStage().act();
+        this.score.setText("Score: " + Globals.getScore());
         this.getStage().draw();
     }
 
@@ -80,6 +82,7 @@ public class PauseScreen extends AbstractScreen {
         mainTable.top();
 
         // button creation
+        this.score = new Label("Score: " + Globals.getScore(),skin);
         TextButton resumeButton = new TextButton("Resume", skin);
         TextButton scoreButton = new TextButton("Leaderboard", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
@@ -143,6 +146,8 @@ public class PauseScreen extends AbstractScreen {
 
         // add buttons to table
         mainTable.add(title);
+        mainTable.row();
+        mainTable.add(score);
         mainTable.row();
         mainTable.add(resumeButton);
         mainTable.row();
