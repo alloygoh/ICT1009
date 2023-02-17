@@ -6,12 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public abstract class AbstractScreen implements Screen{
+public abstract class AbstractScreen implements Screen {
     private Game game;
     private Stage stage;
     private OrthographicCamera camera;
 
-    public AbstractScreen(Game game){
+    public AbstractScreen(Game game) {
         this.game = game;
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -34,12 +34,12 @@ public abstract class AbstractScreen implements Screen{
     public OrthographicCamera getCamera() {
         return camera;
     }
-    
+
     // to be overwritten by all screens to add actors onto stage
     public abstract void initStage();
 
     @Override
-    public void dispose(){
+    public void dispose() {
         stage.dispose();
     }
 }

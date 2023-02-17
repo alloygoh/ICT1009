@@ -9,14 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Utils.Globals;
 
-public class LoadingScreen extends AbstractScreen{
+public class LoadingScreen extends AbstractScreen {
     private Skin skin;
     private ProgressBar progressBar;
     private Label loadingLabel;
     private OnLoadListener onLoadListener;
     private AssetManager assetManager;
 
-    public interface OnLoadListener{
+    public interface OnLoadListener {
         void onLoad();
     }
 
@@ -29,6 +29,7 @@ public class LoadingScreen extends AbstractScreen{
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
         initStage();
     }
+
     @Override
     public void show() {
     }
@@ -41,7 +42,7 @@ public class LoadingScreen extends AbstractScreen{
             onLoadListener.onLoad();
         }
         progressBar.setValue(assetManager.getProgress());
-        loadingLabel.setText("Loading... " + (int)(assetManager.getProgress() * 100) + "%");
+        loadingLabel.setText("Loading... " + (int) (assetManager.getProgress() * 100) + "%");
         this.getStage().draw();
     }
 

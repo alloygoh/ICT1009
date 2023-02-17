@@ -5,16 +5,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Utils.Globals;
 
 public class InstructionScreen extends AbstractScreen {
     private Skin skin;
 
-    public InstructionScreen(Game game){
+    public InstructionScreen(Game game) {
         super(game);
-        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json",Skin.class);
+        this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
         this.getCamera().update();
 
         initStage();
@@ -25,7 +28,7 @@ public class InstructionScreen extends AbstractScreen {
         //Stage should control input:
         Gdx.input.setInputProcessor(this.getStage());
     }
-    
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
@@ -66,7 +69,7 @@ public class InstructionScreen extends AbstractScreen {
         Table mainTable = new Table();
         Table buttons = new Table();
         // set table to fill stage
-        mainTable.setFillParent(true); 
+        mainTable.setFillParent(true);
         // set alignment of contents in table
         mainTable.top();
         buttons.bottom();
@@ -87,7 +90,7 @@ public class InstructionScreen extends AbstractScreen {
 
         // end of fonts config
 
-        Label title = new Label("Game Instructions",labelStyle2);
+        Label title = new Label("Game Instructions", labelStyle2);
         title.setFontScale(1f);
 
         Label instructions1 = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Est velit egestas dui id ornare arcu odio ut sem. Viverra nibh cras pulvinar mattis. Lacinia quis vel eros donec ac odio tempor. Massa tincidunt dui ut ornare lectus. Mi eget mauris pharetra et ultrices neque ornare aenean. Eget velit aliquet sagittis id consectetur purus ut faucibus pulvinar. Vestibulum lectus mauris ultrices eros in cursus turpis massa tincidunt. Eleifend mi in nulla posuere. Cras fermentum odio eu feugiat. Mattis rhoncus urna neque viverra justo nec ultrices. Leo in vitae turpis massa sed elementum tempus egestas sed. Fames ac turpis egestas integer eget aliquet nibh praesent. Lacinia at quis risus sed. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum. Ac tincidunt vitae semper quis lectus. Non arcu risus quis varius quam quisque id diam vel.\n" +
@@ -115,9 +118,9 @@ public class InstructionScreen extends AbstractScreen {
 
         // add listeners to buttons
         // go to main screen if clicked
-        backButton.addListener(new ClickListener(){
+        backButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent inputEvent, float x, float y){
+            public void clicked(InputEvent inputEvent, float x, float y) {
                 Globals.getScreenManager().setScreen(Globals.getScreenManager().getPreviousScreen().getClass());
             }
         });

@@ -1,16 +1,16 @@
 package com.mygdx.game.Characters;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
-public class Pen extends CollidableActor implements iSaveable{
+import java.util.HashMap;
 
-    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas",TextureAtlas.class);
+public class Pen extends CollidableActor implements iSaveable {
+
+    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("pen"));
 
     public Pen() {
@@ -42,20 +42,20 @@ public class Pen extends CollidableActor implements iSaveable{
     }
 
     public Pen(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
-            Controls control) {
+               Controls control) {
         super(drawable, width, height, x, y, movementSpeed, control);
     }
 
     @Override
     public void populate(HashMap<String, Object> options) {
-        float x = (float)options.get("x");
-        float y = (float)options.get("y");
-        float width = (float)options.get("width");
-        float height = (float)options.get("height");
-        float movementSpeed = (float)options.get("speed");
-        Controls controls = (Controls)options.get("controls");
+        float x = (float) options.get("x");
+        float y = (float) options.get("y");
+        float width = (float) options.get("width");
+        float height = (float) options.get("height");
+        float movementSpeed = (float) options.get("speed");
+        Controls controls = (Controls) options.get("controls");
         this.setX(x);
-        this.setY(y);    
+        this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
         this.setMovementSpeed(movementSpeed);

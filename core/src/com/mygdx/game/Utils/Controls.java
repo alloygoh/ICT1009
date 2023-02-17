@@ -1,24 +1,24 @@
 package com.mygdx.game.Utils;
 
-import java.io.Serializable;
-
 import com.badlogic.gdx.Input;
 
+import java.io.Serializable;
+
 // allow custom controls
-public class Controls implements Serializable{
+public class Controls implements Serializable {
     private int up;
     private int down;
     private int left;
     private int right;
 
-    public Controls(){
+    public Controls() {
         this.up = -1;
         this.down = -1;
         this.left = -1;
         this.right = -1;
     }
 
-    public Controls(int up, int down, int left, int right){
+    public Controls(int up, int down, int left, int right) {
         this.up = up;
         this.down = down;
         this.left = left;
@@ -26,7 +26,7 @@ public class Controls implements Serializable{
     }
 
     // presets
-    public static final class Presets{
+    public static final class Presets {
         public static final Controls DEFAULT = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
         public static final Controls NONE = new Controls();
     }

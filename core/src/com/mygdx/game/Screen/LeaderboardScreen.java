@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Leaderboard.Leaderboard;
 import com.mygdx.game.Leaderboard.LeaderboardEntry;
@@ -100,7 +97,7 @@ public class LeaderboardScreen extends AbstractScreen {
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
         // end of fonts config
-        Label title = new Label("Leaderboards",labelStyle2);
+        Label title = new Label("Leaderboards", labelStyle2);
         mainTable.add(title);
         mainTable.row();
 

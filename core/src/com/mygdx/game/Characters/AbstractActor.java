@@ -1,12 +1,12 @@
 package com.mygdx.game.Characters;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
+
+import java.util.ArrayList;
 
 public abstract class AbstractActor extends Actor {
     protected ArrayList<Direction> directions;
@@ -15,7 +15,7 @@ public abstract class AbstractActor extends Actor {
     private Controls control;
 
     public AbstractActor(float width, float height, float x, float y,
-            float movementSpeed, Controls control) {
+                         float movementSpeed, Controls control) {
         this.setWidth(width);
         this.setHeight(height);
         this.setX(x);
@@ -25,31 +25,37 @@ public abstract class AbstractActor extends Actor {
         this.directions = new ArrayList<>();
     }
 
-    public Vector2 getForecastedPosition(){
+    public Vector2 getForecastedPosition() {
         float delta = Gdx.graphics.getDeltaTime();
         float forecastX = this.getX();
-        float forecastY= this.getY();
-        if (directions.contains(Direction.UP)){
+        float forecastY = this.getY();
+        if (directions.contains(Direction.UP)) {
             forecastY += this.movementSpeed * delta;
-        }if (directions.contains(Direction.DOWN)){
+        }
+        if (directions.contains(Direction.DOWN)) {
             forecastY -= this.movementSpeed * delta;
-        }if (directions.contains(Direction.LEFT)){
+        }
+        if (directions.contains(Direction.LEFT)) {
             forecastX -= this.movementSpeed * delta;
-        }if (directions.contains(Direction.RIGHT)){
+        }
+        if (directions.contains(Direction.RIGHT)) {
             forecastX += this.movementSpeed * delta;
         }
         return new Vector2(forecastX, forecastY);
     }
 
     @Override
-    public void act(float delta){
-        if (directions.contains(Direction.UP)){
+    public void act(float delta) {
+        if (directions.contains(Direction.UP)) {
             moveUp(delta);
-        }if (directions.contains(Direction.DOWN)){
+        }
+        if (directions.contains(Direction.DOWN)) {
             moveDown(delta);
-        }if (directions.contains(Direction.LEFT)){
+        }
+        if (directions.contains(Direction.LEFT)) {
             moveLeft(delta);
-        }if (directions.contains(Direction.RIGHT)){
+        }
+        if (directions.contains(Direction.RIGHT)) {
             moveRight(delta);
         }
     }

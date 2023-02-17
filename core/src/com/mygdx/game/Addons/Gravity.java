@@ -10,20 +10,20 @@ public class Gravity {
     // default to light gravity
     private static int gravityLevel = GRAVITY_LIGHT;
 
-    public void setGravityLevel(int gravityLevel){
+    public void setGravityLevel(int gravityLevel) {
         Gravity.gravityLevel = gravityLevel;
     }
-    
+
     // handle default gravity
-    public static void invokeGravity(AbstractActor actor, float delta){
-       invokeGravity(gravityLevel, actor, delta); 
+    public static void invokeGravity(AbstractActor actor, float delta) {
+        invokeGravity(gravityLevel, actor, delta);
     }
-    
-    public static void invokeGravity(int gravityLevel, AbstractActor actor, float delta){
-        if(actor.getY() <= 0){
+
+    public static void invokeGravity(int gravityLevel, AbstractActor actor, float delta) {
+        if (actor.getY() <= 0) {
             return;
         }
-        actor.setY(actor.getY() - delta*(actor.getMovementSpeed()/gravityLevel));
+        actor.setY(actor.getY() - delta * (actor.getMovementSpeed() / gravityLevel));
     }
 
 }

@@ -82,7 +82,7 @@ public class PauseScreen extends AbstractScreen {
         mainTable.top();
 
         // button creation
-        this.score = new Label("Score: " + Globals.getScore(),skin);
+        this.score = new Label("Score: " + Globals.getScore(), skin);
         TextButton resumeButton = new TextButton("Resume", skin);
         TextButton scoreButton = new TextButton("Leaderboard", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
@@ -94,7 +94,7 @@ public class PauseScreen extends AbstractScreen {
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
 
-        Label title = new Label("GAME PAUSED",labelStyle2);
+        Label title = new Label("GAME PAUSED", labelStyle2);
 
         // add listeners to buttons
         resumeButton.addListener(new ClickListener() {
@@ -108,7 +108,7 @@ public class PauseScreen extends AbstractScreen {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((SettingsScreen.class)) == null){
+                if (screenManager.getScreen((SettingsScreen.class)) == null) {
                     screenManager.addScreen(new SettingsScreen(getGame(), settingsManager));
                 }
                 screenManager.setScreen(SettingsScreen.class);
@@ -118,7 +118,7 @@ public class PauseScreen extends AbstractScreen {
         scoreButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((LeaderboardScreen.class)) == null){
+                if (screenManager.getScreen((LeaderboardScreen.class)) == null) {
                     screenManager.addScreen(new LeaderboardScreen(getGame()));
                 }
                 screenManager.setScreen(LeaderboardScreen.class);
@@ -128,7 +128,7 @@ public class PauseScreen extends AbstractScreen {
         instructionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((InstructionScreen.class)) == null){
+                if (screenManager.getScreen((InstructionScreen.class)) == null) {
                     screenManager.addScreen(new InstructionScreen(getGame()));
                 }
                 screenManager.setScreen(InstructionScreen.class);

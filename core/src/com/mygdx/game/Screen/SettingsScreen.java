@@ -7,11 +7,7 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Controls;
@@ -118,7 +114,7 @@ public class SettingsScreen extends AbstractScreen {
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
         // end of fonts config
-        Label title = new Label("Settings",labelStyle2);
+        Label title = new Label("Settings", labelStyle2);
         mainTable.add(title).colspan(2);
         mainTable.row();
         // mainTable.setDebug(true);

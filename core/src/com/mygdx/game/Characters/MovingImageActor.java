@@ -20,12 +20,12 @@ public class MovingImageActor extends AbstractActor {
     }
 
     public MovingImageActor(TextureRegionDrawable texture, float width, float height, float x, float y,
-            Controls control) {
+                            Controls control) {
         this(texture, width, height, x, y, 100, control);
     }
 
     public MovingImageActor(TextureRegionDrawable texture, float width, float height, float x, float y,
-            float movementSpeed, Controls control) {
+                            float movementSpeed, Controls control) {
         super(width, height, x, y, movementSpeed, control);
         this.texture = texture;
     }
@@ -36,7 +36,7 @@ public class MovingImageActor extends AbstractActor {
     }
 
     @Override
-    public void reactToEvent(String event, Object others){
+    public void reactToEvent(String event, Object others) {
         return;
     }
 

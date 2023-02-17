@@ -1,10 +1,10 @@
 package com.mygdx.game.Manager;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.Screen.AbstractScreen;
+
+import java.util.HashMap;
 
 public class ScreenManager {
     private HashMap<Class, AbstractScreen> screensMap;
@@ -16,31 +16,31 @@ public class ScreenManager {
         this.game = game;
     }
 
-    public void addScreen(AbstractScreen screen){
+    public void addScreen(AbstractScreen screen) {
         screensMap.put(screen.getClass(), screen);
     }
 
-    public Screen getScreen(Class screenClass){
+    public Screen getScreen(Class screenClass) {
         return screensMap.get(screenClass);
     }
 
-    public void setScreen(Class screen){
+    public void setScreen(Class screen) {
         this.previousScreen = (AbstractScreen) game.getScreen();
         game.setScreen(getScreen(screen));
     }
-    
-    public AbstractScreen getPreviousScreen(){
+
+    public AbstractScreen getPreviousScreen() {
         return this.previousScreen;
     }
 
-    public void disposeScreen(AbstractScreen screen){
+    public void disposeScreen(AbstractScreen screen) {
         Screen temp = (Screen) screen;
         temp.dispose();
         this.screensMap.remove(screen.getClass());
     }
 
-    public void disposeAll(){
-        for(Screen screen: screensMap.values()){
+    public void disposeAll() {
+        for (Screen screen : screensMap.values()) {
             screen.dispose();
         }
         screensMap.clear();

@@ -1,7 +1,5 @@
 package com.mygdx.game.Screen;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
@@ -16,6 +14,8 @@ import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Utils.Globals;
+
+import java.util.ArrayList;
 
 public class MainScreen extends AbstractScreen {
     private Skin skin;
@@ -92,14 +92,14 @@ public class MainScreen extends AbstractScreen {
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
 
-        Label title = new Label("MAIN MENU",labelStyle2);
+        Label title = new Label("MAIN MENU", labelStyle2);
 
         // add listeners to buttons
         // create new game screen if clicked
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((GameScreen.class)) == null){
+                if (screenManager.getScreen((GameScreen.class)) == null) {
                     screenManager.addScreen(new GameScreen(getGame(), settingsManager));
                 }
                 screenManager.setScreen(GameScreen.class);
@@ -110,7 +110,7 @@ public class MainScreen extends AbstractScreen {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((SettingsScreen.class)) == null){
+                if (screenManager.getScreen((SettingsScreen.class)) == null) {
                     screenManager.addScreen(new SettingsScreen(getGame(), settingsManager));
                 }
                 screenManager.setScreen(SettingsScreen.class);
@@ -120,7 +120,7 @@ public class MainScreen extends AbstractScreen {
         scoreButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((LeaderboardScreen.class)) == null){
+                if (screenManager.getScreen((LeaderboardScreen.class)) == null) {
                     screenManager.addScreen(new LeaderboardScreen(getGame()));
                 }
                 screenManager.setScreen(LeaderboardScreen.class);
@@ -130,7 +130,7 @@ public class MainScreen extends AbstractScreen {
         instructionsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                if (screenManager.getScreen((InstructionScreen.class)) == null){
+                if (screenManager.getScreen((InstructionScreen.class)) == null) {
                     screenManager.addScreen(new InstructionScreen(getGame()));
                 }
                 screenManager.setScreen(InstructionScreen.class);
@@ -151,9 +151,9 @@ public class MainScreen extends AbstractScreen {
         mainTable.row();
         mainTable.add(playButton);
         mainTable.row();
-        
 
-        if (Globals.getGameStateManager().hasSavedState()){
+
+        if (Globals.getGameStateManager().hasSavedState()) {
             TextButton resumeButton = new TextButton("Resume Saved Game", skin);
             resumeButton.addListener(new ClickListener() {
                 @Override
@@ -167,7 +167,7 @@ public class MainScreen extends AbstractScreen {
             mainTable.add(resumeButton);
             mainTable.row();
         }
-        
+
         mainTable.add(scoreButton);
         mainTable.row();
         mainTable.add(instructionsButton);

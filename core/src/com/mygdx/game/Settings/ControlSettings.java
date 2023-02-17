@@ -1,13 +1,13 @@
 package com.mygdx.game.Settings;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Input;
 import com.mygdx.game.Interfaces.iSettings;
 import com.mygdx.game.Utils.Controls;
 
-public class ControlSettings implements iSettings{
+import java.io.Serializable;
+import java.util.HashMap;
+
+public class ControlSettings implements iSettings {
 
     private HashMap<Integer, Controls> controlSettingsMap;
 
@@ -15,7 +15,7 @@ public class ControlSettings implements iSettings{
         this.controlSettingsMap = new HashMap<>();
     }
 
-    public ControlSettings(HashMap<Integer, Controls> controlSetting){
+    public ControlSettings(HashMap<Integer, Controls> controlSetting) {
         this.controlSettingsMap = controlSetting;
     }
 

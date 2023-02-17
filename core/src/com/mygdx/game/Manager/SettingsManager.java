@@ -1,19 +1,14 @@
 package com.mygdx.game.Manager;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-
 import com.mygdx.game.Interfaces.iSettings;
 import com.mygdx.game.Settings.ControlSettings;
 import com.mygdx.game.Utils.Controls;
 
-public class SettingsManager{
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class SettingsManager {
 
     private ControlSettings controlSettings;
     private ArrayList<iSettings> masterSettings;
@@ -30,31 +25,31 @@ public class SettingsManager{
         return controlSettings;
     }
 
-    private void populateSettings(){
-        this.controlSettings = new ControlSettings((HashMap<Integer, Controls>)masterSettings.get(0));
+    private void populateSettings() {
+        this.controlSettings = new ControlSettings((HashMap<Integer, Controls>) masterSettings.get(0));
 
         // re-add into masterSettings with proper types to allow for proper serialization
         masterSettings.clear();
         masterSettings.add(controlSettings);
     }
 
-    private ArrayList serializeAllSettings(){
+    private ArrayList serializeAllSettings() {
         ArrayList serializedData = new ArrayList<>();
-        for(iSettings data: masterSettings){
+        for (iSettings data : masterSettings) {
             serializedData.add(data.getSerializableValue());
         }
         return serializedData;
     }
 
-    public void readFromConfig(){
+    public void readFromConfig() {
         FileInputStream inputStream;
-        try{
+        try {
             inputStream = new FileInputStream("settings.config");
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-            masterSettings = (ArrayList)objectInputStream.readObject();
+            masterSettings = (ArrayList) objectInputStream.readObject();
             objectInputStream.close();
             populateSettings();
-        } catch(ClassNotFoundException| IOException e){
+        } catch (ClassNotFoundException | IOException e) {
             // no previous config or error reading config
             // populate with default
             controlSettings.initDefaultControls();
@@ -62,19 +57,19 @@ public class SettingsManager{
         return;
     }
 
-    public void writeToConfig(){
+    public void writeToConfig() {
         FileOutputStream outputStream;
-        try{
+        try {
             outputStream = new FileOutputStream("settings.config");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(serializeAllSettings());
             objectOutputStream.flush();
             objectOutputStream.close();
-        } catch(IOException e){
+        } catch (IOException e) {
             // unable to write config, terminate
             return;
         }
     }
 
-    
+
 }

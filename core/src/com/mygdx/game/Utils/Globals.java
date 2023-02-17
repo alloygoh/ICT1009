@@ -25,7 +25,7 @@ public class Globals {
         return score;
     }
 
-    public static void incrementScore(){
+    public static void incrementScore() {
         Globals.score += 1;
     }
 
@@ -45,7 +45,7 @@ public class Globals {
         return settingsManager;
     }
 
-    public static AssetManager getAssetManager(){
+    public static AssetManager getAssetManager() {
         return assetManager;
     }
 }
