@@ -3,34 +3,41 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Characters.*;
+import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
+import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+
 
 public class GameScreen extends AbstractScreen {
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private ArrayList<AbstractActor> entities;
+    private ArrayList<BaseObject> objectList;
     private Viewport viewport;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
+    private HashMap<Class, ArrayList<BaseObject>> stash;
+    private Random random;
+    private float timeSinceGeneration;
+    private int maxObjects = 15;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -41,10 +48,18 @@ public class GameScreen extends AbstractScreen {
         this.settingsManager = settingsManager;
         this.screenManager = Globals.getScreenManager();
 
+        this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
-        // this.entities = new ArrayList<>();
+
+        this.stash = new HashMap<Class, ArrayList<BaseObject>>();
+        ArrayList<Class> objectClasses = new ArrayList<Class>(Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
+        for (Class targetClass:objectClasses){
+            stash.put(targetClass, new ArrayList<BaseObject>());
+        }
+
         this.entities = (ArrayList<AbstractActor>) entities;
+        this.objectList = new ArrayList<>();
 
         initStage();
         this.getCamera().update();
@@ -60,7 +75,6 @@ public class GameScreen extends AbstractScreen {
     public GameScreen(Game game, SettingsManager settingsManager) {
         this(game, settingsManager, new ArrayList<>());
     }
-
 
     private void governCollisions() {
         ArrayList<CollidableActor> collidables = new ArrayList<>();
@@ -78,7 +92,6 @@ public class GameScreen extends AbstractScreen {
         }
     }
 
-
     public void governBorders() {
         for (AbstractActor actor : entities) {
             if (exceedingBorder(actor)) {
@@ -91,14 +104,9 @@ public class GameScreen extends AbstractScreen {
     public boolean exceedingBorder(AbstractActor actor) {
         float maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth();
         float maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight();
-        if (actor instanceof Ball) {
-            // specially handle for circles as x starts from middle
-            maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth() * 2;
-            maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight() * 2;
-        }
-
         Vector2 forecastedPosition = actor.getForecastedPosition();
-        if (forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0 || forecastedPosition.y < 0) {
+        if (forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0
+                || forecastedPosition.y < 0) {
             return true;
         }
         return false;
@@ -107,15 +115,9 @@ public class GameScreen extends AbstractScreen {
     public void correctMovement(Actor actor) {
         float maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth();
         float maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight();
-        if (actor instanceof Ball) {
-            // specially handle for circles as x starts from middle
-            maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth() * 2;
-            maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight() * 2;
-        }
         actor.setX(Math.min(maxX, Math.max(actor.getX(), 0)));
         actor.setY(Math.min(maxY, Math.max(actor.getY(), 0)));
     }
-
 
     @Override
     public void show() {
@@ -126,6 +128,18 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         Globals.incrementScore();
+
+        if (objectList.size() < maxObjects && timeSinceGeneration > 1) {
+            ArrayList<BaseObject> objects = generateGameObjects();
+            for (Actor object : objects) {
+                this.getStage().addActor(object);
+            }
+            timeSinceGeneration = 0;
+            entities.addAll(objects);
+        } else {
+            timeSinceGeneration += delta;
+        }
+
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         // to go to Pause screen
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE))) {
@@ -153,6 +167,17 @@ public class GameScreen extends AbstractScreen {
         governBorders();
         governCollisions();
         this.getStage().act(delta);
+        ArrayList<BaseObject> holdingArea = new ArrayList<>();
+        for (BaseObject ai : objectList) {
+            if (ai.shouldDisappear()) {
+                freeActor(ai);
+                addToStash(ai);
+                holdingArea.add(ai);
+            }
+        }
+        for (MovingAI ai : holdingArea) {
+            objectList.remove(ai);
+        }
         this.getStage().draw();
 
     }
@@ -194,41 +219,128 @@ public class GameScreen extends AbstractScreen {
         super.dispose();
     }
 
-    @Override
-    public void initStage() {
-        Controls c1 = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
-        Ball ball1 = new Ball(this.renderer, 20.0f, Color.RED, c1);
-        // faster moving car
-        TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
-        TextureRegionDrawable carDrawable = new TextureRegionDrawable(atlas.findRegion("car"));
+    private void addToStash(BaseObject actor) {
+        actor.resetStatus();
+        if (actor instanceof Pizza) {
+            stash.get(Pizza.class).add(actor);
+        } else if (actor instanceof Boba) {
+            stash.get(Boba.class).add(actor);
+        } else if (actor instanceof Fries) {
+            stash.get(Fries.class).add(actor);
+        } else if (actor instanceof Carrot) {
+            stash.get(Carrot.class).add(actor);
+        } else if (actor instanceof Toast) {
+            stash.get(Toast.class).add(actor);
+        } else if (actor instanceof Fruit) {
+            stash.get(Fruit.class).add(actor);
+        }
+    }
 
-        MovingAI carAI = new MovingAI(carDrawable, 80, 80, 150, 100, 150);
-
-        // medium moving pen
-        Controls p1 = settingsManager.getControlSettings().getControlOf(1);
-        Controls p2 = settingsManager.getControlSettings().getControlOf(2);
-        Pen player1;
-        Car player2;
-        if (this.entities.size() == 0) {
-            player1 = new Pen(80, 80, 200, 0, 100, p1);
-            player2 = new Car(80, 80, p2);
-        } else {
-            if (this.entities.get(0) instanceof Pen) {
-                player1 = (Pen) this.entities.get(0);
-                player1.setControl(p1);
-                player2 = (Car) this.entities.get(1);
-                player2.setControl(p2);
-            } else {
-                player1 = (Pen) this.entities.get(1);
-                player1.setControl(p1);
-                player2 = (Car) this.entities.get(0);
-                player2.setControl(p2);
+    private boolean checkCollision(BaseObject actor, ArrayList<BaseObject> actorList) {
+        for (iCollidable collidable : actorList) {
+            if (collidable.collidesWith(actor)) {
+                return true;
             }
         }
+        return false;
+    }
 
-        // entities.addAll(Arrays.asList(ball1, ball2, car1, pen1));
+    private ArrayList<BaseObject> generateGameObjects() {
+        int numToGenerate = random.nextInt(6);
+        ArrayList<BaseObject> staging = new ArrayList<>();
+        for (int i = 0; i < numToGenerate; i++) {
+            BaseObject object = generateNewObject();
+            // make sure generation does not result in collision right away
+            while (checkCollision(object, objectList)) {
+                // regen coordinates
+                object.setX(random.nextFloat() * viewport.getWorldWidth());
+                object.setY(random.nextFloat() * viewport.getWorldHeight());
+            }
+            staging.add(object);
+            // add to list to ensure generation does not result in collision
+            objectList.add(object);
+        }
+        return staging;
+    }
+
+    private BaseObject generateNewObject() {
+        int choice = random.nextInt(6);
+        BaseObject actor;
+        switch (choice) {
+            // generate Pizza
+            case 0:
+                if (stash.get(Pizza.class).size() != 0) {
+                    actor = stash.get(Pizza.class).remove(0);
+                    break;
+                }
+                actor = new Pizza();
+                break;
+            // generate Boba
+            case 1:
+                if (stash.get(Boba.class).size() != 0) {
+                    actor = stash.get(Boba.class).remove(0);
+                    break;
+                }
+                actor = new Boba();
+                break;
+            // generate Fries
+            case 2:
+                if (stash.get(Fries.class).size() != 0) {
+                    actor = stash.get(Fries.class).remove(0);
+                    break;
+                }
+                actor = new Fries();
+                break;
+            // generate Toast
+            case 3:
+                if (stash.get(Toast.class).size() != 0) {
+                    actor = stash.get(Toast.class).remove(0);
+                    break;
+                }
+                actor = new Toast();
+                break;
+            // generate Carrot 
+            case 4:
+                if (stash.get(Carrot.class).size() != 0) {
+                    actor = stash.get(Carrot.class).remove(0);
+                    break;
+                }
+                actor = new Carrot();
+                break;
+            // generate Fruit
+            case 5:
+            default:
+                if (stash.get(Fruit.class).size() != 0) {
+                    actor = stash.get(Fruit.class).remove(0);
+                    break;
+                }
+                actor = new Fruit();
+                break;
+
+        }
+        actor.setY(random.nextFloat() * viewport.getWorldHeight());
+        actor.setX(random.nextFloat() * viewport.getWorldWidth());
+        return actor;
+    }
+
+    @Override
+    public void initStage() {
+        Controls p1 = settingsManager.getControlSettings().getControlOf(1);
+        Controls p2 = settingsManager.getControlSettings().getControlOf(2);
+        Player player1;
+        Player player2;
+        if (this.entities.size() == 0) {
+            player1 = new Player(30, 60, 200, 0, 100, p1);
+            player2 = new Player(30, 60, p2);
+        } else {
+                player1 = (Player) this.entities.get(0);
+                player1.setControl(p1);
+                player2 = (Player) this.entities.get(1);
+                player2.setControl(p2);
+        }
+
         entities.clear();
-        entities.addAll(Arrays.asList(player1, player2, ball1, carAI));
+        entities.addAll(Arrays.asList(player1, player2));
 
         for (Actor actor : entities) {
             this.getStage().addActor(actor);

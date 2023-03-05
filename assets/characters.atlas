@@ -1,20 +1,34 @@
 
 characters.png
-size: 2048, 512
+size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-car
+player-base
   rotate: false
-  xy: 2, 168
-  size: 792, 301
-  orig: 900, 900
-  offset: 45, 299
+  xy: 679, 82
+  size: 149, 519
+  orig: 149, 520
+  offset: 0, 0
   index: -1
-pen
+player-buff
   rotate: false
-  xy: 796, 2
-  size: 467, 467
-  orig: 468, 468
+  xy: 2, 2
+  size: 287, 599
+  orig: 289, 600
+  offset: 2, 1
+  index: -1
+player-fat
+  rotate: false
+  xy: 504, 75
+  size: 173, 526
+  orig: 174, 528
   offset: 1, 0
+  index: -1
+player-obese
+  rotate: false
+  xy: 291, 50
+  size: 211, 551
+  orig: 213, 551
+  offset: 2, 0
   index: -1
