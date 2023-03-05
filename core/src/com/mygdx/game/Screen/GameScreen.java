@@ -3,14 +3,11 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -33,11 +30,11 @@ public class GameScreen extends AbstractScreen {
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private ArrayList<AbstractActor> entities;
-    private ArrayList<MovingAI> aiList;
+    private ArrayList<BaseObject> objectList;
     private Viewport viewport;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
-    private HashMap<Class, ArrayList<MovingAI>> stash;
+    private HashMap<Class, ArrayList<BaseObject>> stash;
     private Random random;
     private float timeSinceGeneration;
     private int maxObjects = 15;
@@ -55,14 +52,14 @@ public class GameScreen extends AbstractScreen {
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
 
-        this.stash = new HashMap<Class, ArrayList<MovingAI>>();
+        this.stash = new HashMap<Class, ArrayList<BaseObject>>();
         ArrayList<Class> objectClasses = new ArrayList<Class>(Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
         for (Class targetClass:objectClasses){
-            stash.put(targetClass, new ArrayList<MovingAI>());
+            stash.put(targetClass, new ArrayList<BaseObject>());
         }
 
         this.entities = (ArrayList<AbstractActor>) entities;
-        this.aiList = new ArrayList<>();
+        this.objectList = new ArrayList<>();
 
         initStage();
         this.getCamera().update();
@@ -132,8 +129,8 @@ public class GameScreen extends AbstractScreen {
     public void render(float delta) {
         Globals.incrementScore();
 
-        if (aiList.size() < maxObjects && timeSinceGeneration > 1) {
-            ArrayList<MovingAI> objects = generateGameObjects();
+        if (objectList.size() < maxObjects && timeSinceGeneration > 1) {
+            ArrayList<BaseObject> objects = generateGameObjects();
             for (Actor object : objects) {
                 this.getStage().addActor(object);
             }
@@ -170,8 +167,8 @@ public class GameScreen extends AbstractScreen {
         governBorders();
         governCollisions();
         this.getStage().act(delta);
-        ArrayList<MovingAI> holdingArea = new ArrayList<>();
-        for (MovingAI ai : aiList) {
+        ArrayList<BaseObject> holdingArea = new ArrayList<>();
+        for (BaseObject ai : objectList) {
             if (ai.shouldDisappear()) {
                 freeActor(ai);
                 addToStash(ai);
@@ -179,7 +176,7 @@ public class GameScreen extends AbstractScreen {
             }
         }
         for (MovingAI ai : holdingArea) {
-            aiList.remove(ai);
+            objectList.remove(ai);
         }
         this.getStage().draw();
 
@@ -222,7 +219,7 @@ public class GameScreen extends AbstractScreen {
         super.dispose();
     }
 
-    private void addToStash(MovingAI actor) {
+    private void addToStash(BaseObject actor) {
         actor.resetStatus();
         if (actor instanceof Pizza) {
             stash.get(Pizza.class).add(actor);
@@ -239,7 +236,7 @@ public class GameScreen extends AbstractScreen {
         }
     }
 
-    private boolean checkCollision(MovingAI actor, ArrayList<MovingAI> actorList) {
+    private boolean checkCollision(BaseObject actor, ArrayList<BaseObject> actorList) {
         for (iCollidable collidable : actorList) {
             if (collidable.collidesWith(actor)) {
                 return true;
@@ -248,27 +245,27 @@ public class GameScreen extends AbstractScreen {
         return false;
     }
 
-    private ArrayList<MovingAI> generateGameObjects() {
+    private ArrayList<BaseObject> generateGameObjects() {
         int numToGenerate = random.nextInt(6);
-        ArrayList<MovingAI> staging = new ArrayList<>();
+        ArrayList<BaseObject> staging = new ArrayList<>();
         for (int i = 0; i < numToGenerate; i++) {
-            MovingAI object = generateNewObject();
+            BaseObject object = generateNewObject();
             // make sure generation does not result in collision right away
-            while (checkCollision(object, aiList)) {
+            while (checkCollision(object, objectList)) {
                 // regen coordinates
                 object.setX(random.nextFloat() * viewport.getWorldWidth());
                 object.setY(random.nextFloat() * viewport.getWorldHeight());
             }
             staging.add(object);
             // add to list to ensure generation does not result in collision
-            aiList.add(object);
+            objectList.add(object);
         }
         return staging;
     }
 
-    private MovingAI generateNewObject() {
+    private BaseObject generateNewObject() {
         int choice = random.nextInt(6);
-        MovingAI actor;
+        BaseObject actor;
         switch (choice) {
             // generate Pizza
             case 0:
