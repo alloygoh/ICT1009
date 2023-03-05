@@ -42,6 +42,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 
     private void initAssets() {
         // load characters
+        assetManager.load("objects.atlas", TextureAtlas.class);
         assetManager.load("characters.atlas", TextureAtlas.class);
         // load other assets
         assetManager.load("comic/skin/comic-ui.atlas", TextureAtlas.class);
