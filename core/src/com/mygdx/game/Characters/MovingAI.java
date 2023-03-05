@@ -9,7 +9,6 @@ import java.util.Random;
 public class MovingAI extends CollidableActor {
     private Random random;
     private int directionCount;
-    private boolean shouldDisappear = false;
 
     public MovingAI(TextureRegionDrawable texture, float width, float height) {
         this(texture, width, height, 100, 100, 100);
@@ -25,6 +24,10 @@ public class MovingAI extends CollidableActor {
         this.random = new Random();
         this.directionCount = 50;
         generateRandomMovement();
+    }
+
+    public void setDirectionCount(int directionCount) {
+        this.directionCount = directionCount;
     }
 
     @Override
@@ -57,27 +60,6 @@ public class MovingAI extends CollidableActor {
             this.moveRight(delta);
         }
         this.directionCount -= 1;
-    }
-    
-    public boolean shouldDisappear(){
-        return this.shouldDisappear;
-    }
-
-    public void resetStatus(){
-        this.shouldDisappear = false;
-        this.directions.clear();
-        this.directionCount = 0;
-        this.setCollided(false);
-    }
-
-    @Override
-    public void reactToEvent(String event, Object others){
-        if (event.equals("eaten")){
-            this.shouldDisappear = true;
-            this.setX(-1);
-            this.setY(-1);
-        }
-        super.reactToEvent(event, others);
     }
 
 }
