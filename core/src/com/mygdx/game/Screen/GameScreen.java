@@ -15,22 +15,32 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Characters.*;
+import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
+import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+
 
 public class GameScreen extends AbstractScreen {
     private SpriteBatch batch;
     private ShapeRenderer renderer;
     private ArrayList<AbstractActor> entities;
+    private ArrayList<MovingAI> aiList;
     private Viewport viewport;
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
+    private HashMap<Class, ArrayList<MovingAI>> stash;
+    private Random random;
+    private float timeSinceGeneration;
+    private int maxObjects = 15;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -41,10 +51,18 @@ public class GameScreen extends AbstractScreen {
         this.settingsManager = settingsManager;
         this.screenManager = Globals.getScreenManager();
 
+        this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
-        // this.entities = new ArrayList<>();
+
+        this.stash = new HashMap<Class, ArrayList<MovingAI>>();
+        ArrayList<Class> objectClasses = new ArrayList<Class>(Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
+        for (Class targetClass:objectClasses){
+            stash.put(targetClass, new ArrayList<MovingAI>());
+        }
+
         this.entities = (ArrayList<AbstractActor>) entities;
+        this.aiList = new ArrayList<>();
 
         initStage();
         this.getCamera().update();
@@ -61,7 +79,6 @@ public class GameScreen extends AbstractScreen {
         this(game, settingsManager, new ArrayList<>());
     }
 
-
     private void governCollisions() {
         ArrayList<CollidableActor> collidables = new ArrayList<>();
         for (Actor actor : entities) {
@@ -77,7 +94,6 @@ public class GameScreen extends AbstractScreen {
             }
         }
     }
-
 
     public void governBorders() {
         for (AbstractActor actor : entities) {
@@ -98,7 +114,8 @@ public class GameScreen extends AbstractScreen {
         }
 
         Vector2 forecastedPosition = actor.getForecastedPosition();
-        if (forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0 || forecastedPosition.y < 0) {
+        if (forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0
+                || forecastedPosition.y < 0) {
             return true;
         }
         return false;
@@ -116,7 +133,6 @@ public class GameScreen extends AbstractScreen {
         actor.setY(Math.min(maxY, Math.max(actor.getY(), 0)));
     }
 
-
     @Override
     public void show() {
         // TODO Auto-generated method stub
@@ -126,6 +142,18 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         Globals.incrementScore();
+
+        if (aiList.size() < maxObjects && timeSinceGeneration > 1) {
+            ArrayList<MovingAI> objects = generateGameObjects();
+            for (Actor object : objects) {
+                this.getStage().addActor(object);
+            }
+            timeSinceGeneration = 0;
+            entities.addAll(objects);
+        } else {
+            timeSinceGeneration += delta;
+        }
+
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         // to go to Pause screen
         if (Gdx.input.isKeyPressed((Input.Keys.ESCAPE))) {
@@ -153,6 +181,17 @@ public class GameScreen extends AbstractScreen {
         governBorders();
         governCollisions();
         this.getStage().act(delta);
+        ArrayList<MovingAI> holdingArea = new ArrayList<>();
+        for (MovingAI ai : aiList) {
+            if (ai.shouldDisappear()) {
+                freeActor(ai);
+                addToStash(ai);
+                holdingArea.add(ai);
+            }
+        }
+        for (MovingAI ai : holdingArea) {
+            aiList.remove(ai);
+        }
         this.getStage().draw();
 
     }
@@ -192,6 +231,110 @@ public class GameScreen extends AbstractScreen {
         renderer.dispose();
         batch.dispose();
         super.dispose();
+    }
+
+    private void addToStash(MovingAI actor) {
+        actor.resetStatus();
+        if (actor instanceof Pizza) {
+            stash.get(Pizza.class).add(actor);
+        } else if (actor instanceof Boba) {
+            stash.get(Boba.class).add(actor);
+        } else if (actor instanceof Fries) {
+            stash.get(Fries.class).add(actor);
+        } else if (actor instanceof Carrot) {
+            stash.get(Carrot.class).add(actor);
+        } else if (actor instanceof Toast) {
+            stash.get(Toast.class).add(actor);
+        } else if (actor instanceof Fruit) {
+            stash.get(Fruit.class).add(actor);
+        }
+    }
+
+    private boolean checkCollision(MovingAI actor, ArrayList<MovingAI> actorList) {
+        for (iCollidable collidable : actorList) {
+            if (collidable.collidesWith(actor)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private ArrayList<MovingAI> generateGameObjects() {
+        int numToGenerate = random.nextInt(6);
+        ArrayList<MovingAI> staging = new ArrayList<>();
+        for (int i = 0; i < numToGenerate; i++) {
+            MovingAI object = generateNewObject();
+            // make sure generation does not result in collision right away
+            while (checkCollision(object, aiList)) {
+                // regen coordinates
+                object.setX(random.nextFloat() * viewport.getWorldWidth());
+                object.setY(random.nextFloat() * viewport.getWorldHeight());
+            }
+            staging.add(object);
+            // add to list to ensure generation does not result in collision
+            aiList.add(object);
+        }
+        return staging;
+    }
+
+    private MovingAI generateNewObject() {
+        int choice = random.nextInt(6);
+        MovingAI actor;
+        switch (choice) {
+            // generate Pizza
+            case 0:
+                if (stash.get(Pizza.class).size() != 0) {
+                    actor = stash.get(Pizza.class).remove(0);
+                    break;
+                }
+                actor = new Pizza();
+                break;
+            // generate Boba
+            case 1:
+                if (stash.get(Boba.class).size() != 0) {
+                    actor = stash.get(Boba.class).remove(0);
+                    break;
+                }
+                actor = new Boba();
+                break;
+            // generate Fries
+            case 2:
+                if (stash.get(Fries.class).size() != 0) {
+                    actor = stash.get(Fries.class).remove(0);
+                    break;
+                }
+                actor = new Fries();
+                break;
+            // generate Toast
+            case 3:
+                if (stash.get(Toast.class).size() != 0) {
+                    actor = stash.get(Toast.class).remove(0);
+                    break;
+                }
+                actor = new Toast();
+                break;
+            // generate Carrot 
+            case 4:
+                if (stash.get(Carrot.class).size() != 0) {
+                    actor = stash.get(Carrot.class).remove(0);
+                    break;
+                }
+                actor = new Carrot();
+                break;
+            // generate Fruit
+            case 5:
+            default:
+                if (stash.get(Fruit.class).size() != 0) {
+                    actor = stash.get(Fruit.class).remove(0);
+                    break;
+                }
+                actor = new Fruit();
+                break;
+
+        }
+        actor.setY(random.nextFloat() * viewport.getWorldHeight());
+        actor.setX(random.nextFloat() * viewport.getWorldWidth());
+        return actor;
     }
 
     @Override
