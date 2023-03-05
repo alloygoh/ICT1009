@@ -107,12 +107,6 @@ public class GameScreen extends AbstractScreen {
     public boolean exceedingBorder(AbstractActor actor) {
         float maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth();
         float maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight();
-        if (actor instanceof Ball) {
-            // specially handle for circles as x starts from middle
-            maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth() * 2;
-            maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight() * 2;
-        }
-
         Vector2 forecastedPosition = actor.getForecastedPosition();
         if (forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0
                 || forecastedPosition.y < 0) {
@@ -124,11 +118,6 @@ public class GameScreen extends AbstractScreen {
     public void correctMovement(Actor actor) {
         float maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth();
         float maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight();
-        if (actor instanceof Ball) {
-            // specially handle for circles as x starts from middle
-            maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth() * 2;
-            maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight() * 2;
-        }
         actor.setX(Math.min(maxX, Math.max(actor.getX(), 0)));
         actor.setY(Math.min(maxY, Math.max(actor.getY(), 0)));
     }
@@ -339,39 +328,22 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Controls c1 = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
-        Ball ball1 = new Ball(this.renderer, 20.0f, Color.RED, c1);
-        // faster moving car
-        TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
-        TextureRegionDrawable carDrawable = new TextureRegionDrawable(atlas.findRegion("car"));
-
-        MovingAI carAI = new MovingAI(carDrawable, 80, 80, 150, 100, 150);
-
-        // medium moving pen
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
         Controls p2 = settingsManager.getControlSettings().getControlOf(2);
-        Pen player1;
-        Car player2;
+        Player player1;
+        Player player2;
         if (this.entities.size() == 0) {
-            player1 = new Pen(80, 80, 200, 0, 100, p1);
-            player2 = new Car(80, 80, p2);
+            player1 = new Player(30, 60, 200, 0, 100, p1);
+            player2 = new Player(30, 60, p2);
         } else {
-            if (this.entities.get(0) instanceof Pen) {
-                player1 = (Pen) this.entities.get(0);
+                player1 = (Player) this.entities.get(0);
                 player1.setControl(p1);
-                player2 = (Car) this.entities.get(1);
+                player2 = (Player) this.entities.get(1);
                 player2.setControl(p2);
-            } else {
-                player1 = (Pen) this.entities.get(1);
-                player1.setControl(p1);
-                player2 = (Car) this.entities.get(0);
-                player2.setControl(p2);
-            }
         }
 
-        // entities.addAll(Arrays.asList(ball1, ball2, car1, pen1));
         entities.clear();
-        entities.addAll(Arrays.asList(player1, player2, ball1, carAI));
+        entities.addAll(Arrays.asList(player1, player2));
 
         for (Actor actor : entities) {
             this.getStage().addActor(actor);
