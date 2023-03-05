@@ -1,16 +1,15 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Direction;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class MovingAI extends CollidableActor {
     private Random random;
     private int directionCount;
+    private boolean shouldDisappear = false;
 
     public MovingAI(TextureRegionDrawable texture, float width, float height) {
         this(texture, width, height, 100, 100, 100);
@@ -30,11 +29,14 @@ public class MovingAI extends CollidableActor {
 
     @Override
     public void act(float delta) {
-        if (directionCount < 0) {
+        if (directionCount <= 0) {
             generateRandomMovement();
             this.directionCount = 50;
+            return;
         }
-        moveRandomly(delta);
+        super.act(delta);
+        this.directionCount -=1;
+        
     }
 
     public void generateRandomMovement() {
@@ -56,65 +58,26 @@ public class MovingAI extends CollidableActor {
         }
         this.directionCount -= 1;
     }
+    
+    public boolean shouldDisappear(){
+        return this.shouldDisappear;
+    }
+
+    public void resetStatus(){
+        this.shouldDisappear = false;
+        this.directions.clear();
+        this.directionCount = 0;
+        this.setCollided(false);
+    }
 
     @Override
-    public void handleCollision(iCollidable collidable) {
-        ArrayList<Direction> directions = this.getDirections();
-        for (Direction direction : directions) {
-            if (direction == Direction.LEFT) {
-                float deltaX = this.getBounds().getX() - (collidable.getBounds().x + collidable.getBounds().getWidth());
-                if (collidable.isIdle()) {
-                    // handle full movement back until point of no collision
-                    float newX = this.getX() - deltaX;
-                    this.setX(newX);
-                } else {
-                    // both move back equal amounts
-                    float newX = this.getX() - deltaX / 2;
-                    this.setX(newX);
-                }
-            }
-            if (direction == Direction.RIGHT) {
-                float deltaX = (getBounds().getX() + getBounds().getWidth()) - collidable.getBounds().x;
-                if (collidable.isIdle()) {
-                    // handle full movement back until point of no collision
-                    float newX = this.getX() - deltaX;
-                    this.setX(newX);
-                } else {
-                    // both move back equal amounts
-                    float newX = this.getX() - deltaX / 2;
-                    this.setX(newX);
-                }
-            }
-            if (direction == Direction.UP) {
-                float deltaY = (getBounds().getY() + getBounds().getHeight()) - collidable.getBounds().y;
-                if (collidable.isIdle()) {
-                    // handle full movement back until point of no collision
-                    float newY = this.getY() - deltaY;
-                    this.setY(newY);
-                } else {
-                    // both move back equal amounts
-                    float newY = this.getY() - deltaY / 2;
-                    this.setY(newY);
-                }
-            }
-            if (direction == Direction.DOWN) {
-                float deltaY = getBounds().getY()
-                        - (collidable.getBounds().getY() + collidable.getBounds().getHeight());
-                if (collidable.isIdle()) {
-                    // handle full movement back until point of no collision
-                    float newY = this.getY() - deltaY;
-                    this.setY(newY);
-                } else {
-                    // both move back equal amounts
-                    float newY = this.getY() - deltaY / 2;
-                    this.setY(newY);
-                }
-            }
-            // mark as idle to prevent re-positioning
-            this.getDirections().clear();
-            this.getDirections().add(Direction.IDLE);
-
+    public void reactToEvent(String event, Object others){
+        if (event.equals("eaten")){
+            this.shouldDisappear = true;
+            this.setX(-1);
+            this.setY(-1);
         }
-
+        super.reactToEvent(event, others);
     }
+
 }
