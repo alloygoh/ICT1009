@@ -1,0 +1,76 @@
+
+objects.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+boba
+  rotate: false
+  xy: 313, 144
+  size: 174, 307
+  orig: 174, 307
+  offset: 0, 0
+  index: -1
+carrot
+  rotate: false
+  xy: 679, 646
+  size: 315, 358
+  orig: 315, 358
+  offset: 0, 0
+  index: -1
+fries
+  rotate: false
+  xy: 489, 215
+  size: 171, 236
+  orig: 171, 236
+  offset: 0, 0
+  index: -1
+fruits
+  rotate: false
+  xy: 2, 186
+  size: 309, 217
+  orig: 309, 217
+  offset: 0, 0
+  index: -1
+pizza
+  rotate: false
+  xy: 2, 2
+  size: 280, 182
+  orig: 280, 182
+  offset: 0, 0
+  index: -1
+player-base
+  rotate: false
+  xy: 872, 125
+  size: 149, 519
+  orig: 149, 520
+  offset: 0, 0
+  index: -1
+player-buff
+  rotate: false
+  xy: 2, 405
+  size: 287, 599
+  orig: 289, 600
+  offset: 2, 1
+  index: -1
+player-fat
+  rotate: false
+  xy: 504, 478
+  size: 173, 526
+  orig: 174, 528
+  offset: 1, 0
+  index: -1
+player-obese
+  rotate: false
+  xy: 291, 453
+  size: 211, 551
+  orig: 213, 551
+  offset: 2, 0
+  index: -1
+toast
+  rotate: false
+  xy: 679, 405
+  size: 191, 239
+  orig: 191, 239
+  offset: 0, 0
+  index: -1
