@@ -13,10 +13,13 @@ import com.mygdx.game.Utils.Globals;
 
 public class LeaderboardScreen extends AbstractScreen {
     private Skin skin;
+    private Table scoreTable;
+    private Table mainTable;
 
     public LeaderboardScreen(Game game) {
         super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
+//        this.scoreBoard = Globals.getLeaderboard();
         this.getCamera().update();
         initStage();
     }
@@ -24,6 +27,26 @@ public class LeaderboardScreen extends AbstractScreen {
     @Override
     public void show() {
         // Stage should control input:
+//        System.out.println("times");
+
+//        System.out.println(this.getStage().getActors().get(0));
+        //System.out.println(this.mainTable.getChild(1));
+        this.scoreTable.clear();
+
+        // TODO make this a function cause repeated code..
+        for (int i = 1; i < Globals.getLeaderboard().size() + 1; i++) {
+            Label nameField = new Label(
+                    (String.valueOf(i) + ". " + Globals.getLeaderboard().getLeaderboardEntryOfPosition(i).getName() + "\t"), skin);
+            Label scoreField = new Label(String.valueOf(Globals.getLeaderboard().getLeaderboardEntryOfPosition(i).getScore()),
+                    skin);
+            this.scoreTable.add(nameField).padRight(50);
+            this.scoreTable.add(scoreField);
+            this.scoreTable.row();
+        }
+
+        this.getStage().clear();
+        this.getStage().addActor(this.mainTable);
+
         Gdx.input.setInputProcessor(this.getStage());
 
     }
@@ -31,6 +54,7 @@ public class LeaderboardScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
+//        this.scoreBoard.load();
         this.getStage().act();
         this.getStage().draw();
     }
@@ -65,31 +89,31 @@ public class LeaderboardScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
-        Table mainTable = new Table();
+         this.mainTable = new Table();
         // set table to fill stage
-        mainTable.setFillParent(true);
+        this.mainTable.setFillParent(true);
         // set alignment of contents in table
-        mainTable.top();
+        this.mainTable.top();
 
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
 
-        Leaderboard scoreBoard = new Leaderboard();
-
+//        this.scoreBoard.load();
+//
         // Mock Samples for testing
-        LeaderboardEntry entry1 = new LeaderboardEntry("John", 50);
-        LeaderboardEntry entry2 = new LeaderboardEntry("Bobby", 30);
-        LeaderboardEntry entry3 = new LeaderboardEntry("Gabe", 60);
-        LeaderboardEntry entry4 = new LeaderboardEntry("Daniel", 53);
-        LeaderboardEntry entry5 = new LeaderboardEntry("Sammy", 80);
-        LeaderboardEntry entry6 = new LeaderboardEntry("Dixie Normas", 100);
-
-        scoreBoard.reviseScoreboard(entry1);
-        scoreBoard.reviseScoreboard(entry2);
-        scoreBoard.reviseScoreboard(entry3);
-        scoreBoard.reviseScoreboard(entry4);
-        scoreBoard.reviseScoreboard(entry5);
-        scoreBoard.reviseScoreboard(entry6);
+//        LeaderboardEntry entry1 = new LeaderboardEntry("John", 50);
+//        LeaderboardEntry entry2 = new LeaderboardEntry("Bobby", 30);
+//        LeaderboardEntry entry3 = new LeaderboardEntry("Gabe", 60);
+//        LeaderboardEntry entry4 = new LeaderboardEntry("Daniel", 53);
+//        LeaderboardEntry entry5 = new LeaderboardEntry("Sammy", 80);
+//        LeaderboardEntry entry6 = new LeaderboardEntry("Dixie Normas", 100);
+//
+//        scoreBoard.reviseScoreboard(entry1);
+//        scoreBoard.reviseScoreboard(entry2);
+//        scoreBoard.reviseScoreboard(entry3);
+//        scoreBoard.reviseScoreboard(entry4);
+//        scoreBoard.reviseScoreboard(entry5);
+//        scoreBoard.reviseScoreboard(entry6);
         // End of mock samples and code
 
         // fonts
@@ -98,12 +122,12 @@ public class LeaderboardScreen extends AbstractScreen {
         labelStyle2.font = titleFont;
         // end of fonts config
         Label title = new Label("Leaderboards", labelStyle2);
-        mainTable.add(title);
-        mainTable.row();
+        this.mainTable.add(title);
+        this.mainTable.row();
 
-        Table scoreTable = new Table(skin);
-        scoreTable.top();
-
+        this.scoreTable = new Table(skin);
+        this.scoreTable.top();
+        this.scoreTable.setWidth(100);
         // add listeners to buttons
         // go to main screen if clicked
         backButton.addListener(new ClickListener() {
@@ -114,22 +138,22 @@ public class LeaderboardScreen extends AbstractScreen {
         });
 
         // add buttons to table
-        for (int i = 1; i < scoreBoard.size() + 1; i++) {
-            TextField nameField = new TextField(
-                    (String.valueOf(i) + ". " + scoreBoard.getLeaderboardEntryOfPosition(i).getName()), skin);
-            TextField scoreField = new TextField(String.valueOf(scoreBoard.getLeaderboardEntryOfPosition(i).getScore()),
+        for (int i = 1; i < Globals.getLeaderboard().size() + 1; i++) {
+            Label nameField = new Label(
+                    (String.valueOf(i) + ". " + Globals.getLeaderboard().getLeaderboardEntryOfPosition(i).getName()), skin);
+            Label scoreField = new Label(String.valueOf(Globals.getLeaderboard().getLeaderboardEntryOfPosition(i).getScore()),
                     skin);
-            scoreTable.add(nameField);
-            scoreTable.add(scoreField);
-            scoreTable.row();
+            this.scoreTable.add(nameField).padRight(50);
+            this.scoreTable.add(scoreField);
+            this.scoreTable.row();
         }
 
-        mainTable.row();
-        mainTable.add(scoreTable);
-        mainTable.row();
-        mainTable.add(backButton);
+        this.mainTable.row();
+        this.mainTable.add(this.scoreTable);
+        this.mainTable.row();
+        this.mainTable.add(backButton);
 
-        this.getStage().addActor(mainTable);
+        this.getStage().addActor(this.mainTable);
     }
 
 }

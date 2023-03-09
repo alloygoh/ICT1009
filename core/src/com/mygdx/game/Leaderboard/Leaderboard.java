@@ -1,5 +1,11 @@
 package com.mygdx.game.Leaderboard;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
+import com.mygdx.game.Utils.Globals;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -41,5 +47,23 @@ public class Leaderboard {
 
         // re-sort arraylist
         Collections.sort(this.entries);
+        save();
+        Globals.getLeaderboard().load();
     }
+
+    public void save() {
+        FileHandle file = Gdx.files.local("leaderboard.json");
+        Json json = new Json();
+        json.toJson(this.entries, file);
+    }
+
+    public void load() {
+        FileHandle file = Gdx.files.local("leaderboard.json");
+        Json json = new Json();
+        if (file.exists()) {
+            this.entries = json.fromJson(ArrayList.class, LeaderboardEntry.class, file);
+
+        }
+    }
+
 }

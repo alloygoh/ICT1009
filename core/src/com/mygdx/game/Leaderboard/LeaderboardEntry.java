@@ -11,6 +11,9 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry> {
         this.score = score;
     }
 
+    public LeaderboardEntry() {
+
+    }
     public int getScore() {
         return this.score;
     }
