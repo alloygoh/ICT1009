@@ -19,20 +19,12 @@ public class LeaderboardScreen extends AbstractScreen {
     public LeaderboardScreen(Game game) {
         super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
-//        this.scoreBoard = Globals.getLeaderboard();
         this.getCamera().update();
         initStage();
     }
 
-    @Override
-    public void show() {
-        // Stage should control input:
-//        System.out.println("times");
-
-//        System.out.println(this.getStage().getActors().get(0));
-        //System.out.println(this.mainTable.getChild(1));
+    private void reloadScoreTable() {
         this.scoreTable.clear();
-
         // TODO make this a function cause repeated code..
         for (int i = 1; i < Globals.getLeaderboard().size() + 1; i++) {
             Label nameField = new Label(
@@ -43,7 +35,12 @@ public class LeaderboardScreen extends AbstractScreen {
             this.scoreTable.add(scoreField);
             this.scoreTable.row();
         }
+    }
 
+    @Override
+    public void show() {
+        // Stage should control input:
+        reloadScoreTable();
         this.getStage().clear();
         this.getStage().addActor(this.mainTable);
 
@@ -98,24 +95,6 @@ public class LeaderboardScreen extends AbstractScreen {
         // button creation
         TextButton backButton = new TextButton("Go Back", skin);
 
-//        this.scoreBoard.load();
-//
-        // Mock Samples for testing
-//        LeaderboardEntry entry1 = new LeaderboardEntry("John", 50);
-//        LeaderboardEntry entry2 = new LeaderboardEntry("Bobby", 30);
-//        LeaderboardEntry entry3 = new LeaderboardEntry("Gabe", 60);
-//        LeaderboardEntry entry4 = new LeaderboardEntry("Daniel", 53);
-//        LeaderboardEntry entry5 = new LeaderboardEntry("Sammy", 80);
-//        LeaderboardEntry entry6 = new LeaderboardEntry("Dixie Normas", 100);
-//
-//        scoreBoard.reviseScoreboard(entry1);
-//        scoreBoard.reviseScoreboard(entry2);
-//        scoreBoard.reviseScoreboard(entry3);
-//        scoreBoard.reviseScoreboard(entry4);
-//        scoreBoard.reviseScoreboard(entry5);
-//        scoreBoard.reviseScoreboard(entry6);
-        // End of mock samples and code
-
         // fonts
         BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
@@ -138,15 +117,7 @@ public class LeaderboardScreen extends AbstractScreen {
         });
 
         // add buttons to table
-        for (int i = 1; i < Globals.getLeaderboard().size() + 1; i++) {
-            Label nameField = new Label(
-                    (String.valueOf(i) + ". " + Globals.getLeaderboard().getLeaderboardEntryOfPosition(i).getName()), skin);
-            Label scoreField = new Label(String.valueOf(Globals.getLeaderboard().getLeaderboardEntryOfPosition(i).getScore()),
-                    skin);
-            this.scoreTable.add(nameField).padRight(50);
-            this.scoreTable.add(scoreField);
-            this.scoreTable.row();
-        }
+        reloadScoreTable();
 
         this.mainTable.row();
         this.mainTable.add(this.scoreTable);

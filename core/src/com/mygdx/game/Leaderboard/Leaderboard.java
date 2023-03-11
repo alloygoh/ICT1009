@@ -48,7 +48,6 @@ public class Leaderboard {
         // re-sort arraylist
         Collections.sort(this.entries);
         save();
-        Globals.getLeaderboard().load();
     }
 
     public void save() {
