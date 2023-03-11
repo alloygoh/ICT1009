@@ -1,6 +1,7 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Interfaces.iSaveable;
@@ -14,11 +15,12 @@ public class Player extends CollidableActor implements iSaveable {
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player-base"));
     private int power;
-    private int lifeCount = 5; //player life count
-    private boolean isDead = false; //to check if lifeCount is 0
+    private int lifeCount;
+    private boolean isDead;
+    private Vector2 originCoordinates;
 
     public Player() {
-        this(40,60);
+        this(40, 60);
     }
 
     public Player(float width, float height) {
@@ -42,43 +44,50 @@ public class Player extends CollidableActor implements iSaveable {
     }
 
     public Player(float width, float height, float x, float y, float movementSpeed, Controls control) {
-        super(drawable, width, height, x, y, movementSpeed, control);
+        this(drawable, width, height, x, y, movementSpeed, control);
     }
 
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
-               Controls control) {
+            Controls control) {
         super(drawable, width, height, x, y, movementSpeed, control);
         this.power = 0;
+        this.lifeCount = 5;
+        this.isDead = false;
+        this.originCoordinates = new Vector2(x, y);
     }
 
-    public int getPower(){
+    public int getPower() {
         return this.power;
     }
 
-    public boolean isDead()
-    {
+    public boolean isDead() {
         return this.isDead;
+    }
+    
+    private void reset(){
+        this.power = 0;
+        this.setX(this.originCoordinates.x);
+        this.setY(this.originCoordinates.y);
+    }
+    
+    private void loseLife(){
+        this.lifeCount -= 1;
+        this.isDead = (this.lifeCount <= 0);
     }
 
     @Override
-    public void handleCollision(iCollidable collidable){
-        if (collidable instanceof BaseObject){
-            BaseObject object = (BaseObject)collidable;
+    public void handleCollision(iCollidable collidable) {
+        if (collidable instanceof BaseObject) {
+            BaseObject object = (BaseObject) collidable;
             this.power += object.getPowerPoints();
-            System.out.println(this.power);
-            object.reactToEvent("eaten", object);
-        } else if (collidable instanceof Player){
+            object.reactToEvent("eaten", this);
+        } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
             Player player = (Player) collidable;
-            if(this.power > player.getPower())
-            {
-                player.reactToEvent("lose life", player);
-                player.reactToEvent("resetPosition", player);
-                player.reactToEvent("resetPoints", player);
-            } else if (this.power < player.getPower()){
-                this.reactToEvent("lose life", this);
-                player.reactToEvent("resetPosition", this);
-                player.reactToEvent("resetPower", this);
+            if (this.power > player.getPower()) {
+                player.reactToEvent("lose life", this);
+                player.reactToEvent("reset", this);
+                this.reactToEvent("reset", player);
             }
             // if same power, nothing happens
             super.handleCollision(collidable);
@@ -87,34 +96,14 @@ public class Player extends CollidableActor implements iSaveable {
     }
 
     @Override
-    public void reactToEvent(String event, Object others){
-        // TODO
-        // add life logic here
-        // deduction of life all that
-        //Player otherPlayer = (Player)others;
-        if (event.equals("lose life")) // this works
-        {
-            if (this.lifeCount > 0)
-            {
-                this.lifeCount--;
-            }
-        }
-        if (event.equals("resetPower")) // doesnt work
-        {
-            if (this.power > 0 || this.power < 0)
-            {
-                this.power = 0;
-            }
-        }
-        //if (event.equals("reset"))
-
-
-
-        if (this.lifeCount == 0) //  somewhere in our code, boolean isDead will be checked to display end game screen and reset everybody
-        {
-            this.isDead = true;
-            this.setX(-1); // for testing stuff
-            this.setY(-1); // for testing stuff
+    public void reactToEvent(String event, Object others) {
+        if (event.equals("lose life")) {
+            // TODO
+            // check isDead to change screen to game over screen
+            loseLife();
+            return;
+        } else if (event.equals("reset")) {
+            reset();
             return;
         }
 
