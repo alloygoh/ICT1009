@@ -32,8 +32,8 @@ public class BaseObject extends MovingAI {
     public void reactToEvent(String event, Object others){
         if (event.equals("eaten")){
             this.shouldDisappear = true;
-            this.setX(-1);
-            this.setY(-1);
+            this.setX(-1 -this.getWidth());
+            this.setY(-1 - this.getHeight());
             return;
         }
         super.reactToEvent(event, others);
