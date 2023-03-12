@@ -28,10 +28,6 @@ public class Globals {
         return score;
     }
 
-    public static void incrementScore() {
-        Globals.score += 1;
-    }
-
     public static void setScore(int score) {
         Globals.score = score;
     }

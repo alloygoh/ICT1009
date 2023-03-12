@@ -1,13 +1,12 @@
 package com.mygdx.game.Leaderboard;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-import com.mygdx.game.Utils.Globals;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
 
 public class Leaderboard {
     private final int MAX_ENTRIES = 10;
@@ -61,8 +60,7 @@ public class Leaderboard {
         Json json = new Json();
         if (file.exists()) {
             this.entries = json.fromJson(ArrayList.class, LeaderboardEntry.class, file);
-
-        }
+        } 
     }
 
 }

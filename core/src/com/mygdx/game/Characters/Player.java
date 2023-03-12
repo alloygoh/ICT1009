@@ -18,6 +18,7 @@ public class Player extends CollidableActor implements iSaveable {
     private int lifeCount;
     private boolean isDead;
     private Vector2 originCoordinates;
+    private int highScore;
 
     public Player() {
         this(40, 60);
@@ -50,14 +51,19 @@ public class Player extends CollidableActor implements iSaveable {
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
         super(drawable, width, height, x, y, movementSpeed, control);
+        this.highScore = 0;
         this.power = 0;
-        this.lifeCount = 5;
+        this.lifeCount = 1;
         this.isDead = false;
         this.originCoordinates = new Vector2(x, y);
     }
 
     public int getPower() {
         return this.power;
+    }
+    
+    public int getHighScore(){
+        return this.highScore;
     }
 
     public boolean isDead() {
@@ -84,11 +90,21 @@ public class Player extends CollidableActor implements iSaveable {
         } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
             Player player = (Player) collidable;
-            if (this.power > player.getPower()) {
+            if (this.power > player.getPower()){
+                // win
+                if(this.highScore < this.power){
+                    this.highScore = this.power;
+                }
+
                 player.reactToEvent("lose life", this);
                 player.reactToEvent("reset", this);
                 this.reactToEvent("reset", player);
+                return;
             }
+            // since forecasting is the method for detecting collisions, the other player does not see collision if idle
+            // manually trigger collision event
+            player.reactToEvent("collision", this);
+
             // if same power, nothing happens
             super.handleCollision(collidable);
         }
@@ -98,8 +114,6 @@ public class Player extends CollidableActor implements iSaveable {
     @Override
     public void reactToEvent(String event, Object others) {
         if (event.equals("lose life")) {
-            // TODO
-            // check isDead to change screen to game over screen
             loseLife();
             return;
         } else if (event.equals("reset")) {

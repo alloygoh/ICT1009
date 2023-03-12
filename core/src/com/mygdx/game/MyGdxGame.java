@@ -65,6 +65,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         contentFont.fontParameters.color = Color.WHITE;
         assetManager.load("GamePlayedContent.ttf", BitmapFont.class, contentFont);
 
+        Globals.getLeaderboard().load();
         this.settingsManager.readFromConfig();
     }
 

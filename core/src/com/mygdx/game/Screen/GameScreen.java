@@ -35,6 +35,7 @@ public class GameScreen extends AbstractScreen {
     private SettingsManager settingsManager;
     private ScreenManager screenManager;
     private HashMap<Class, ArrayList<BaseObject>> stash;
+    private ArrayList<Player> players;
     private Random random;
     private float timeSinceGeneration;
     private int maxObjects = 15;
@@ -59,6 +60,7 @@ public class GameScreen extends AbstractScreen {
         }
 
         this.entities = (ArrayList<AbstractActor>) entities;
+        this.players = new ArrayList<Player>();
         this.objectList = new ArrayList<>();
 
         initStage();
@@ -94,6 +96,13 @@ public class GameScreen extends AbstractScreen {
 
     public void governBorders() {
         for (AbstractActor actor : entities) {
+            // don't correct movement for eaten food
+            if (actor instanceof BaseObject){
+                BaseObject food = (BaseObject)actor;
+                if (food.shouldDisappear()){
+                    continue;
+                }
+            }
             if (exceedingBorder(actor)) {
                 correctMovement(actor);
             }
@@ -124,10 +133,26 @@ public class GameScreen extends AbstractScreen {
         // TODO Auto-generated method stub
 
     }
+    
+    private void populateHighScore(){
+        for (Player player: players){
+            // since 2 players only, can safely assume the player that is not dead is the winner
+            if(!player.isDead()){
+                Globals.setScore(player.getHighScore());
+            }
+        }
+    }
 
     @Override
     public void render(float delta) {
-        Globals.incrementScore();
+        // check if should end game
+        for (Player player: players){
+            if (player.isDead()){
+                populateHighScore();
+                Globals.getScreenManager().setScreen(GameOverScreen.class);
+                return;
+            }
+        }
 
         if (objectList.size() < maxObjects && timeSinceGeneration > 1) {
             ArrayList<BaseObject> objects = generateGameObjects();
@@ -341,6 +366,7 @@ public class GameScreen extends AbstractScreen {
 
         entities.clear();
         entities.addAll(Arrays.asList(player1, player2));
+        players.addAll(Arrays.asList(player1, player2));
 
         for (Actor actor : entities) {
             this.getStage().addActor(actor);
