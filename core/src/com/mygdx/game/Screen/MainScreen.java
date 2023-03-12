@@ -85,6 +85,8 @@ public class MainScreen extends AbstractScreen {
         TextButton scoreButton = new TextButton("Leaderboard", skin);
         TextButton instructionsButton = new TextButton("Instructions", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
+        // TODO: remove after win condition calls this screen
+        TextButton addScoreButton = new TextButton("Add Score", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         // fonts
@@ -123,7 +125,18 @@ public class MainScreen extends AbstractScreen {
                 if (screenManager.getScreen((LeaderboardScreen.class)) == null) {
                     screenManager.addScreen(new LeaderboardScreen(getGame()));
                 }
+//                Globals.getLeaderboard().load();
                 screenManager.setScreen(LeaderboardScreen.class);
+            }
+        });
+        //TODO Remove after winning condition calls gameover screen
+        addScoreButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y) {
+                if (screenManager.getScreen((GameOverScreen.class)) == null) {
+                    screenManager.addScreen(new GameOverScreen(getGame(), 80));
+                }
+                screenManager.setScreen(GameOverScreen.class);
             }
         });
 
@@ -173,6 +186,8 @@ public class MainScreen extends AbstractScreen {
         mainTable.add(instructionsButton);
         mainTable.row();
         mainTable.add(settingsButton);
+        mainTable.row();
+        mainTable.add(addScoreButton);
         mainTable.row();
         mainTable.add(exitButton);
 

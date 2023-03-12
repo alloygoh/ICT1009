@@ -24,7 +24,7 @@ public class LoadingScreen extends AbstractScreen {
         super(game);
         this.onLoadListener = onLoadListener;
         this.assetManager = Globals.getAssetManager();
-
+        Globals.getLeaderboard().load();
         this.getCamera().update();
         this.skin = new Skin(Gdx.files.internal("comic/skin/comic-ui.json"));
         initStage();
