@@ -53,7 +53,7 @@ public class Player extends CollidableActor implements iSaveable {
         super(drawable, width, height, x, y, movementSpeed, control);
         this.highScore = 0;
         this.power = 0;
-        this.lifeCount = 1;
+        this.lifeCount = 2;
         this.isDead = false;
         this.originCoordinates = new Vector2(x, y);
     }
@@ -85,8 +85,10 @@ public class Player extends CollidableActor implements iSaveable {
     public void handleCollision(iCollidable collidable) {
         if (collidable instanceof BaseObject) {
             BaseObject object = (BaseObject) collidable;
-            this.power += object.getPowerPoints();
-            object.reactToEvent("eaten", this);
+            if(!this.isIdle()){
+                this.power += object.getPowerPoints();
+                object.reactToEvent("eaten", this);
+            }
         } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
             Player player = (Player) collidable;
@@ -100,10 +102,12 @@ public class Player extends CollidableActor implements iSaveable {
                 player.reactToEvent("reset", this);
                 this.reactToEvent("reset", player);
                 return;
+            }else if (this.power < player.getPower()){
+                // since forecasting is the method for detecting collisions, the other player does not see collision if idle
+                // manually trigger collision event
+                player.reactToEvent("collision", this);
+                return;
             }
-            // since forecasting is the method for detecting collisions, the other player does not see collision if idle
-            // manually trigger collision event
-            player.reactToEvent("collision", this);
 
             // if same power, nothing happens
             super.handleCollision(collidable);
@@ -132,12 +136,20 @@ public class Player extends CollidableActor implements iSaveable {
         float height = (float) options.get("height");
         float movementSpeed = (float) options.get("speed");
         Controls controls = (Controls) options.get("controls");
+        Vector2 origin = (Vector2) options.get("origin");
+        int power = (int) options.get("power");
+        int life = (int) options.get("life");
+        int highScore = (int) options.get("highscore");
         this.setX(x);
         this.setY(y);
         this.setWidth(width);
         this.setHeight(height);
         this.setMovementSpeed(movementSpeed);
         this.setControl(controls);
+        this.originCoordinates = origin;
+        this.power = power;
+        this.lifeCount = life;
+        this.highScore = highScore;
     }
 
     @Override
@@ -145,6 +157,10 @@ public class Player extends CollidableActor implements iSaveable {
         HashMap<String, Object> options = new HashMap<>();
         options.put("x", this.getX());
         options.put("y", this.getY());
+        options.put("origin", this.originCoordinates);
+        options.put("power", this.power);
+        options.put("life", this.lifeCount);
+        options.put("highscore", this.highScore);
         options.put("width", this.getWidth());
         options.put("height", this.getHeight());
         options.put("speed", this.getMovementSpeed());

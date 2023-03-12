@@ -145,14 +145,6 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        // check if should end game
-        for (Player player: players){
-            if (player.isDead()){
-                populateHighScore();
-                Globals.getScreenManager().setScreen(GameOverScreen.class);
-                return;
-            }
-        }
 
         if (objectList.size() < maxObjects && timeSinceGeneration > 1) {
             ArrayList<BaseObject> objects = generateGameObjects();
@@ -192,6 +184,16 @@ public class GameScreen extends AbstractScreen {
         governBorders();
         governCollisions();
         this.getStage().act(delta);
+
+        // check if should end game
+        for (Player player: players){
+            if (player.isDead()){
+                populateHighScore();
+                Globals.getScreenManager().setScreen(GameOverScreen.class);
+                return;
+            }
+        }
+
         ArrayList<BaseObject> holdingArea = new ArrayList<>();
         for (BaseObject ai : objectList) {
             if (ai.shouldDisappear()) {
