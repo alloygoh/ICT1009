@@ -13,15 +13,20 @@ import com.mygdx.game.Utils.Globals;
 public class GameOverScreen extends AbstractScreen{
 
     private Skin skin;
-    private int score;
+    Label titleLabel;
+    TextField nameField;
 
-    public GameOverScreen(Game game, int score) {
+    public GameOverScreen(Game game) {
         super(game);
         this.skin = Globals.getAssetManager().get("comic/skin/comic-ui.json", Skin.class);
         this.getCamera().update();
-        this.score = score;
-
         initStage();
+    }
+    
+    
+    private void addNewLeaderboardEntry(){
+        LeaderboardEntry entry = new LeaderboardEntry(this.nameField.getText(), Globals.getScore());
+        Globals.getLeaderboard().reviseScoreboard(entry);
     }
 
     @Override
@@ -36,7 +41,7 @@ public class GameOverScreen extends AbstractScreen{
         buttons.setX((Gdx.graphics.getWidth() - buttons.getWidth()) / 2);
 
         // button creation
-        TextButton backButton = new TextButton("Submit", skin);
+        TextButton submitButton = new TextButton("Submit", skin);
 
         // fonts
         BitmapFont titleFont = Globals.getAssetManager().get("GamePlayedTitle.ttf", BitmapFont.class);
@@ -50,21 +55,20 @@ public class GameOverScreen extends AbstractScreen{
 
         // end of fonts config
 
-        Label title = new Label("GAME OVER!\nSCORE: " + score , labelStyle2);
-        title.setFontScale(1f);
+        this.titleLabel = new Label("GAME OVER!\nSCORE: " + Globals.getScore() , labelStyle2);
+        titleLabel.setFontScale(1f);
 
         Label header = new Label("Name: ", skin);
         header.setFontScale(3f);
 
         // Create a text field using the skin
-        final TextField textField = new TextField("", skin);
-        textField.getStyle().font.getData().setScale(3f);
-        textField.getStyle().cursor.setTopHeight(40);
-        textField.getStyle().cursor.setBottomHeight(40);
+        this.nameField = new TextField("", skin);
+        nameField.getStyle().cursor.setTopHeight(40);
+        nameField.getStyle().cursor.setBottomHeight(40);
 
         // Set the position and size of the text field
-        textField.setSize(400, 100);
-        textField.setPosition((Gdx.graphics.getWidth() - textField.getWidth()) / 2, (Gdx.graphics.getHeight() - textField.getHeight()) / 2);
+        nameField.setSize(400, 100);
+        nameField.setPosition((Gdx.graphics.getWidth() - nameField.getWidth()) / 2, (Gdx.graphics.getHeight() - nameField.getHeight()) / 2);
 
         // Set the position and size of header
         header.setWidth(750);
@@ -74,32 +78,30 @@ public class GameOverScreen extends AbstractScreen{
 
         // add listeners to buttons
         // Save to file if clicked -> return to menu after
-        backButton.addListener(new ClickListener() {
-            private LeaderboardEntry entry;
+        submitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
-                //
-                this.entry = new LeaderboardEntry(textField.getText(), score);
-                Globals.getLeaderboard().reviseScoreboard(this.entry);
-                Globals.getScreenManager().setScreen(Globals.getScreenManager().getScreen(MainScreen.class).getClass());
+                addNewLeaderboardEntry();
+                nameField.setText("");
+                Globals.getScreenManager().setScreen(MainScreen.class);
             }
         });
 
         // add fields to table
-        mainTable.add(title);
+        mainTable.add(titleLabel);
         mainTable.row();
         buttons.row();
-        buttons.add(backButton);
+        buttons.add(submitButton);
 
         this.getStage().addActor(header);
-        this.getStage().addActor(textField);
+        this.getStage().addActor(nameField);
         this.getStage().addActor(mainTable);
         this.getStage().addActor(buttons);
     }
 
     @Override
     public void show() {
-        //Stage should control input:
+        // stage should control input:
         Gdx.input.setInputProcessor(this.getStage());
     }
 
@@ -107,6 +109,7 @@ public class GameOverScreen extends AbstractScreen{
     public void render(float delta) {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         this.getStage().act();
+        this.titleLabel.setText("GAME OVER!\nSCORE: " + Globals.getScore());
         this.getStage().draw();
     }
 

@@ -2,7 +2,10 @@ package com.mygdx.game.Manager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Screen.AbstractScreen;
+import com.mygdx.game.Screen.GameOverScreen;
+import com.mygdx.game.Screen.GameScreen;
 
 import java.util.HashMap;
 
@@ -25,6 +28,13 @@ public class ScreenManager {
     }
 
     public void setScreen(Class screen) {
+        if (screen != GameScreen.class){
+            ScreenUtils.clear(0, 0, 0, 0);
+        }
+        if (screen == GameOverScreen.class){
+            // reset game
+            disposeScreen((AbstractScreen)game.getScreen());
+        }
         this.previousScreen = (AbstractScreen) game.getScreen();
         game.setScreen(getScreen(screen));
     }
