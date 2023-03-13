@@ -1,6 +1,5 @@
 package com.mygdx.game.Characters;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
@@ -13,7 +12,6 @@ import com.mygdx.game.Objects.Fruit;
 import com.mygdx.game.Objects.Pizza;
 import com.mygdx.game.Objects.Toast;
 import com.mygdx.game.Utils.Controls;
-import com.mygdx.game.Utils.Globals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,42 +19,12 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Player extends CollidableActor implements iSaveable {
-    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
-    private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player-base"));
     private int power;
     private int lifeCount;
     private boolean isDead;
     private Vector2 originCoordinates;
     private int highScore;
     private ArrayList<Class> foodsEaten;
-
-    // public Player() {
-    //     this(40, 60);
-    // }
-
-    // public Player(float width, float height) {
-    //     this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
-    // }
-
-    // public Player(float width, float height, Controls control) {
-    //     this(drawable, width, height, 0, 0, 100, control);
-    // }
-
-    // public Player(float width, float height, float movementSpeed, Controls control) {
-    //     this(drawable, width, height, 0, 0, movementSpeed, control);
-    // }
-
-    // public Player(float width, float height, float x, float y) {
-    //     this(drawable, width, height, x, y, 100, Controls.Presets.DEFAULT);
-    // }
-
-    // public Player(float width, float height, float x, float y, Controls control) {
-    //     this(drawable, width, height, x, y, 100, control);
-    // }
-
-    // public Player(float width, float height, float x, float y, float movementSpeed, Controls control) {
-    //     this(drawable, width, height, x, y, movementSpeed, control);
-    // }
 
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
