@@ -70,6 +70,10 @@ public class Player extends CollidableActor implements iSaveable {
         this.foodsEaten = new ArrayList<Class>();
     }
 
+    public int getLifeCount(){
+        return this.lifeCount;
+    }
+
     public int getPower() {
         return this.power;
     }
