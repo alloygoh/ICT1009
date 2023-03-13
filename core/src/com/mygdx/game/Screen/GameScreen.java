@@ -3,6 +3,7 @@ package com.mygdx.game.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,6 +21,7 @@ import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +41,9 @@ public class GameScreen extends AbstractScreen {
     private Random random;
     private float timeSinceGeneration;
     private int maxObjects = 15;
+    private static Sound SFXcountDown = Gdx.audio.newSound(Gdx.files.internal("sound/countdown.mp3"));
+    public static Sound bgm = Gdx.audio.newSound(Gdx.files.internal("sound/MeowDefence.mp3"));
+
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -48,7 +53,6 @@ public class GameScreen extends AbstractScreen {
         this.getStage().setViewport(viewport);
         this.settingsManager = settingsManager;
         this.screenManager = Globals.getScreenManager();
-
         this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
@@ -72,6 +76,7 @@ public class GameScreen extends AbstractScreen {
                 ((MovingShapeActor) actor).setRenderer(renderer);
             }
         }
+
     }
 
     public GameScreen(Game game, SettingsManager settingsManager) {
@@ -352,6 +357,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void initStage() {
+
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
         Controls p2 = settingsManager.getControlSettings().getControlOf(2);
         Player player1;
@@ -376,5 +382,16 @@ public class GameScreen extends AbstractScreen {
 
         // read keystrokes
         Gdx.input.setInputProcessor(this.getStage());
+        SFXcountDown.play(1.0f);
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long bgmID = bgm.play(0.5f);
+        bgm.stop();
+        bgmID = bgm.play(0.5f);
+        bgm.setLooping(bgmID,true);
+
     }
 }
