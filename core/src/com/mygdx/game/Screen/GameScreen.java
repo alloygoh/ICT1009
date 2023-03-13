@@ -6,9 +6,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -46,6 +48,7 @@ public class GameScreen extends AbstractScreen {
     private Label player2LifeLabel;
     private Label player1PowerLabel;
     private Label player2PowerLabel;
+    private HashMap<Integer, ArrayList<Image>> comboLabelMap;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -59,6 +62,10 @@ public class GameScreen extends AbstractScreen {
         this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
+        // player 1 & 2 combo images
+        this.comboLabelMap = new HashMap<Integer,ArrayList<Image>>();
+        this.comboLabelMap.put(0, new ArrayList<Image>());
+        this.comboLabelMap.put(1, new ArrayList<Image>());
 
         this.stash = new HashMap<Class, ArrayList<BaseObject>>();
         ArrayList<Class> objectClasses = new ArrayList<Class>(
@@ -362,6 +369,19 @@ public class GameScreen extends AbstractScreen {
         return actor;
     }
     
+    private void resetComboVisibility(){
+        ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
+        ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
+        
+        for (Image image: player1Combo){
+            image.setVisible(true);
+        }
+        
+        for (Image image: player2Combo){
+            image.setVisible(true);
+        }
+    }
+
     private void refreshScore(){
         Player player1 = players.get(0);
         Player player2 = players.get(1);
@@ -369,11 +389,59 @@ public class GameScreen extends AbstractScreen {
         this.player1PowerLabel.setText(player1.getPower());
         this.player2LifeLabel.setText(player2.getLifeCount());
         this.player2PowerLabel.setText(player2.getPower());
+        
+        resetComboVisibility();
+        ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
+        ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
+        for (Class food: player1.getFoodsEaten()){
+            if (food == Carrot.class){
+                if (player1Combo.get(0).isVisible()){
+                    player1Combo.get(0).setVisible(false);
+                }else{
+                    player1Combo.get(1).setVisible(false);
+                }
+            } else if(food == Fruit.class){
+                player1Combo.get(2).setVisible(false);
+            } else if (food == Toast.class){
+                player1Combo.get(3).setVisible(false);
+            }
+        }
+
+        for (Class food: player2.getFoodsEaten()){
+            if (food == Carrot.class){
+                if (player2Combo.get(0).isVisible()){
+                    player2Combo.get(0).setVisible(false);
+                }else{
+                    player2Combo.get(1).setVisible(false);
+                }
+            } else if(food == Fruit.class){
+                player2Combo.get(2).setVisible(false);
+            } else if (food == Toast.class){
+                player2Combo.get(3).setVisible(false);
+            }
+        }
     }
     
+    // only called once
     private void initScoreTable(){
+        ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
+        ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
+
         Player player1 = players.get(0);
         Player player2 = players.get(1);
+
+        TextureAtlas atlas = Globals.getAssetManager().get("objects.atlas", TextureAtlas.class);
+        Image player1CarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player1SecondaryCarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player1FruitImage = new Image(atlas.findRegion("fruits"));
+        Image player1ToastImage = new Image(atlas.findRegion("toast"));
+        player1Combo.addAll(Arrays.asList(player1CarrotImage, player1SecondaryCarrotImage, player1FruitImage, player1ToastImage));
+        
+        Image player2CarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player2SecondaryCarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player2FruitImage = new Image(atlas.findRegion("fruits"));
+        Image player2ToastImage = new Image(atlas.findRegion("toast"));
+        player2Combo.addAll(Arrays.asList(player2CarrotImage, player2SecondaryCarrotImage, player2FruitImage, player2ToastImage));
 
         Table player1ScoreTable = new Table();
         // top left
@@ -391,12 +459,20 @@ public class GameScreen extends AbstractScreen {
         Label player1LifeTextLabel = new Label("Player 1 Life:", scoreLabelStyle);
         player1ScoreTable.add(player1LifeTextLabel).padLeft(2).fillX();
         this.player1LifeLabel = new Label(String.valueOf(player1.getLifeCount()), scoreStyle);
-        player1ScoreTable.add(player1LifeLabel).padLeft(10).minWidth(100);
+        player1ScoreTable.add(player1LifeLabel).padLeft(10);
         player1ScoreTable.row();
         Label player1PowerTextLabel = new Label("Player 1 Power:", scoreLabelStyle);
         player1ScoreTable.add(player1PowerTextLabel).padLeft(2).fillX();
         this.player1PowerLabel = new Label(String.valueOf(player1.getPower()), scoreStyle);
-        player1ScoreTable.add(player1PowerLabel).padLeft(10).minWidth(100);
+        player1ScoreTable.add(player1PowerLabel).padLeft(10);
+        player1ScoreTable.row();
+        Label player1ComboLabel = new Label("Player 1 Combo:", scoreLabelStyle);
+        player1ScoreTable.add(player1ComboLabel).padLeft(2);
+        player1ScoreTable.add(player1CarrotImage).size(20,20).padLeft(5);
+        player1ScoreTable.add(player1SecondaryCarrotImage).size(20,20);
+        player1ScoreTable.add(player1FruitImage).size(20,20);
+        player1ScoreTable.add(player1ToastImage).size(20,20);
+        
 
         Table player2ScoreTable = new Table();
         player2ScoreTable.setX(this.getStage().getViewport().getWorldWidth());
@@ -411,6 +487,13 @@ public class GameScreen extends AbstractScreen {
         player2ScoreTable.add(player2PowerTextLabel).padLeft(2).fillX();
         this.player2PowerLabel = new Label(String.valueOf(player2.getPower()), scoreStyle);
         player2ScoreTable.add(player2PowerLabel).padLeft(10).padRight(2);
+        player2ScoreTable.row();
+        Label player2ComboLabel = new Label("Player 2 Combo:", scoreLabelStyle);
+        player2ScoreTable.add(player2ComboLabel).padLeft(2);
+        player2ScoreTable.add(player2CarrotImage).size(20,20).padLeft(5);
+        player2ScoreTable.add(player2SecondaryCarrotImage).size(20,20);
+        player2ScoreTable.add(player2FruitImage).size(20,20);
+        player2ScoreTable.add(player2ToastImage).size(20,20);
 
         player1ScoreTable.top().left();
         player2ScoreTable.top().right();
