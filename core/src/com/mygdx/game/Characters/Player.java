@@ -58,6 +58,10 @@ public class Player extends CollidableActor implements iSaveable {
         this.originCoordinates = new Vector2(x, y);
     }
 
+    public int getLifeCount(){
+        return this.lifeCount;
+    }
+
     public int getPower() {
         return this.power;
     }
