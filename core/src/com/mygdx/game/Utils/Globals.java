@@ -14,6 +14,7 @@ public class Globals {
     private static GameStateManager gameStateManager;
     private static Leaderboard leaderboard;
     private static int score;
+    private static float countDown;
 
     public Globals(Game game) {
         Globals.assetManager = new AssetManager();
@@ -22,6 +23,19 @@ public class Globals {
         Globals.gameStateManager = new GameStateManager();
         Globals.leaderboard = new Leaderboard();
         Globals.score = 0;
+        Globals.countDown = 30f;
+    }
+
+    public static void setCountDown(float countDown) {
+        Globals.countDown = countDown;
+    }
+    
+    public static void restoreCountDown(){
+        Globals.countDown = 30f;
+    }
+
+    public static float getCountDown() {
+        return countDown;
     }
 
     public static int getScore() {
