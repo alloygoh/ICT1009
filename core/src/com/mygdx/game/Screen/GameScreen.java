@@ -357,8 +357,8 @@ public class GameScreen extends AbstractScreen {
         Player player1;
         Player player2;
         if (this.entities.size() == 0) {
-            player1 = new Player(30, 60, 200, 0, 100, p1);
-            player2 = new Player(30, 60, p2);
+            player1 = new Guy(30, 60, 200, 0, 100, p1);
+            player2 = new Girl(30, 60, p2);
         } else {
                 player1 = (Player) this.entities.get(0);
                 player1.setControl(p1);
