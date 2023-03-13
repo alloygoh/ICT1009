@@ -4,10 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -39,6 +42,10 @@ public class GameScreen extends AbstractScreen {
     private Random random;
     private float timeSinceGeneration;
     private int maxObjects = 15;
+    private Label player1LifeLabel;
+    private Label player2LifeLabel;
+    private Label player1PowerLabel;
+    private Label player2PowerLabel;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -54,8 +61,9 @@ public class GameScreen extends AbstractScreen {
         this.renderer = new ShapeRenderer();
 
         this.stash = new HashMap<Class, ArrayList<BaseObject>>();
-        ArrayList<Class> objectClasses = new ArrayList<Class>(Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
-        for (Class targetClass:objectClasses){
+        ArrayList<Class> objectClasses = new ArrayList<Class>(
+                Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
+        for (Class targetClass : objectClasses) {
             stash.put(targetClass, new ArrayList<BaseObject>());
         }
 
@@ -65,7 +73,7 @@ public class GameScreen extends AbstractScreen {
 
         initStage();
         this.getCamera().update();
-        this.getStage().setDebugAll(true);
+        // this.getStage().setDebugAll(true);
 
         for (Actor actor : this.entities) {
             if (actor instanceof MovingShapeActor) {
@@ -97,9 +105,9 @@ public class GameScreen extends AbstractScreen {
     public void governBorders() {
         for (AbstractActor actor : entities) {
             // don't correct movement for eaten food
-            if (actor instanceof BaseObject){
-                BaseObject food = (BaseObject)actor;
-                if (food.shouldDisappear()){
+            if (actor instanceof BaseObject) {
+                BaseObject food = (BaseObject) actor;
+                if (food.shouldDisappear()) {
                     continue;
                 }
             }
@@ -133,11 +141,12 @@ public class GameScreen extends AbstractScreen {
         // TODO Auto-generated method stub
 
     }
-    
-    private void populateHighScore(){
-        for (Player player: players){
-            // since 2 players only, can safely assume the player that is not dead is the winner
-            if(!player.isDead()){
+
+    private void populateHighScore() {
+        for (Player player : players) {
+            // since 2 players only, can safely assume the player that is not dead is the
+            // winner
+            if (!player.isDead()) {
                 Globals.setScore(player.getHighScore());
             }
         }
@@ -185,9 +194,12 @@ public class GameScreen extends AbstractScreen {
         governCollisions();
         this.getStage().act(delta);
 
+        // refresh scoretable on screen
+        refreshScore();
+
         // check if should end game
-        for (Player player: players){
-            if (player.isDead()){
+        for (Player player : players) {
+            if (player.isDead()) {
                 populateHighScore();
                 Globals.getScreenManager().setScreen(GameOverScreen.class);
                 return;
@@ -349,6 +361,62 @@ public class GameScreen extends AbstractScreen {
         actor.setX(random.nextFloat() * viewport.getWorldWidth());
         return actor;
     }
+    
+    private void refreshScore(){
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        this.player1LifeLabel.setText(player1.getLifeCount());
+        this.player1PowerLabel.setText(player1.getPower());
+        this.player2LifeLabel.setText(player2.getLifeCount());
+        this.player2PowerLabel.setText(player2.getPower());
+    }
+    
+    private void initScoreTable(){
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+
+        Table player1ScoreTable = new Table();
+        // top left
+        player1ScoreTable.setX(0);
+        player1ScoreTable.setY(this.getStage().getViewport().getWorldHeight());
+
+        BitmapFont scoreLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
+        Label.LabelStyle scoreLabelStyle = new Label.LabelStyle();
+        scoreLabelStyle.font = scoreLabelFont;
+
+        BitmapFont scoreFont = Globals.getAssetManager().get("scoreFont.ttf", BitmapFont.class);
+        Label.LabelStyle scoreStyle = new Label.LabelStyle();
+        scoreStyle.font = scoreFont;
+
+        Label player1LifeTextLabel = new Label("Player 1 Life:", scoreLabelStyle);
+        player1ScoreTable.add(player1LifeTextLabel).padLeft(2).fillX();
+        this.player1LifeLabel = new Label(String.valueOf(player1.getLifeCount()), scoreStyle);
+        player1ScoreTable.add(player1LifeLabel).padLeft(10).minWidth(100);
+        player1ScoreTable.row();
+        Label player1PowerTextLabel = new Label("Player 1 Power:", scoreLabelStyle);
+        player1ScoreTable.add(player1PowerTextLabel).padLeft(2).fillX();
+        this.player1PowerLabel = new Label(String.valueOf(player1.getPower()), scoreStyle);
+        player1ScoreTable.add(player1PowerLabel).padLeft(10).minWidth(100);
+
+        Table player2ScoreTable = new Table();
+        player2ScoreTable.setX(this.getStage().getViewport().getWorldWidth());
+        player2ScoreTable.setY(this.getStage().getViewport().getWorldHeight());
+
+        Label player2LifeTextLabel = new Label("Player 2 Life:", scoreLabelStyle);
+        player2ScoreTable.add(player2LifeTextLabel).padLeft(2).fillX();
+        this.player2LifeLabel = new Label(String.valueOf(player2.getLifeCount()), scoreStyle);
+        player2ScoreTable.add(player2LifeLabel).padLeft(10).padRight(2);
+        player2ScoreTable.row();
+        Label player2PowerTextLabel = new Label("Player 2 Power:", scoreLabelStyle);
+        player2ScoreTable.add(player2PowerTextLabel).padLeft(2).fillX();
+        this.player2PowerLabel = new Label(String.valueOf(player2.getPower()), scoreStyle);
+        player2ScoreTable.add(player2PowerLabel).padLeft(10).padRight(2);
+
+        player1ScoreTable.top().left();
+        player2ScoreTable.top().right();
+        this.getStage().addActor(player1ScoreTable);
+        this.getStage().addActor(player2ScoreTable);
+    }
 
     @Override
     public void initStage() {
@@ -357,13 +425,13 @@ public class GameScreen extends AbstractScreen {
         Player player1;
         Player player2;
         if (this.entities.size() == 0) {
-            player1 = new Player(30, 60, 200, 0, 100, p1);
-            player2 = new Player(30, 60, p2);
+            player1 = new Player(30, 60, p1);
+            player2 = new Player(30, 60,200,0, 100,p2);
         } else {
-                player1 = (Player) this.entities.get(0);
-                player1.setControl(p1);
-                player2 = (Player) this.entities.get(1);
-                player2.setControl(p2);
+            player1 = (Player) this.entities.get(0);
+            player1.setControl(p1);
+            player2 = (Player) this.entities.get(1);
+            player2.setControl(p2);
         }
 
         entities.clear();
@@ -373,6 +441,9 @@ public class GameScreen extends AbstractScreen {
         for (Actor actor : entities) {
             this.getStage().addActor(actor);
         }
+        
+        // score overlay
+        initScoreTable();
 
         // read keystrokes
         Gdx.input.setInputProcessor(this.getStage());
