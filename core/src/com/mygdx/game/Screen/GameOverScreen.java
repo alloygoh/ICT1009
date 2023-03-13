@@ -49,6 +49,7 @@ public class GameOverScreen extends AbstractScreen{
         labelStyle2.font = titleFont;
 
         BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedContent.ttf", BitmapFont.class);
+        contentFont.getData().setScale(4.0f);
         Label.LabelStyle labelStyleContent = new Label.LabelStyle();
         labelStyleContent.font = contentFont;
 
@@ -58,8 +59,7 @@ public class GameOverScreen extends AbstractScreen{
         this.titleLabel = new Label("GAME OVER!\nSCORE: " + Globals.getScore() , labelStyle2);
         titleLabel.setFontScale(1f);
 
-        Label header = new Label("Name: ", skin);
-        header.setFontScale(3f);
+        Label header = new Label("Name:  ", labelStyleContent);
 
         // Create a text field using the skin
         this.nameField = new TextField("", skin);
