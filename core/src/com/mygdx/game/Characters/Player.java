@@ -3,12 +3,22 @@ package com.mygdx.game.Characters;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.compression.lzma.Base;
 import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Objects.BaseObject;
+import com.mygdx.game.Objects.Boba;
+import com.mygdx.game.Objects.Carrot;
+import com.mygdx.game.Objects.Fries;
+import com.mygdx.game.Objects.Fruit;
+import com.mygdx.game.Objects.Pizza;
+import com.mygdx.game.Objects.Toast;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Player extends CollidableActor implements iSaveable {
@@ -19,6 +29,7 @@ public class Player extends CollidableActor implements iSaveable {
     private boolean isDead;
     private Vector2 originCoordinates;
     private int highScore;
+    private ArrayList<Class> foodsEaten;
 
     public Player() {
         this(40, 60);
@@ -56,6 +67,7 @@ public class Player extends CollidableActor implements iSaveable {
         this.lifeCount = 2;
         this.isDead = false;
         this.originCoordinates = new Vector2(x, y);
+        this.foodsEaten = new ArrayList<Class>();
     }
 
     public int getPower() {
@@ -80,6 +92,22 @@ public class Player extends CollidableActor implements iSaveable {
         this.lifeCount -= 1;
         this.isDead = (this.lifeCount <= 0);
     }
+    
+    private boolean checkCombo(){
+        // combo consists of 2 carrots, 1 fruit and 1 toast
+        if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2){
+            this.foodsEaten.clear();
+            return true;
+        }
+        if (this.foodsEaten.contains(Boba.class) || this.foodsEaten.contains(Pizza.class)  || this.foodsEaten.contains(Fries.class)){
+            this.foodsEaten.clear();
+        }
+        if (this.foodsEaten.size() > 4){
+            // if more than combo size, remove oldest food
+            this.foodsEaten.remove(0);
+        }
+        return false;
+    }
 
     @Override
     public void handleCollision(iCollidable collidable) {
@@ -87,7 +115,12 @@ public class Player extends CollidableActor implements iSaveable {
             BaseObject object = (BaseObject) collidable;
             if(!this.isIdle()){
                 this.power += object.getPowerPoints();
+                this.foodsEaten.add(object.getClass());
                 object.reactToEvent("eaten", this);
+                if (checkCombo()){
+                    // combo bonus
+                    this.power += 20;
+                }
             }
         } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
