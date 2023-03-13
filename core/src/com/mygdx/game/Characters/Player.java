@@ -3,7 +3,6 @@ package com.mygdx.game.Characters;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.compression.lzma.Base;
 import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Objects.BaseObject;
@@ -76,6 +75,10 @@ public class Player extends CollidableActor implements iSaveable {
 
     public int getPower() {
         return this.power;
+    }
+
+    public ArrayList<Class> getFoodsEaten(){
+        return this.foodsEaten;
     }
     
     public int getHighScore(){
