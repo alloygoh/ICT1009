@@ -17,6 +17,7 @@ public class Player extends CollidableActor implements iSaveable {
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player-base"));
     private static Sound sfxGoodConsume = Gdx.audio.newSound(Gdx.files.internal("sound/goodfood.mp3"));
+    private static Sound sfxBadConsume = Gdx.audio.newSound(Gdx.files.internal("sound/badfood.mp3"));
     private static Sound sfxGameOver = Gdx.audio.newSound(Gdx.files.internal("sound/gameEnd.mp3"));
     private int power;
     private int lifeCount;
@@ -91,7 +92,11 @@ public class Player extends CollidableActor implements iSaveable {
             BaseObject object = (BaseObject) collidable;
             if(!this.isIdle()){
                 this.power += object.getPowerPoints();
-                sfxGoodConsume.play(1.0f);
+                if (object.getPowerPoints() > 0) {
+                    sfxGoodConsume.play(1.0f);
+                }
+                else
+                    sfxBadConsume.play(1.0f);
                 object.reactToEvent("eaten", this);
             }
         } else if (collidable instanceof Player && collidable != this) {
