@@ -20,33 +20,33 @@ public class Player extends CollidableActor implements iSaveable {
     private Vector2 originCoordinates;
     private int highScore;
 
-    public Player() {
-        this(40, 60);
-    }
+    // public Player() {
+    //     this(40, 60);
+    // }
 
-    public Player(float width, float height) {
-        this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
-    }
+    // public Player(float width, float height) {
+    //     this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
+    // }
 
-    public Player(float width, float height, Controls control) {
-        this(drawable, width, height, 0, 0, 100, control);
-    }
+    // public Player(float width, float height, Controls control) {
+    //     this(drawable, width, height, 0, 0, 100, control);
+    // }
 
-    public Player(float width, float height, float movementSpeed, Controls control) {
-        this(drawable, width, height, 0, 0, movementSpeed, control);
-    }
+    // public Player(float width, float height, float movementSpeed, Controls control) {
+    //     this(drawable, width, height, 0, 0, movementSpeed, control);
+    // }
 
-    public Player(float width, float height, float x, float y) {
-        this(drawable, width, height, x, y, 100, Controls.Presets.DEFAULT);
-    }
+    // public Player(float width, float height, float x, float y) {
+    //     this(drawable, width, height, x, y, 100, Controls.Presets.DEFAULT);
+    // }
 
-    public Player(float width, float height, float x, float y, Controls control) {
-        this(drawable, width, height, x, y, 100, control);
-    }
+    // public Player(float width, float height, float x, float y, Controls control) {
+    //     this(drawable, width, height, x, y, 100, control);
+    // }
 
-    public Player(float width, float height, float x, float y, float movementSpeed, Controls control) {
-        this(drawable, width, height, x, y, movementSpeed, control);
-    }
+    // public Player(float width, float height, float x, float y, float movementSpeed, Controls control) {
+    //     this(drawable, width, height, x, y, movementSpeed, control);
+    // }
 
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
