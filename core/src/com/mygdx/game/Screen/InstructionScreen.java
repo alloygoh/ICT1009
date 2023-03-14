@@ -5,12 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Utils.Globals;
+import com.badlogic.gdx.utils.Align;
+
 
 public class InstructionScreen extends AbstractScreen {
     private Skin skin;
@@ -107,11 +106,18 @@ public class InstructionScreen extends AbstractScreen {
                 "\nIf player consume tons of unhealthy food, players will become weaker(lesser health) and slower(speed)\n" +
                 "\n", skin);
         // End of mock samples and code
-        instructions1.setWidth(750);
+        instructions1.setFontScale(1.5f);
         instructions1.setWrap(true);
-        instructions1.setY((Gdx.graphics.getHeight() - instructions1.getHeight()) / 2);
-        instructions1.setX((Gdx.graphics.getWidth() - instructions1.getWidth()) / 2);
-        instructions1.setFontScale(2);
+
+        Table instructionsTable = new Table();
+        instructionsTable.setSize(this.getStage().getWidth() / 3f - instructionsTable.getWidth() / 3f, this.getStage().getHeight() / 2f - instructionsTable.getHeight() / 2f);
+        instructionsTable.setPosition(this.getStage().getWidth() / 2f - instructionsTable.getWidth() / 2f, this.getStage().getHeight() / 2f - instructionsTable.getHeight() / 2f);
+        instructionsTable.align(Align.topLeft);
+        ScrollPane instructionsPane = new ScrollPane(instructions1, skin);
+        instructionsPane.setScrollingDisabled(true,false);
+        instructionsPane.setForceScroll(false, true); // Allow scrolling only vertically
+        instructionsPane.setWidth(1000);
+        instructionsTable.add(instructionsPane).expand().fill();
         // add listeners to buttons
         // go to main screen if clicked
         backButton.addListener(new ClickListener() {
@@ -127,7 +133,7 @@ public class InstructionScreen extends AbstractScreen {
         buttons.row();
         buttons.add(backButton);
 
-        this.getStage().addActor(instructions1);
+        this.getStage().addActor(instructionsTable);
         this.getStage().addActor(mainTable);
         this.getStage().addActor(buttons);
     }
