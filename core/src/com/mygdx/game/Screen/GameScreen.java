@@ -31,7 +31,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-
 public class GameScreen extends AbstractScreen {
     private SpriteBatch batch;
     private ShapeRenderer renderer;
@@ -65,7 +64,7 @@ public class GameScreen extends AbstractScreen {
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
         // player 1 & 2 combo images
-        this.comboLabelMap = new HashMap<Integer,ArrayList<Image>>();
+        this.comboLabelMap = new HashMap<Integer, ArrayList<Image>>();
         this.comboLabelMap.put(0, new ArrayList<Image>());
         this.comboLabelMap.put(1, new ArrayList<Image>());
 
@@ -94,17 +93,17 @@ public class GameScreen extends AbstractScreen {
         this(game, settingsManager, new ArrayList<>());
     }
 
-    private void initBattle(Player player1, Player player2){
+    private void initBattle(Player player1, Player player2) {
         int powerDiff = Math.abs(player1.getPower() - player2.getPower());
-        if(powerDiff == 0){
+        if (powerDiff == 0) {
             // do not trigger battle animation is same power
             player1.reactToEvent("collision", player2);
             return;
         }
         Player losingPlayer = player1;
-        if (player2.getPower() < player1.getPower()){
+        if (player2.getPower() < player1.getPower()) {
             losingPlayer = player2;
-        }    
+        }
         Globals.getScreenManager().addScreen(new BattleScreen(getGame(), losingPlayer, powerDiff, players));
         Globals.getScreenManager().setScreen(BattleScreen.class);
         Globals.setInBattle(true);
@@ -120,14 +119,13 @@ public class GameScreen extends AbstractScreen {
         for (CollidableActor subject : collidables) {
             for (CollidableActor collidableActor : collidables) {
                 if (subject.collidesWith(collidableActor)) {
-                    if(subject != collidableActor && subject instanceof Player && collidableActor instanceof Player){
+                    if (subject != collidableActor && subject instanceof Player && collidableActor instanceof Player) {
                         // initiate battle
-                        if (!Globals.isInBattle()){
-                            initBattle((Player)subject, (Player)collidableActor);
+                        if (!Globals.isInBattle() && Globals.getCountDown() <= 0) {
+                            initBattle((Player) subject, (Player) collidableActor);
                         }
-                    } else{
-                        subject.reactToEvent("collision", collidableActor);
                     }
+                    subject.reactToEvent("collision", collidableActor);
                 }
             }
         }
@@ -220,11 +218,9 @@ public class GameScreen extends AbstractScreen {
             actor.processKeyStrokes(delta);
         }
 
-
-
         governBorders();
         governCollisions();
-        
+
         this.getStage().act(delta);
 
         // refresh scoretable on screen
@@ -373,7 +369,7 @@ public class GameScreen extends AbstractScreen {
                 }
                 actor = new Toast();
                 break;
-            // generate Carrot 
+            // generate Carrot
             case 4:
                 if (stash.get(Carrot.class).size() != 0) {
                     actor = stash.get(Carrot.class).remove(0);
@@ -396,21 +392,21 @@ public class GameScreen extends AbstractScreen {
         actor.setX(random.nextFloat() * viewport.getWorldWidth());
         return actor;
     }
-    
-    private void resetComboVisibility(){
+
+    private void resetComboVisibility() {
         ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
         ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
-        
-        for (Image image: player1Combo){
+
+        for (Image image : player1Combo) {
             image.setVisible(true);
         }
-        
-        for (Image image: player2Combo){
+
+        for (Image image : player2Combo) {
             image.setVisible(true);
         }
     }
-    
-    private void refreshTimer(float delta){
+
+    private void refreshTimer(float delta) {
         Globals.setCountDown(Globals.getCountDown() - delta);
         BitmapFont timerLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
         Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
@@ -418,48 +414,48 @@ public class GameScreen extends AbstractScreen {
         this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
     }
 
-    private void refreshScore(){
+    private void refreshScore() {
         Player player1 = players.get(0);
         Player player2 = players.get(1);
         this.player1LifeLabel.setText(player1.getLifeCount());
         this.player1PowerLabel.setText(player1.getPower());
         this.player2LifeLabel.setText(player2.getLifeCount());
         this.player2PowerLabel.setText(player2.getPower());
-        
+
         resetComboVisibility();
         ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
         ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
-        for (Class food: player1.getFoodsEaten()){
-            if (food == Carrot.class){
-                if (player1Combo.get(0).isVisible()){
+        for (Class food : player1.getFoodsEaten()) {
+            if (food == Carrot.class) {
+                if (player1Combo.get(0).isVisible()) {
                     player1Combo.get(0).setVisible(false);
-                }else{
+                } else {
                     player1Combo.get(1).setVisible(false);
                 }
-            } else if(food == Fruit.class){
+            } else if (food == Fruit.class) {
                 player1Combo.get(2).setVisible(false);
-            } else if (food == Toast.class){
+            } else if (food == Toast.class) {
                 player1Combo.get(3).setVisible(false);
             }
         }
 
-        for (Class food: player2.getFoodsEaten()){
-            if (food == Carrot.class){
-                if (player2Combo.get(0).isVisible()){
+        for (Class food : player2.getFoodsEaten()) {
+            if (food == Carrot.class) {
+                if (player2Combo.get(0).isVisible()) {
                     player2Combo.get(0).setVisible(false);
-                }else{
+                } else {
                     player2Combo.get(1).setVisible(false);
                 }
-            } else if(food == Fruit.class){
+            } else if (food == Fruit.class) {
                 player2Combo.get(2).setVisible(false);
-            } else if (food == Toast.class){
+            } else if (food == Toast.class) {
                 player2Combo.get(3).setVisible(false);
             }
         }
     }
-    
+
     // only called once
-    private void initScoreTable(){
+    private void initScoreTable() {
         ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
         ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
 
@@ -471,13 +467,15 @@ public class GameScreen extends AbstractScreen {
         Image player1SecondaryCarrotImage = new Image(atlas.findRegion("carrot"));
         Image player1FruitImage = new Image(atlas.findRegion("fruits"));
         Image player1ToastImage = new Image(atlas.findRegion("toast"));
-        player1Combo.addAll(Arrays.asList(player1CarrotImage, player1SecondaryCarrotImage, player1FruitImage, player1ToastImage));
-        
+        player1Combo.addAll(
+                Arrays.asList(player1CarrotImage, player1SecondaryCarrotImage, player1FruitImage, player1ToastImage));
+
         Image player2CarrotImage = new Image(atlas.findRegion("carrot"));
         Image player2SecondaryCarrotImage = new Image(atlas.findRegion("carrot"));
         Image player2FruitImage = new Image(atlas.findRegion("fruits"));
         Image player2ToastImage = new Image(atlas.findRegion("toast"));
-        player2Combo.addAll(Arrays.asList(player2CarrotImage, player2SecondaryCarrotImage, player2FruitImage, player2ToastImage));
+        player2Combo.addAll(
+                Arrays.asList(player2CarrotImage, player2SecondaryCarrotImage, player2FruitImage, player2ToastImage));
 
         Table player1ScoreTable = new Table();
         // top left
@@ -504,11 +502,10 @@ public class GameScreen extends AbstractScreen {
         player1ScoreTable.row();
         Label player1ComboLabel = new Label("Player 1 Combo:", scoreLabelStyle);
         player1ScoreTable.add(player1ComboLabel).padLeft(2);
-        player1ScoreTable.add(player1CarrotImage).size(20,20).padLeft(5);
-        player1ScoreTable.add(player1SecondaryCarrotImage).size(20,20);
-        player1ScoreTable.add(player1FruitImage).size(20,20);
-        player1ScoreTable.add(player1ToastImage).size(20,20);
-        
+        player1ScoreTable.add(player1CarrotImage).size(20, 20).padLeft(5);
+        player1ScoreTable.add(player1SecondaryCarrotImage).size(20, 20);
+        player1ScoreTable.add(player1FruitImage).size(20, 20);
+        player1ScoreTable.add(player1ToastImage).size(20, 20);
 
         Table player2ScoreTable = new Table();
         player2ScoreTable.setX(this.getStage().getViewport().getWorldWidth());
@@ -526,10 +523,10 @@ public class GameScreen extends AbstractScreen {
         player2ScoreTable.row();
         Label player2ComboLabel = new Label("Player 2 Combo:", scoreLabelStyle);
         player2ScoreTable.add(player2ComboLabel).padLeft(2);
-        player2ScoreTable.add(player2CarrotImage).size(20,20).padLeft(5);
-        player2ScoreTable.add(player2SecondaryCarrotImage).size(20,20);
-        player2ScoreTable.add(player2FruitImage).size(20,20);
-        player2ScoreTable.add(player2ToastImage).size(20,20);
+        player2ScoreTable.add(player2CarrotImage).size(20, 20).padLeft(5);
+        player2ScoreTable.add(player2SecondaryCarrotImage).size(20, 20);
+        player2ScoreTable.add(player2FruitImage).size(20, 20);
+        player2ScoreTable.add(player2ToastImage).size(20, 20);
 
         player1ScoreTable.top().left();
         player2ScoreTable.top().right();
@@ -560,16 +557,17 @@ public class GameScreen extends AbstractScreen {
         for (Actor actor : entities) {
             this.getStage().addActor(actor);
         }
-        
+
         // score overlay
         initScoreTable();
-        
+
         // countdown timer
         BitmapFont timerLabelFont = Globals.getAssetManager().get("timerFont.ttf", BitmapFont.class);
         Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
         timerLabelStyle.font = timerLabelFont;
         this.countDownLabel = new Label("Time till battle: " + Globals.getCountDown(), timerLabelStyle);
-        this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth()-countDownLabel.getWidth())/2, this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getWidth()) / 2,
+                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
         this.getStage().addActor(this.countDownLabel);
 
         // read keystrokes
