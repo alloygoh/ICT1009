@@ -1,13 +1,20 @@
 package com.mygdx.game.Screen;
 
+import java.lang.Math;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,11 +27,11 @@ import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
-
 
 public class GameScreen extends AbstractScreen {
     private SpriteBatch batch;
@@ -39,6 +46,14 @@ public class GameScreen extends AbstractScreen {
     private Random random;
     private float timeSinceGeneration;
     private int maxObjects = 15;
+    private static Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
+    public static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
+    private Label player1LifeLabel;
+    private Label player2LifeLabel;
+    private Label player1PowerLabel;
+    private Label player2PowerLabel;
+    private HashMap<Integer, ArrayList<Image>> comboLabelMap;
+    private Label countDownLabel;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -48,14 +63,18 @@ public class GameScreen extends AbstractScreen {
         this.getStage().setViewport(viewport);
         this.settingsManager = settingsManager;
         this.screenManager = Globals.getScreenManager();
-
         this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
+        // player 1 & 2 combo images
+        this.comboLabelMap = new HashMap<Integer, ArrayList<Image>>();
+        this.comboLabelMap.put(0, new ArrayList<Image>());
+        this.comboLabelMap.put(1, new ArrayList<Image>());
 
         this.stash = new HashMap<Class, ArrayList<BaseObject>>();
-        ArrayList<Class> objectClasses = new ArrayList<Class>(Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
-        for (Class targetClass:objectClasses){
+        ArrayList<Class> objectClasses = new ArrayList<Class>(
+                Arrays.asList(Carrot.class, Toast.class, Fruit.class, Boba.class, Pizza.class, Fries.class));
+        for (Class targetClass : objectClasses) {
             stash.put(targetClass, new ArrayList<BaseObject>());
         }
 
@@ -65,17 +84,33 @@ public class GameScreen extends AbstractScreen {
 
         initStage();
         this.getCamera().update();
-        this.getStage().setDebugAll(true);
 
         for (Actor actor : this.entities) {
             if (actor instanceof MovingShapeActor) {
                 ((MovingShapeActor) actor).setRenderer(renderer);
             }
         }
+
     }
 
     public GameScreen(Game game, SettingsManager settingsManager) {
         this(game, settingsManager, new ArrayList<>());
+    }
+
+    private void initBattle(Player player1, Player player2) {
+        int powerDiff = Math.abs(player1.getPower() - player2.getPower());
+        if (powerDiff == 0) {
+            // do not trigger battle animation is same power
+            player1.reactToEvent("collision", player2);
+            return;
+        }
+        Player losingPlayer = player1;
+        if (player2.getPower() < player1.getPower()) {
+            losingPlayer = player2;
+        }
+        Globals.getScreenManager().addScreen(new BattleScreen(getGame(), losingPlayer, powerDiff, players));
+        Globals.getScreenManager().setScreen(BattleScreen.class);
+        Globals.setInBattle(true);
     }
 
     private void governCollisions() {
@@ -88,6 +123,12 @@ public class GameScreen extends AbstractScreen {
         for (CollidableActor subject : collidables) {
             for (CollidableActor collidableActor : collidables) {
                 if (subject.collidesWith(collidableActor)) {
+                    if (subject != collidableActor && subject instanceof Player && collidableActor instanceof Player) {
+                        // initiate battle
+                        if (!Globals.isInBattle() && Globals.getCountDown() <= 0) {
+                            initBattle((Player) subject, (Player) collidableActor);
+                        }
+                    }
                     subject.reactToEvent("collision", collidableActor);
                 }
             }
@@ -97,9 +138,9 @@ public class GameScreen extends AbstractScreen {
     public void governBorders() {
         for (AbstractActor actor : entities) {
             // don't correct movement for eaten food
-            if (actor instanceof BaseObject){
-                BaseObject food = (BaseObject)actor;
-                if (food.shouldDisappear()){
+            if (actor instanceof BaseObject) {
+                BaseObject food = (BaseObject) actor;
+                if (food.shouldDisappear()) {
                     continue;
                 }
             }
@@ -133,11 +174,12 @@ public class GameScreen extends AbstractScreen {
         // TODO Auto-generated method stub
 
     }
-    
-    private void populateHighScore(){
-        for (Player player: players){
-            // since 2 players only, can safely assume the player that is not dead is the winner
-            if(!player.isDead()){
+
+    private void populateHighScore() {
+        for (Player player : players) {
+            // since 2 players only, can safely assume the player that is not dead is the
+            // winner
+            if (!player.isDead()) {
                 Globals.setScore(player.getHighScore());
             }
         }
@@ -145,7 +187,6 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-
         if (objectList.size() < maxObjects && timeSinceGeneration > 1) {
             ArrayList<BaseObject> objects = generateGameObjects();
             for (Actor object : objects) {
@@ -183,11 +224,17 @@ public class GameScreen extends AbstractScreen {
 
         governBorders();
         governCollisions();
+
         this.getStage().act(delta);
 
+        // refresh scoretable on screen
+        refreshScore();
+        // refresh timer
+        refreshTimer(delta);
+
         // check if should end game
-        for (Player player: players){
-            if (player.isDead()){
+        for (Player player : players) {
+            if (player.isDead()) {
                 populateHighScore();
                 Globals.getScreenManager().setScreen(GameOverScreen.class);
                 return;
@@ -326,7 +373,7 @@ public class GameScreen extends AbstractScreen {
                 }
                 actor = new Toast();
                 break;
-            // generate Carrot 
+            // generate Carrot
             case 4:
                 if (stash.get(Carrot.class).size() != 0) {
                     actor = stash.get(Carrot.class).remove(0);
@@ -350,20 +397,162 @@ public class GameScreen extends AbstractScreen {
         return actor;
     }
 
+    private void resetComboVisibility() {
+        ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
+        ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
+
+        for (Image image : player1Combo) {
+            image.setVisible(true);
+        }
+
+        for (Image image : player2Combo) {
+            image.setVisible(true);
+        }
+    }
+
+    private void refreshTimer(float delta) {
+        Globals.setCountDown(Globals.getCountDown() - delta);
+        BitmapFont timerLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
+        Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
+        timerLabelStyle.font = timerLabelFont;
+        this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
+    }
+
+    private void refreshScore() {
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        this.player1LifeLabel.setText(player1.getLifeCount());
+        this.player1PowerLabel.setText(player1.getPower());
+        this.player2LifeLabel.setText(player2.getLifeCount());
+        this.player2PowerLabel.setText(player2.getPower());
+
+        resetComboVisibility();
+        ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
+        ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
+        for (Class food : player1.getFoodsEaten()) {
+            if (food == Carrot.class) {
+                if (player1Combo.get(0).isVisible()) {
+                    player1Combo.get(0).setVisible(false);
+                } else {
+                    player1Combo.get(1).setVisible(false);
+                }
+            } else if (food == Fruit.class) {
+                player1Combo.get(2).setVisible(false);
+            } else if (food == Toast.class) {
+                player1Combo.get(3).setVisible(false);
+            }
+        }
+
+        for (Class food : player2.getFoodsEaten()) {
+            if (food == Carrot.class) {
+                if (player2Combo.get(0).isVisible()) {
+                    player2Combo.get(0).setVisible(false);
+                } else {
+                    player2Combo.get(1).setVisible(false);
+                }
+            } else if (food == Fruit.class) {
+                player2Combo.get(2).setVisible(false);
+            } else if (food == Toast.class) {
+                player2Combo.get(3).setVisible(false);
+            }
+        }
+    }
+
+    // only called once
+    private void initScoreTable() {
+        ArrayList<Image> player1Combo = this.comboLabelMap.get(0);
+        ArrayList<Image> player2Combo = this.comboLabelMap.get(1);
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+
+        TextureAtlas atlas = Globals.getAssetManager().get("objects.atlas", TextureAtlas.class);
+        Image player1CarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player1SecondaryCarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player1FruitImage = new Image(atlas.findRegion("fruits"));
+        Image player1ToastImage = new Image(atlas.findRegion("toast"));
+        player1Combo.addAll(
+                Arrays.asList(player1CarrotImage, player1SecondaryCarrotImage, player1FruitImage, player1ToastImage));
+
+        Image player2CarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player2SecondaryCarrotImage = new Image(atlas.findRegion("carrot"));
+        Image player2FruitImage = new Image(atlas.findRegion("fruits"));
+        Image player2ToastImage = new Image(atlas.findRegion("toast"));
+        player2Combo.addAll(
+                Arrays.asList(player2CarrotImage, player2SecondaryCarrotImage, player2FruitImage, player2ToastImage));
+
+        Table player1ScoreTable = new Table();
+        // top left
+        player1ScoreTable.setX(0);
+        player1ScoreTable.setY(this.getStage().getViewport().getWorldHeight());
+
+        BitmapFont scoreLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
+        Label.LabelStyle scoreLabelStyle = new Label.LabelStyle();
+        scoreLabelStyle.font = scoreLabelFont;
+
+        BitmapFont scoreFont = Globals.getAssetManager().get("scoreFont.ttf", BitmapFont.class);
+        Label.LabelStyle scoreStyle = new Label.LabelStyle();
+        scoreStyle.font = scoreFont;
+
+        Label player1LifeTextLabel = new Label("Player 1 Life:", scoreLabelStyle);
+        player1ScoreTable.add(player1LifeTextLabel).padLeft(2).fillX();
+        this.player1LifeLabel = new Label(String.valueOf(player1.getLifeCount()), scoreStyle);
+        player1ScoreTable.add(player1LifeLabel).padLeft(10);
+        player1ScoreTable.row();
+        Label player1PowerTextLabel = new Label("Player 1 Power:", scoreLabelStyle);
+        player1ScoreTable.add(player1PowerTextLabel).padLeft(2).fillX();
+        this.player1PowerLabel = new Label(String.valueOf(player1.getPower()), scoreStyle);
+        player1ScoreTable.add(player1PowerLabel).padLeft(10);
+        player1ScoreTable.row();
+        Label player1ComboLabel = new Label("Player 1 Combo:", scoreLabelStyle);
+        player1ScoreTable.add(player1ComboLabel).padLeft(2);
+        player1ScoreTable.add(player1CarrotImage).size(20, 20).padLeft(5);
+        player1ScoreTable.add(player1SecondaryCarrotImage).size(20, 20);
+        player1ScoreTable.add(player1FruitImage).size(20, 20);
+        player1ScoreTable.add(player1ToastImage).size(20, 20);
+
+        Table player2ScoreTable = new Table();
+        player2ScoreTable.setX(this.getStage().getViewport().getWorldWidth());
+        player2ScoreTable.setY(this.getStage().getViewport().getWorldHeight());
+
+        Label player2LifeTextLabel = new Label("Player 2 Life:", scoreLabelStyle);
+        player2ScoreTable.add(player2LifeTextLabel).padLeft(2).fillX();
+        this.player2LifeLabel = new Label(String.valueOf(player2.getLifeCount()), scoreStyle);
+        player2ScoreTable.add(player2LifeLabel).padLeft(10).padRight(2);
+        player2ScoreTable.row();
+        Label player2PowerTextLabel = new Label("Player 2 Power:", scoreLabelStyle);
+        player2ScoreTable.add(player2PowerTextLabel).padLeft(2).fillX();
+        this.player2PowerLabel = new Label(String.valueOf(player2.getPower()), scoreStyle);
+        player2ScoreTable.add(player2PowerLabel).padLeft(10).padRight(2);
+        player2ScoreTable.row();
+        Label player2ComboLabel = new Label("Player 2 Combo:", scoreLabelStyle);
+        player2ScoreTable.add(player2ComboLabel).padLeft(2);
+        player2ScoreTable.add(player2CarrotImage).size(20, 20).padLeft(5);
+        player2ScoreTable.add(player2SecondaryCarrotImage).size(20, 20);
+        player2ScoreTable.add(player2FruitImage).size(20, 20);
+        player2ScoreTable.add(player2ToastImage).size(20, 20);
+
+        player1ScoreTable.top().left();
+        player2ScoreTable.top().right();
+        this.getStage().addActor(player1ScoreTable);
+        this.getStage().addActor(player2ScoreTable);
+    }
+
     @Override
     public void initStage() {
+
         Controls p1 = settingsManager.getControlSettings().getControlOf(1);
         Controls p2 = settingsManager.getControlSettings().getControlOf(2);
         Player player1;
         Player player2;
         if (this.entities.size() == 0) {
-            player1 = new Player(30, 60, 200, 0, 100, p1);
-            player2 = new Player(30, 60, p2);
+            player1 = new Guy(30, 60, 200, 0, 100, p1);
+            player2 = new Girl(30, 60, p2);
         } else {
-                player1 = (Player) this.entities.get(0);
-                player1.setControl(p1);
-                player2 = (Player) this.entities.get(1);
-                player2.setControl(p2);
+            player1 = (Player) this.entities.get(0);
+            player1.setControl(p1);
+            player2 = (Player) this.entities.get(1);
+            player2.setControl(p2);
         }
 
         entities.clear();
@@ -374,7 +563,30 @@ public class GameScreen extends AbstractScreen {
             this.getStage().addActor(actor);
         }
 
+        // score overlay
+        initScoreTable();
+
+        // countdown timer
+        BitmapFont timerLabelFont = Globals.getAssetManager().get("timerFont.ttf", BitmapFont.class);
+        Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
+        timerLabelStyle.font = timerLabelFont;
+        this.countDownLabel = new Label("Time till battle: " + Globals.getCountDown(), timerLabelStyle);
+        this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getWidth()) / 2,
+                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        this.getStage().addActor(this.countDownLabel);
+
         // read keystrokes
         Gdx.input.setInputProcessor(this.getStage());
+        SFXcountDown.play(1.0f);
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long bgmID = bgm.play(0.5f);
+        bgm.stop();
+        bgmID = bgm.play(0.5f);
+        bgm.setLooping(bgmID,true);
+
     }
 }

@@ -1,11 +1,15 @@
 package com.mygdx.game.Objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Characters.MovingAI;
+import com.mygdx.game.Utils.Globals;
 
 public class BaseObject extends MovingAI {
     private int powerPoints;
     private boolean shouldDisappear = false;
+    private static Sound sfxGoodConsume = Globals.getAssetManager().get("sound/good-food.mp3");
+    private static Sound sfxBadConsume = Globals.getAssetManager().get("sound/bad-food.mp3");
 
     public BaseObject(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed, int powerPoints) {
         super(drawable, width, height, x, y, movementSpeed);
@@ -26,6 +30,14 @@ public class BaseObject extends MovingAI {
         this.setDirectionCount(0);
         this.setCollided(false);
     }
+    
+    private void playSound(){
+        if (powerPoints > 0) {
+            sfxGoodConsume.play(1.0f);
+        } else{
+            sfxBadConsume.play(1.0f);
+        }
+    }
 
 
     @Override
@@ -34,6 +46,7 @@ public class BaseObject extends MovingAI {
             this.shouldDisappear = true;
             this.setX(-1 -this.getWidth());
             this.setY(-1 - this.getHeight());
+            playSound();
             return;
         }
         super.reactToEvent(event, others);
