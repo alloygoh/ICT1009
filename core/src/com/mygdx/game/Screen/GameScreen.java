@@ -81,7 +81,6 @@ public class GameScreen extends AbstractScreen {
 
         initStage();
         this.getCamera().update();
-        // this.getStage().setDebugAll(true);
 
         for (Actor actor : this.entities) {
             if (actor instanceof MovingShapeActor) {
@@ -95,14 +94,19 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void initBattle(Player player1, Player player2){
-        // both positive    
         int powerDiff = Math.abs(player1.getPower() - player2.getPower());
+        if(powerDiff == 0){
+            // do not trigger battle animation is same power
+            player1.reactToEvent("collision", player2);
+            return;
+        }
         Player losingPlayer = player1;
         if (player2.getPower() < player1.getPower()){
             losingPlayer = player2;
         }    
         Globals.getScreenManager().addScreen(new BattleScreen(getGame(), losingPlayer, powerDiff, players));
         Globals.getScreenManager().setScreen(BattleScreen.class);
+        Globals.setInBattle(true);
     }
 
     private void governCollisions() {
@@ -117,7 +121,9 @@ public class GameScreen extends AbstractScreen {
                 if (subject.collidesWith(collidableActor)) {
                     if(subject != collidableActor && subject instanceof Player && collidableActor instanceof Player){
                         // initiate battle
-                        initBattle((Player)subject, (Player)collidableActor);
+                        if (!Globals.isInBattle()){
+                            initBattle((Player)subject, (Player)collidableActor);
+                        }
                     } else{
                         subject.reactToEvent("collision", collidableActor);
                     }

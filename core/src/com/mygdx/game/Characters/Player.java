@@ -109,10 +109,6 @@ public class Player extends CollidableActor implements iSaveable {
                 if(this.highScore < this.power){
                     this.highScore = this.power;
                 }
-
-                // player.reactToEvent("lose life", this);
-                // player.reactToEvent("reset", this);
-                // this.reactToEvent("reset", player);
                 return;
             }else if (this.power < player.getPower()){
                 // since forecasting is the method for detecting collisions, the other player does not see collision if idle
