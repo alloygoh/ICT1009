@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -47,6 +48,19 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         // load other assets
         assetManager.load("comic/skin/comic-ui.atlas", TextureAtlas.class);
         assetManager.load("comic/skin/comic-ui.json", Skin.class);
+        
+        // sounds
+        assetManager.load("sound/bad-food.mp3", Sound.class);
+        assetManager.load("sound/combo-sound.mp3", Sound.class);
+        assetManager.load("sound/countdown.mp3", Sound.class);
+        assetManager.load("sound/game-end.mp3", Sound.class);
+        assetManager.load("sound/good-food.mp3", Sound.class);
+        assetManager.load("sound/level-up.mp3", Sound.class);
+        assetManager.load("sound/meow-defence.mp3", Sound.class);
+        assetManager.load("sound/pvp-bgm.mp3", Sound.class);
+        assetManager.load("sound/pvp-fight.mp3", Sound.class);
+        assetManager.load("sound/pvp-lose.mp3", Sound.class);
+        assetManager.load("sound/pvp-win.mp3", Sound.class);
 
         // fonts
         FileHandleResolver resolver = new InternalFileHandleResolver();

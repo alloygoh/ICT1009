@@ -41,8 +41,8 @@ public class GameScreen extends AbstractScreen {
     private Random random;
     private float timeSinceGeneration;
     private int maxObjects = 15;
-    private static Sound SFXcountDown = Gdx.audio.newSound(Gdx.files.internal("sound/countdown.mp3"));
-    public static Sound bgm = Gdx.audio.newSound(Gdx.files.internal("sound/MeowDefence.mp3"));
+    private static Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
+    public static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
 
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {

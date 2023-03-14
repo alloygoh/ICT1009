@@ -1,6 +1,5 @@
 package com.mygdx.game.Characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -16,9 +15,7 @@ import java.util.HashMap;
 public class Player extends CollidableActor implements iSaveable {
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player-base"));
-    private static Sound sfxGoodConsume = Gdx.audio.newSound(Gdx.files.internal("sound/goodfood.mp3"));
-    private static Sound sfxBadConsume = Gdx.audio.newSound(Gdx.files.internal("sound/badfood.mp3"));
-    private static Sound sfxGameOver = Gdx.audio.newSound(Gdx.files.internal("sound/gameEnd.mp3"));
+    private static Sound sfxLose = Globals.getAssetManager().get("sound/pvp-lose.mp3");
     private int power;
     private int lifeCount;
     private boolean isDead;
@@ -84,6 +81,7 @@ public class Player extends CollidableActor implements iSaveable {
     private void loseLife(){
         this.lifeCount -= 1;
         this.isDead = (this.lifeCount <= 0);
+        sfxLose.play(1.0f);
     }
 
     @Override
@@ -92,11 +90,6 @@ public class Player extends CollidableActor implements iSaveable {
             BaseObject object = (BaseObject) collidable;
             if(!this.isIdle()){
                 this.power += object.getPowerPoints();
-                if (object.getPowerPoints() > 0) {
-                    sfxGoodConsume.play(1.0f);
-                }
-                else
-                    sfxBadConsume.play(1.0f);
                 object.reactToEvent("eaten", this);
             }
         } else if (collidable instanceof Player && collidable != this) {
@@ -107,7 +100,6 @@ public class Player extends CollidableActor implements iSaveable {
                 if(this.highScore < this.power){
                     this.highScore = this.power;
                 }
-                sfxGameOver.play(1.0f);
                 player.reactToEvent("lose life", this);
                 player.reactToEvent("reset", this);
                 this.reactToEvent("reset", player);
