@@ -14,6 +14,7 @@ public class Globals {
     private static GameStateManager gameStateManager;
     private static Leaderboard leaderboard;
     private static int score;
+    private static float countDown;
     private static boolean inBattle = false;
 
     public Globals(Game game) {
@@ -23,6 +24,19 @@ public class Globals {
         Globals.gameStateManager = new GameStateManager();
         Globals.leaderboard = new Leaderboard();
         Globals.score = 0;
+        Globals.countDown = 30f;
+    }
+
+    public static void setCountDown(float countDown) {
+        Globals.countDown = countDown;
+    }
+    
+    public static void restoreCountDown(){
+        Globals.countDown = 30f;
+    }
+
+    public static float getCountDown() {
+        return countDown;
     }
     
     public static boolean isInBattle(){

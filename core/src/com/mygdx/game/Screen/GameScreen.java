@@ -50,6 +50,7 @@ public class GameScreen extends AbstractScreen {
     private Label player1PowerLabel;
     private Label player2PowerLabel;
     private HashMap<Integer, ArrayList<Image>> comboLabelMap;
+    private Label countDownLabel;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -184,7 +185,6 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-
         if (objectList.size() < maxObjects && timeSinceGeneration > 1) {
             ArrayList<BaseObject> objects = generateGameObjects();
             for (Actor object : objects) {
@@ -229,6 +229,8 @@ public class GameScreen extends AbstractScreen {
 
         // refresh scoretable on screen
         refreshScore();
+        // refresh timer
+        refreshTimer(delta);
 
         // check if should end game
         for (Player player : players) {
@@ -407,6 +409,14 @@ public class GameScreen extends AbstractScreen {
             image.setVisible(true);
         }
     }
+    
+    private void refreshTimer(float delta){
+        Globals.setCountDown(Globals.getCountDown() - delta);
+        BitmapFont timerLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
+        Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
+        timerLabelStyle.font = timerLabelFont;
+        this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
+    }
 
     private void refreshScore(){
         Player player1 = players.get(0);
@@ -553,6 +563,14 @@ public class GameScreen extends AbstractScreen {
         
         // score overlay
         initScoreTable();
+        
+        // countdown timer
+        BitmapFont timerLabelFont = Globals.getAssetManager().get("timerFont.ttf", BitmapFont.class);
+        Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
+        timerLabelStyle.font = timerLabelFont;
+        this.countDownLabel = new Label("Time till battle: " + Globals.getCountDown(), timerLabelStyle);
+        this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth()-countDownLabel.getWidth())/2, this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        this.getStage().addActor(this.countDownLabel);
 
         // read keystrokes
         Gdx.input.setInputProcessor(this.getStage());

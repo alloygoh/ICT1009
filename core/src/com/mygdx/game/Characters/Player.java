@@ -12,6 +12,7 @@ import com.mygdx.game.Objects.Fruit;
 import com.mygdx.game.Objects.Pizza;
 import com.mygdx.game.Objects.Toast;
 import com.mygdx.game.Utils.Controls;
+import com.mygdx.game.Utils.Globals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,6 +104,12 @@ public class Player extends CollidableActor implements iSaveable {
             }
         } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
+            // check if battle started
+            if (Globals.getCountDown() > 0){
+                super.handleCollision(collidable);
+                return;
+            }
+            
             Player player = (Player) collidable;
             if (this.power > player.getPower()){
                 // win
@@ -130,6 +137,8 @@ public class Player extends CollidableActor implements iSaveable {
             return;
         } else if (event.equals("reset")) {
             reset();
+            // reset counter for hunting phase
+            Globals.restoreCountDown();
             return;
         } else if (event.equals("defended")){
             // TODO: play sound
