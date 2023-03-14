@@ -1,5 +1,6 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
@@ -19,7 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Player extends CollidableActor implements iSaveable {
-    private int power;
+    private float power;
     private int lifeCount;
     private boolean isDead;
     private Vector2 originCoordinates;
@@ -42,7 +43,7 @@ public class Player extends CollidableActor implements iSaveable {
     }
 
     public int getPower() {
-        return this.power;
+        return (int)this.power;
     }
 
     public ArrayList<Class> getFoodsEaten(){
@@ -68,6 +69,23 @@ public class Player extends CollidableActor implements iSaveable {
         this.isDead = (this.lifeCount <= 0);
     }
     
+    private void exercise(){
+        // TODO
+        // insert sound here, maybe change drawable here too
+        this.power += 0.1;
+    }
+    
+    @Override
+    public void processKeyStrokes(float delta){
+        // if exercise key is pressed, do not move
+        if (Gdx.input.isKeyPressed(this.getControl().getSpecialKey())) {
+            exercise();
+            this.directions.clear();
+            return;
+        }
+        super.processKeyStrokes(delta);
+    }
+
     private boolean checkCombo(){
         // combo consists of 2 carrots, 1 fruit and 1 toast
         if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2){
@@ -103,7 +121,7 @@ public class Player extends CollidableActor implements iSaveable {
             if (this.power > player.getPower()){
                 // win
                 if(this.highScore < this.power){
-                    this.highScore = this.power;
+                    this.highScore = (int)this.power;
                 }
 
                 player.reactToEvent("lose life", this);
