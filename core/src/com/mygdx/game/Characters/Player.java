@@ -63,6 +63,10 @@ public class Player extends CollidableActor implements iSaveable {
         this.setY(this.originCoordinates.y);
     }
     
+    private void resetPosition(){
+        this.setPosition(originCoordinates.x, originCoordinates.y);
+    }
+    
     private void loseLife(){
         this.lifeCount -= 1;
         this.isDead = (this.lifeCount <= 0);
@@ -105,10 +109,6 @@ public class Player extends CollidableActor implements iSaveable {
                 if(this.highScore < this.power){
                     this.highScore = this.power;
                 }
-
-                player.reactToEvent("lose life", this);
-                player.reactToEvent("reset", this);
-                this.reactToEvent("reset", player);
                 return;
             }else if (this.power < player.getPower()){
                 // since forecasting is the method for detecting collisions, the other player does not see collision if idle
@@ -130,6 +130,12 @@ public class Player extends CollidableActor implements iSaveable {
             return;
         } else if (event.equals("reset")) {
             reset();
+            return;
+        } else if (event.equals("defended")){
+            // TODO: play sound
+            return;
+        } else if (event.equals("reset position")){
+            resetPosition();
             return;
         }
 

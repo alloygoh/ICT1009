@@ -1,5 +1,6 @@
 package com.mygdx.game.Screen;
 
+import java.lang.Math;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -80,7 +81,6 @@ public class GameScreen extends AbstractScreen {
 
         initStage();
         this.getCamera().update();
-        // this.getStage().setDebugAll(true);
 
         for (Actor actor : this.entities) {
             if (actor instanceof MovingShapeActor) {
@@ -93,6 +93,22 @@ public class GameScreen extends AbstractScreen {
         this(game, settingsManager, new ArrayList<>());
     }
 
+    private void initBattle(Player player1, Player player2){
+        int powerDiff = Math.abs(player1.getPower() - player2.getPower());
+        if(powerDiff == 0){
+            // do not trigger battle animation is same power
+            player1.reactToEvent("collision", player2);
+            return;
+        }
+        Player losingPlayer = player1;
+        if (player2.getPower() < player1.getPower()){
+            losingPlayer = player2;
+        }    
+        Globals.getScreenManager().addScreen(new BattleScreen(getGame(), losingPlayer, powerDiff, players));
+        Globals.getScreenManager().setScreen(BattleScreen.class);
+        Globals.setInBattle(true);
+    }
+
     private void governCollisions() {
         ArrayList<CollidableActor> collidables = new ArrayList<>();
         for (Actor actor : entities) {
@@ -103,7 +119,14 @@ public class GameScreen extends AbstractScreen {
         for (CollidableActor subject : collidables) {
             for (CollidableActor collidableActor : collidables) {
                 if (subject.collidesWith(collidableActor)) {
-                    subject.reactToEvent("collision", collidableActor);
+                    if(subject != collidableActor && subject instanceof Player && collidableActor instanceof Player){
+                        // initiate battle
+                        if (!Globals.isInBattle()){
+                            initBattle((Player)subject, (Player)collidableActor);
+                        }
+                    } else{
+                        subject.reactToEvent("collision", collidableActor);
+                    }
                 }
             }
         }
@@ -197,8 +220,11 @@ public class GameScreen extends AbstractScreen {
             actor.processKeyStrokes(delta);
         }
 
+
+
         governBorders();
         governCollisions();
+        
         this.getStage().act(delta);
 
         // refresh scoretable on screen

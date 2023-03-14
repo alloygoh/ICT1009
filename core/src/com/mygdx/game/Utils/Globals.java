@@ -14,6 +14,7 @@ public class Globals {
     private static GameStateManager gameStateManager;
     private static Leaderboard leaderboard;
     private static int score;
+    private static boolean inBattle = false;
 
     public Globals(Game game) {
         Globals.assetManager = new AssetManager();
@@ -22,6 +23,14 @@ public class Globals {
         Globals.gameStateManager = new GameStateManager();
         Globals.leaderboard = new Leaderboard();
         Globals.score = 0;
+    }
+    
+    public static boolean isInBattle(){
+        return Globals.inBattle;
+    }
+    
+    public static void setInBattle(boolean inBattle){
+        Globals.inBattle = inBattle;
     }
 
     public static int getScore() {
