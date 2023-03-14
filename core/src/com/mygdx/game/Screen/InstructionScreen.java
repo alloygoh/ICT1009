@@ -97,7 +97,7 @@ public class InstructionScreen extends AbstractScreen {
                 + "\n" +
                 "Healhty Food and Unhealthy Food will spawn around the map. Players will gain points from eating healthy food such as " +
                 "Apple, Toast and Carrot. Player will lose points from eating unhealthy food such as Pizza, Fries and Boba.\n\n" +
-                "Point Allocation System:\n\n" +
+                "Points Allocation System:\n\n" +
                 "\tHealthy Food:\t\t Unhealthy Food:\n" +
                 "\n\tToast = 10pts\t\t        Pizza = -10pts\n" +
                 "\tCarrot = 15pts\t\t      Fries = -20pts\n" +
