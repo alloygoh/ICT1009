@@ -1,5 +1,6 @@
 package com.mygdx.game.Screen;
 
+import java.lang.Math;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -93,6 +94,17 @@ public class GameScreen extends AbstractScreen {
         this(game, settingsManager, new ArrayList<>());
     }
 
+    private void initBattle(Player player1, Player player2){
+        // both positive    
+        int powerDiff = Math.abs(player1.getPower() - player2.getPower());
+        Player losingPlayer = player1;
+        if (player2.getPower() < player1.getPower()){
+            losingPlayer = player2;
+        }    
+        Globals.getScreenManager().addScreen(new BattleScreen(getGame(), losingPlayer, powerDiff, players));
+        Globals.getScreenManager().setScreen(BattleScreen.class);
+    }
+
     private void governCollisions() {
         ArrayList<CollidableActor> collidables = new ArrayList<>();
         for (Actor actor : entities) {
@@ -103,7 +115,12 @@ public class GameScreen extends AbstractScreen {
         for (CollidableActor subject : collidables) {
             for (CollidableActor collidableActor : collidables) {
                 if (subject.collidesWith(collidableActor)) {
-                    subject.reactToEvent("collision", collidableActor);
+                    if(subject != collidableActor && subject instanceof Player && collidableActor instanceof Player){
+                        // initiate battle
+                        initBattle((Player)subject, (Player)collidableActor);
+                    } else{
+                        subject.reactToEvent("collision", collidableActor);
+                    }
                 }
             }
         }
@@ -197,8 +214,11 @@ public class GameScreen extends AbstractScreen {
             actor.processKeyStrokes(delta);
         }
 
+
+
         governBorders();
         governCollisions();
+        
         this.getStage().act(delta);
 
         // refresh scoretable on screen

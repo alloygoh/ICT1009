@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Screen.AbstractScreen;
+import com.mygdx.game.Screen.BattleScreen;
 import com.mygdx.game.Screen.GameOverScreen;
 import com.mygdx.game.Screen.GameScreen;
 
@@ -35,7 +36,13 @@ public class ScreenManager {
             // reset game
             disposeScreen((AbstractScreen)game.getScreen());
         }
-        this.previousScreen = (AbstractScreen) game.getScreen();
+        // if transition away from battle, destory screen
+        if(game.getScreen() instanceof BattleScreen){
+            disposeScreen((AbstractScreen)game.getScreen());
+        }else if (screen != BattleScreen.class){
+            // if transition to battle screen, do not update previous screen to allow for game pause to continue working
+            this.previousScreen = (AbstractScreen) game.getScreen();
+        }
         game.setScreen(getScreen(screen));
     }
 
