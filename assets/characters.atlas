@@ -1,34 +1,130 @@
 
 characters.png
-size: 1024, 1024
+size: 2048, 2048
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-player-base
+boba
   rotate: false
-  xy: 679, 82
-  size: 149, 519
-  orig: 149, 520
+  xy: 1252, 366
+  size: 348, 614
+  orig: 348, 614
   offset: 0, 0
   index: -1
-player-buff
+carrot
+  rotate: false
+  xy: 2, 92
+  size: 629, 716
+  orig: 629, 716
+  offset: 0, 0
+  index: -1
+fries
+  rotate: false
+  xy: 1602, 2
+  size: 342, 472
+  orig: 342, 472
+  offset: 0, 0
+  index: -1
+fruits
+  rotate: false
+  xy: 633, 547
+  size: 617, 433
+  orig: 617, 433
+  offset: 0, 0
+  index: -1
+pizza
+  rotate: false
+  xy: 633, 181
+  size: 559, 364
+  orig: 559, 364
+  offset: 0, 0
+  index: -1
+player1-buff
+  rotate: false
+  xy: 2, 810
+  size: 575, 1196
+  orig: 582, 1200
+  offset: 5, 3
+  index: -1
+player1-fat
+  rotate: false
+  xy: 1682, 955
+  size: 346, 1051
+  orig: 348, 1055
+  offset: 2, 0
+  index: -1
+player2-buff
+  rotate: false
+  xy: 1131, 982
+  size: 549, 1024
+  orig: 558, 1030
+  offset: 7, 4
+  index: -1
+player2-strong
+  rotate: false
+  xy: 579, 982
+  size: 550, 1024
+  orig: 1280, 1280
+  offset: 588, 69
+  index: -1
+toast
+  rotate: false
+  xy: 1602, 476
+  size: 382, 477
+  orig: 382, 477
+  offset: 0, 0
+  index: -1
+
+characters2.png
+size: 2048, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+player1-base
+  rotate: false
+  xy: 1700, 163
+  size: 298, 1036
+  orig: 298, 1040
+  offset: 0, 1
+  index: -1
+player1-obese
+  rotate: false
+  xy: 577, 99
+  size: 421, 1100
+  orig: 425, 1101
+  offset: 4, 0
+  index: -1
+player1-strong
   rotate: false
   xy: 2, 2
-  size: 287, 599
-  orig: 289, 600
-  offset: 2, 1
+  size: 573, 1197
+  orig: 577, 1200
+  offset: 4, 3
   index: -1
-player-fat
+player2-fat
   rotate: false
-  xy: 504, 75
-  size: 173, 526
-  orig: 174, 528
-  offset: 1, 0
+  xy: 1371, 178
+  size: 327, 1021
+  orig: 336, 1024
+  offset: 6, 0
   index: -1
-player-obese
+player2-obese
   rotate: false
-  xy: 291, 50
-  size: 211, 551
-  orig: 213, 551
-  offset: 2, 0
+  xy: 1000, 176
+  size: 369, 1023
+  orig: 369, 1032
+  offset: 0, 4
+  index: -1
+
+characters3.png
+size: 512, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+player2-base
+  rotate: false
+  xy: 2, 2
+  size: 294, 1023
+  orig: 298, 1025
+  offset: 3, 0
   index: -1

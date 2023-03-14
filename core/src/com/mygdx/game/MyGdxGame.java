@@ -78,6 +78,31 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         contentFont.fontParameters.size = 15;
         contentFont.fontParameters.color = Color.WHITE;
         assetManager.load("GamePlayedContent.ttf", BitmapFont.class, contentFont);
+        
+        
+        FreeTypeFontLoaderParameter scoreLabelFont = new FreeTypeFontLoaderParameter();
+        scoreLabelFont.fontFileName = "GamePlayed.ttf";
+        scoreLabelFont.fontParameters.size = 15;
+        scoreLabelFont.fontParameters.color = Color.BLACK;
+        assetManager.load("scoreLabelFont.ttf", BitmapFont.class, scoreLabelFont);
+
+        FreeTypeFontLoaderParameter scoreFont = new FreeTypeFontLoaderParameter();
+        scoreFont.fontFileName = "GamePlayed.ttf";
+        scoreFont.fontParameters.size = 15;
+        scoreFont.fontParameters.color = Color.BLUE;
+        assetManager.load("scoreFont.ttf", BitmapFont.class, scoreFont);
+
+        FreeTypeFontLoaderParameter timerFont = new FreeTypeFontLoaderParameter();
+        timerFont.fontFileName = "GamePlayed.ttf";
+        timerFont.fontParameters.size = 15;
+        timerFont.fontParameters.color = Color.RED;
+        assetManager.load("timerFont.ttf", BitmapFont.class, timerFont);
+
+        FreeTypeFontLoaderParameter battleFont = new FreeTypeFontLoaderParameter();
+        battleFont.fontFileName = "GamePlayed.ttf";
+        battleFont.fontParameters.size = 30;
+        battleFont.fontParameters.color = Color.RED;
+        assetManager.load("battleFont.ttf", BitmapFont.class, battleFont);
 
         Globals.getLeaderboard().load();
         this.settingsManager.readFromConfig();

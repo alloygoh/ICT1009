@@ -7,9 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
 import com.mygdx.game.Interfaces.iSaveable;
 import com.mygdx.game.Objects.BaseObject;
+import com.mygdx.game.Objects.Boba;
+import com.mygdx.game.Objects.Carrot;
+import com.mygdx.game.Objects.Fries;
+import com.mygdx.game.Objects.Fruit;
+import com.mygdx.game.Objects.Pizza;
+import com.mygdx.game.Objects.Toast;
 import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Player extends CollidableActor implements iSaveable {
@@ -21,34 +30,7 @@ public class Player extends CollidableActor implements iSaveable {
     private boolean isDead;
     private Vector2 originCoordinates;
     private int highScore;
-
-    public Player() {
-        this(40, 60);
-    }
-
-    public Player(float width, float height) {
-        this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
-    }
-
-    public Player(float width, float height, Controls control) {
-        this(drawable, width, height, 0, 0, 100, control);
-    }
-
-    public Player(float width, float height, float movementSpeed, Controls control) {
-        this(drawable, width, height, 0, 0, movementSpeed, control);
-    }
-
-    public Player(float width, float height, float x, float y) {
-        this(drawable, width, height, x, y, 100, Controls.Presets.DEFAULT);
-    }
-
-    public Player(float width, float height, float x, float y, Controls control) {
-        this(drawable, width, height, x, y, 100, control);
-    }
-
-    public Player(float width, float height, float x, float y, float movementSpeed, Controls control) {
-        this(drawable, width, height, x, y, movementSpeed, control);
-    }
+    private ArrayList<Class> foodsEaten;
 
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
@@ -58,10 +40,19 @@ public class Player extends CollidableActor implements iSaveable {
         this.lifeCount = 2;
         this.isDead = false;
         this.originCoordinates = new Vector2(x, y);
+        this.foodsEaten = new ArrayList<Class>();
+    }
+
+    public int getLifeCount(){
+        return this.lifeCount;
     }
 
     public int getPower() {
         return this.power;
+    }
+
+    public ArrayList<Class> getFoodsEaten(){
+        return this.foodsEaten;
     }
     
     public int getHighScore(){
@@ -78,10 +69,30 @@ public class Player extends CollidableActor implements iSaveable {
         this.setY(this.originCoordinates.y);
     }
     
+    private void resetPosition(){
+        this.setPosition(originCoordinates.x, originCoordinates.y);
+    }
+    
     private void loseLife(){
         this.lifeCount -= 1;
         this.isDead = (this.lifeCount <= 0);
         sfxLose.play(1.0f);
+    }
+    
+    private boolean checkCombo(){
+        // combo consists of 2 carrots, 1 fruit and 1 toast
+        if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2){
+            this.foodsEaten.clear();
+            return true;
+        }
+        if (this.foodsEaten.contains(Boba.class) || this.foodsEaten.contains(Pizza.class)  || this.foodsEaten.contains(Fries.class)){
+            this.foodsEaten.clear();
+        }
+        if (this.foodsEaten.size() > 4){
+            // if more than combo size, remove oldest food
+            this.foodsEaten.remove(0);
+        }
+        return false;
     }
 
     @Override
@@ -90,19 +101,27 @@ public class Player extends CollidableActor implements iSaveable {
             BaseObject object = (BaseObject) collidable;
             if(!this.isIdle()){
                 this.power += object.getPowerPoints();
+                this.foodsEaten.add(object.getClass());
                 object.reactToEvent("eaten", this);
+                if (checkCombo()){
+                    // combo bonus
+                    this.power += 20;
+                }
             }
         } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
+            // check if battle started
+            if (Globals.getCountDown() > 0){
+                super.handleCollision(collidable);
+                return;
+            }
+            
             Player player = (Player) collidable;
             if (this.power > player.getPower()){
                 // win
                 if(this.highScore < this.power){
                     this.highScore = this.power;
                 }
-                player.reactToEvent("lose life", this);
-                player.reactToEvent("reset", this);
-                this.reactToEvent("reset", player);
                 return;
             }else if (this.power < player.getPower()){
                 // since forecasting is the method for detecting collisions, the other player does not see collision if idle
@@ -124,6 +143,14 @@ public class Player extends CollidableActor implements iSaveable {
             return;
         } else if (event.equals("reset")) {
             reset();
+            // reset counter for hunting phase
+            Globals.restoreCountDown();
+            return;
+        } else if (event.equals("defended")){
+            // TODO: play sound
+            return;
+        } else if (event.equals("reset position")){
+            resetPosition();
             return;
         }
 
