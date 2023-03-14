@@ -15,6 +15,7 @@ public class Globals {
     private static Leaderboard leaderboard;
     private static int score;
     private static float countDown;
+    private static boolean inBattle = false;
 
     public Globals(Game game) {
         Globals.assetManager = new AssetManager();
@@ -36,6 +37,14 @@ public class Globals {
 
     public static float getCountDown() {
         return countDown;
+    }
+    
+    public static boolean isInBattle(){
+        return Globals.inBattle;
+    }
+    
+    public static void setInBattle(boolean inBattle){
+        Globals.inBattle = inBattle;
     }
 
     public static int getScore() {

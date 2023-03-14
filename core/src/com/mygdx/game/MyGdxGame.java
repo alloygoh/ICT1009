@@ -84,6 +84,12 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         timerFont.fontParameters.color = Color.RED;
         assetManager.load("timerFont.ttf", BitmapFont.class, timerFont);
 
+        FreeTypeFontLoaderParameter battleFont = new FreeTypeFontLoaderParameter();
+        battleFont.fontFileName = "GamePlayed.ttf";
+        battleFont.fontParameters.size = 30;
+        battleFont.fontParameters.color = Color.RED;
+        assetManager.load("battleFont.ttf", BitmapFont.class, battleFont);
+
         Globals.getLeaderboard().load();
         this.settingsManager.readFromConfig();
     }
