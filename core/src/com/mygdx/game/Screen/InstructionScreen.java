@@ -104,7 +104,7 @@ public class InstructionScreen extends AbstractScreen {
                 "\tApple = 20pts\t\t       Boba = -20pts\n" +
                 "\nAt the start of the game, each player will be given 5pts (Lives).\n" +
                 "\nAs player consume tons of healthy food, players will become stronger(more health) and faster(speed)\n" +
-                "\nIf player consume tons of unhealhty food, players will become weaker(less health) and slower(speed)\n" +
+                "\nIf player consume tons of unhealthy food, players will become weaker(less health) and slower(speed)\n" +
                 "\n", skin);
         // End of mock samples and code
         instructions1.setWidth(750);
