@@ -47,13 +47,15 @@ public class GameScreen extends AbstractScreen {
     private float timeSinceGeneration;
     private int maxObjects = 15;
     private static Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
-    public static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
+    private static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
+    private static Sound SFXFight = Globals.getAssetManager().get("sound/pvp-fight.mp3");
     private Label player1LifeLabel;
     private Label player2LifeLabel;
     private Label player1PowerLabel;
     private Label player2PowerLabel;
     private HashMap<Integer, ArrayList<Image>> comboLabelMap;
     private Label countDownLabel;
+    private boolean hasPlayedEffect = false;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -171,8 +173,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
-
+        hasPlayedEffect = false;
     }
 
     private void populateHighScore() {
@@ -231,6 +232,11 @@ public class GameScreen extends AbstractScreen {
         refreshScore();
         // refresh timer
         refreshTimer(delta);
+        // play sound if fight time
+        if (Globals.getCountDown() <= 0 && !hasPlayedEffect){
+            SFXFight.play(1.0f);
+            hasPlayedEffect = true;
+        }
 
         // check if should end game
         for (Player player : players) {

@@ -1,7 +1,6 @@
 package com.mygdx.game.Characters;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
@@ -22,9 +21,9 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Player extends CollidableActor implements iSaveable {
-    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
-    private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player-base"));
     private static Sound sfxLose = Globals.getAssetManager().get("sound/pvp-lose.mp3");
+    private static Sound sfxDefended = Globals.getAssetManager().get("sound/pvp-win.mp3");
+    private static Sound sfxCombo = Globals.getAssetManager().get("sound/combo-sound.mp3");
     private int power;
     private int lifeCount;
     private boolean isDead;
@@ -83,6 +82,7 @@ public class Player extends CollidableActor implements iSaveable {
         // combo consists of 2 carrots, 1 fruit and 1 toast
         if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2){
             this.foodsEaten.clear();
+            sfxCombo.play(1.0f); 
             return true;
         }
         if (this.foodsEaten.contains(Boba.class) || this.foodsEaten.contains(Pizza.class)  || this.foodsEaten.contains(Fries.class)){
@@ -147,7 +147,7 @@ public class Player extends CollidableActor implements iSaveable {
             Globals.restoreCountDown();
             return;
         } else if (event.equals("defended")){
-            // TODO: play sound
+            sfxDefended.play(1.0f);
             return;
         } else if (event.equals("reset position")){
             resetPosition();

@@ -190,8 +190,6 @@ public class BattleScreen extends AbstractScreen {
                         screenManager.setScreen(GameScreen.class);
                     }
                 } else {
-                    // TODO
-                    // play failed sound
                     triggerLose();
                 }
                 return super.keyUp(event, keycode);
