@@ -1,5 +1,7 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Interfaces.iCollidable;
@@ -20,6 +22,9 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Player extends CollidableActor implements iSaveable {
+    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
+    private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player-base"));
+    private static Sound sfxLose = Globals.getAssetManager().get("sound/pvp-lose.mp3");
     private int power;
     private int lifeCount;
     private boolean isDead;
@@ -71,6 +76,7 @@ public class Player extends CollidableActor implements iSaveable {
     private void loseLife(){
         this.lifeCount -= 1;
         this.isDead = (this.lifeCount <= 0);
+        sfxLose.play(1.0f);
     }
     
     private boolean checkCombo(){
