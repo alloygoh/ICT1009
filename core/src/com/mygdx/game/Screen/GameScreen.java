@@ -419,7 +419,15 @@ public class GameScreen extends AbstractScreen {
         BitmapFont timerLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
         Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
         timerLabelStyle.font = timerLabelFont;
-        this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
+        if(Globals.getCountDown() <= 0){
+            this.countDownLabel.setText("BATTLE!");
+            this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getPrefWidth()) / 2,
+                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        }else{
+            this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
+            this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getWidth()) / 2,
+                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        }
     }
 
     private void refreshScore() {
