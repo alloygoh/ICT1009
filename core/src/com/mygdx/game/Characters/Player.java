@@ -72,6 +72,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
     private void reset(){
         this.power = 0;
         this.level = 2;
+        this.setMovementSpeed(150);
         handleLevels();
         this.setX(this.originCoordinates.x);
         this.setY(this.originCoordinates.y);
