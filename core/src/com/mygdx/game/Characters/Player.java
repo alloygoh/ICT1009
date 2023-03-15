@@ -1,5 +1,6 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,13 +26,13 @@ public abstract class Player extends CollidableActor implements iSaveable {
     private static Sound sfxDefended = Globals.getAssetManager().get("sound/pvp-win.mp3");
     private static Sound sfxCombo = Globals.getAssetManager().get("sound/combo-sound.mp3");
     private static Sound sfxLevelUp = Globals.getAssetManager().get("sound/level-up.mp3");
-    private int power;
     private int lifeCount;
     private boolean isDead;
     private Vector2 originCoordinates;
     private int highScore;
     private int level;
     private ArrayList<Class> foodsEaten;
+    private float power;
 
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
@@ -54,7 +55,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
     }
 
     public int getPower() {
-        return this.power;
+        return (int)this.power;
     }
 
     public ArrayList<Class> getFoodsEaten(){
@@ -128,6 +129,23 @@ public abstract class Player extends CollidableActor implements iSaveable {
         this.setTexture(targetDrawable);
     }
     
+    private void exercise(){
+        // TODO
+        // insert sound here, maybe change drawable here too
+        this.power += 0.1;
+    }
+    
+    @Override
+    public void processKeyStrokes(float delta){
+        // if exercise key is pressed, do not move
+        if (Gdx.input.isKeyPressed(this.getControl().getSpecialKey())) {
+            exercise();
+            this.directions.clear();
+            return;
+        }
+        super.processKeyStrokes(delta);
+    }
+
     private boolean checkCombo(){
         // combo consists of 2 carrots, 1 fruit and 1 toast
         if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2){
@@ -171,7 +189,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
             if (this.power > player.getPower()){
                 // win
                 if(this.highScore < this.power){
-                    this.highScore = this.power;
+                    this.highScore = (int)this.power;
                 }
                 return;
             }else if (this.power < player.getPower()){
@@ -217,7 +235,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
         float movementSpeed = (float) options.get("speed");
         Controls controls = (Controls) options.get("controls");
         Vector2 origin = (Vector2) options.get("origin");
-        int power = (int) options.get("power");
+        float power = (float) options.get("power");
         int life = (int) options.get("life");
         int level = (int) options.get("level");
         int highScore = (int) options.get("highscore");
