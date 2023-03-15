@@ -81,11 +81,13 @@ public class SettingsScreen extends AbstractScreen {
         Label p1DownLabel = new Label("Down Key", skin);
         Label p1LeftLabel = new Label("Left Key", skin);
         Label p1RightLabel = new Label("Right Key", skin);
+        Label p1ExerciseLabel = new Label("Exercise Key", skin);
 
         Label p2UpLabel = new Label("Up Key", skin);
         Label p2DownLabel = new Label("Down Key", skin);
         Label p2LeftLabel = new Label("Left Key", skin);
         Label p2RightLabel = new Label("Right Key", skin);
+        Label p2ExerciseLabel = new Label("Exercise Key", skin);
 
         final Controls player1Controls = settingsManager.getControlSettings().getControlOf(1);
         final Controls player2Controls = settingsManager.getControlSettings().getControlOf(2);
@@ -95,11 +97,13 @@ public class SettingsScreen extends AbstractScreen {
         final TextButton player1DownButton = new TextButton(Input.Keys.toString(player1Controls.getDown()), skin);
         final TextButton player1LeftButton = new TextButton(Input.Keys.toString(player1Controls.getLeft()), skin);
         final TextButton player1RightButton = new TextButton(Input.Keys.toString(player1Controls.getRight()), skin);
+        final TextButton player1ExerciseButton = new TextButton(Input.Keys.toString(player1Controls.getSpecialKey()), skin);
 
         final TextButton player2UpButton = new TextButton(Input.Keys.toString(player2Controls.getUp()), skin);
         final TextButton player2DownButton = new TextButton(Input.Keys.toString(player2Controls.getDown()), skin);
         final TextButton player2LeftButton = new TextButton(Input.Keys.toString(player2Controls.getLeft()), skin);
         final TextButton player2RightButton = new TextButton(Input.Keys.toString(player2Controls.getRight()), skin);
+        final TextButton player2ExerciseButton = new TextButton(Input.Keys.toString(player2Controls.getSpecialKey()), skin);
 
         TextButton backButton = new TextButton("Back", skin);
 
@@ -209,6 +213,26 @@ public class SettingsScreen extends AbstractScreen {
                 });
             }
         });
+        player1ExerciseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y) {
+                // display dialog asking for new key
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
+                    @Override
+                    public boolean keyDown(InputEvent event, int keycode) {
+                        if (keycode != Input.Keys.ESCAPE) {
+                            player1Controls.setSpecialKey(keycode);
+                            configDialog.hide();
+                            player1ExerciseButton.setText(Input.Keys.toString(keycode));
+                        }
+                        getStage().removeListener(this);
+                        configDialog.hide();
+                        return super.keyDown(event, keycode);
+                    }
+                });
+            }
+        });
         player2UpButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent inputEvent, float x, float y) {
@@ -292,6 +316,26 @@ public class SettingsScreen extends AbstractScreen {
                 });
             }
         });
+        player2ExerciseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent inputEvent, float x, float y) {
+                // display dialog asking for new key
+                configDialog.show(getStage());
+                getStage().addListener(new InputListener() {
+                    @Override
+                    public boolean keyDown(InputEvent event, int keycode) {
+                        if (keycode != Input.Keys.ESCAPE) {
+                            player2Controls.setSpecialKey(keycode);
+                            configDialog.hide();
+                            player2ExerciseButton.setText(Input.Keys.toString(keycode));
+                        }
+                        getStage().removeListener(this);
+                        configDialog.hide();
+                        return super.keyDown(event, keycode);
+                    }
+                });
+            }
+        });
 
         // add buttons to table
         mainTable.add(player1Label);
@@ -308,6 +352,9 @@ public class SettingsScreen extends AbstractScreen {
         mainTable.add(p1RightLabel);
         mainTable.add(player1RightButton);
         mainTable.row();
+        mainTable.add(p1ExerciseLabel);
+        mainTable.add(player1ExerciseButton);
+        mainTable.row();
         mainTable.add(player2Label);
         mainTable.row();
         mainTable.add(p2UpLabel);
@@ -321,6 +368,9 @@ public class SettingsScreen extends AbstractScreen {
         mainTable.row();
         mainTable.add(p2RightLabel);
         mainTable.add(player2RightButton);
+        mainTable.row();
+        mainTable.add(p2ExerciseLabel);
+        mainTable.add(player2ExerciseButton);
         mainTable.row();
         mainTable.add(backButton).colspan(2);
         mainTable.row();

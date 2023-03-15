@@ -163,7 +163,7 @@ public class Player extends CollidableActor implements iSaveable {
         float movementSpeed = (float) options.get("speed");
         Controls controls = (Controls) options.get("controls");
         Vector2 origin = (Vector2) options.get("origin");
-        int power = (int) options.get("power");
+        float power = (float) options.get("power");
         int life = (int) options.get("life");
         int highScore = (int) options.get("highscore");
         this.setX(x);
