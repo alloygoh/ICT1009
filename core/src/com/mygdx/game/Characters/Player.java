@@ -97,7 +97,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
     
     protected void levelDown(){
         this.level -= 1;
-        this.setMovementSpeed(this.getMovementSpeed() - 50);
+        this.setMovementSpeed(Math.min(this.getMovementSpeed() - 30,100));
     }
     
     protected void handleLevels(){
@@ -231,6 +231,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
         this.lifeCount = life;
         this.level = level;
         this.highScore = highScore;
+        handleLevels();
     }
 
     @Override

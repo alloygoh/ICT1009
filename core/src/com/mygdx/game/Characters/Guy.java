@@ -18,11 +18,11 @@ public class Guy extends Player {
     }
 
     public Guy(float width, float height) {
-        this(drawable, width, height, 0, 0, 100, Controls.Presets.DEFAULT);
+        this(drawable, width, height, 0, 0, 150, Controls.Presets.DEFAULT);
     }
 
     public Guy(float width, float height, Controls control) {
-        this(drawable, width, height, 0, 0, 100, control);
+        this(drawable, width, height, 0, 0, 150, control);
     }
 
     public Guy(float width, float height, float movementSpeed, Controls control) {
@@ -30,11 +30,11 @@ public class Guy extends Player {
     }
 
     public Guy(float width, float height, float x, float y) {
-        this(drawable, width, height, x, y, 100, Controls.Presets.DEFAULT);
+        this(drawable, width, height, x, y, 150, Controls.Presets.DEFAULT);
     }
 
     public Guy(float width, float height, float x, float y, Controls control) {
-        this(drawable, width, height, x, y, 100, control);
+        this(drawable, width, height, x, y, 150, control);
     }
 
     public Guy(float width, float height, float x, float y, float movementSpeed, Controls control) {
