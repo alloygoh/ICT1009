@@ -7,7 +7,11 @@ import com.mygdx.game.Utils.Globals;
 
 public class Guy extends Player {
     private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
+    private static TextureRegionDrawable drawableObese = new TextureRegionDrawable(atlas.findRegion("player1-obese"));
+    private static TextureRegionDrawable drawableFat = new TextureRegionDrawable(atlas.findRegion("player1-fat"));
     private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player1-base"));
+    private static TextureRegionDrawable drawableStrong = new TextureRegionDrawable(atlas.findRegion("player1-strong"));
+    private static TextureRegionDrawable drawableBuff = new TextureRegionDrawable(atlas.findRegion("player1-buff"));
 
     public Guy() {
         this(40, 60);
@@ -40,6 +44,12 @@ public class Guy extends Player {
     public Guy(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
         super(drawable, width, height, x, y, movementSpeed, control);
+    }
+    
+    @Override
+    protected TextureRegionDrawable resolveImage(){
+        TextureRegionDrawable[] selection = {drawableObese, drawableFat, drawable, drawableStrong, drawableBuff};
+        return selection[this.getLevel()];
     }
         
 }

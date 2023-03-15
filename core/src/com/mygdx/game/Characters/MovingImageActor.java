@@ -30,6 +30,10 @@ public class MovingImageActor extends AbstractActor {
         this.texture = texture;
     }
 
+    public void setTexture(TextureRegionDrawable texture) {
+        this.texture = texture;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         texture.draw(batch, this.getX(), this.getY(), this.getWidth(), this.getHeight());
