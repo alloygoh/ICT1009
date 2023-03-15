@@ -139,13 +139,13 @@ public class BattleScreen extends AbstractScreen {
         Label.LabelStyle battleLabelStyle = new Label.LabelStyle();
         battleLabelStyle.font = battleLabelFont;
 
-        BitmapFont timerFont = Globals.getAssetManager().get("scoreFont.ttf", BitmapFont.class);
+        BitmapFont timerFont = Globals.getAssetManager().get("battleLabelFont.ttf", BitmapFont.class);
         Label.LabelStyle timerStyle = new Label.LabelStyle();
         timerStyle.font = timerFont;
         this.countDownLabel = new Label("Starts in " + countDown, timerStyle);
         this.countDownLabel.setPosition(
                 (this.getStage().getViewport().getWorldWidth() - this.countDownLabel.getWidth()) / 2,
-                this.getStage().getViewport().getWorldHeight() - this.countDownLabel.getHeight() - 10);
+                this.getStage().getViewport().getWorldHeight() - this.countDownLabel.getHeight() - 30);
 
         int playerNumber = 1;
         if (player instanceof Girl) {
