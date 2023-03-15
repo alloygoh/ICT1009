@@ -45,19 +45,19 @@ public class LeaderboardScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
+        
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
+        
 
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
+        
 
     }
 

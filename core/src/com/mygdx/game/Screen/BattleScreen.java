@@ -80,25 +80,21 @@ public class BattleScreen extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
         return;
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
         return;
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
         return;
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
         return;
     }
 
