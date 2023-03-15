@@ -7,6 +7,7 @@ import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -63,6 +64,8 @@ public class BattleScreen extends AbstractScreen {
         }
         if (Gdx.input.getInputProcessor() == null && countDown <= 0) {
             // reactivate input
+            Sound SFXstart = Globals.getAssetManager().get("sound/start.mp3");
+            SFXstart.play(1.0f);
             Gdx.input.setInputProcessor(this.getStage());
         }
     }

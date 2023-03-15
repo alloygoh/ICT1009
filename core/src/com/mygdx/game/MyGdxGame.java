@@ -62,6 +62,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         assetManager.load("sound/pvp-fight.mp3", Sound.class);
         assetManager.load("sound/pvp-lose.mp3", Sound.class);
         assetManager.load("sound/pvp-win.mp3", Sound.class);
+        assetManager.load("sound/start.mp3", Sound.class);
 
         // fonts
         FileHandleResolver resolver = new InternalFileHandleResolver();
