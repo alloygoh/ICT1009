@@ -94,13 +94,12 @@ public class InstructionScreen extends AbstractScreen {
 
         Label instructions1 = new Label("\nHelp Bobby and Candice improve to be a better version of themselves!" +
                 "\n\nPlayer 1 and Player 2 will control Bobby and Candice respectively.\n" +
-                "Please adjust the controls through the Settings screen in the main menu."
-                + "\n" +
-                "Different foods will regularly spawn in the arena." +
-                "Consuming healthy foods will gain points and level up your character." +
+                "Please adjust the controls through the Settings screen in the main menu.\n" +
+                "Different foods will regularly spawn in the arena.\n" +
+                "Consuming healthy foods will gain points and level up your character.\n" +
                 "Consuming unhealthy foods will result in a loss of points.\n\n" +
                 "Points Allocation System:\n\n" +
-                "\tHealthy Food:\t\t Unhealthy Food:\n" +
+                "\tHealthy Food:\t\t\t\t\t      Unhealthy Food:\n" +
                 "\n\tToast = 10pts\t\t        Pizza = -10pts\n" +
                 "\tCarrot = 15pts\t\t      Fries = -20pts\n" +
                 "\tApple = 20pts\t\t       Boba = -20pts\n" +
@@ -109,7 +108,10 @@ public class InstructionScreen extends AbstractScreen {
                 "\nOnce the grace period has ended, players will lose their invulnerability and be subjected to being defeated by the other player." +
                 "\nWhen Bobby or Candice have consumed enough healthy food, they will level up and attain increased movement speed.\n" +
                 "\nUnhealthy foods will weaken them overtime.\n" +
-                "\n", skin);
+                "When Bobby or Candice has fallen, the weaker player will have a chance to prevent a loss of life.\n" +
+                "The player has to complete the sequence of keystrokes presented on the screen in a set amount of time.\n" +
+                "Successfully completing the challenge will allow the player to try again and redeem their bad eating habits." +
+                "\n", labelStyleContent);
         // End of mock samples and code
         instructions1.setFontScale(1.5f);
         instructions1.setWrap(true);
