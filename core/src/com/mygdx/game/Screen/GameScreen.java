@@ -49,6 +49,7 @@ public class GameScreen extends AbstractScreen {
     private static Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
     private static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
     private static Sound SFXFight = Globals.getAssetManager().get("sound/pvp-fight.mp3");
+    private static Sound bgmFight = Globals.getAssetManager().get("sound/pvp-bgm.mp3");
     private Label player1LifeLabel;
     private Label player2LifeLabel;
     private Label player1PowerLabel;
@@ -235,6 +236,11 @@ public class GameScreen extends AbstractScreen {
         // play sound if fight time
         if (Globals.getCountDown() <= 0 && !hasPlayedEffect){
             SFXFight.play(1.0f);
+            bgm.stop();
+            long fightID = bgmFight.play(0.7f);
+            bgmFight.stop();
+            fightID = bgmFight.play(0.7f);
+            bgmFight.setLooping(fightID,true);
             hasPlayedEffect = true;
         }
 
@@ -595,6 +601,7 @@ public class GameScreen extends AbstractScreen {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        bgmFight.stop();
         long bgmID = bgm.play(0.5f);
         bgm.stop();
         bgmID = bgm.play(0.5f);
