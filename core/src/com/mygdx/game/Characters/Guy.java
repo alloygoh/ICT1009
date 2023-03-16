@@ -14,7 +14,7 @@ public class Guy extends Player {
     private static TextureRegionDrawable drawableBuff = new TextureRegionDrawable(atlas.findRegion("player1-buff"));
 
     public Guy() {
-        this(40, 60);
+        this(30, 60);
     }
 
     public Guy(float width, float height) {
