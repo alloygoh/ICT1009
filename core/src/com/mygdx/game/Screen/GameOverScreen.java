@@ -48,8 +48,7 @@ public class GameOverScreen extends AbstractScreen{
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
 
-        BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedContent.ttf", BitmapFont.class);
-        contentFont.getData().setScale(4.0f);
+        BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedName.ttf", BitmapFont.class);
         Label.LabelStyle labelStyleContent = new Label.LabelStyle();
         labelStyleContent.font = contentFont;
 

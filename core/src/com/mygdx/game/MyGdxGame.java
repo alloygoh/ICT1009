@@ -78,8 +78,19 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         contentFont.fontParameters.size = 15;
         contentFont.fontParameters.color = Color.WHITE;
         assetManager.load("GamePlayedContent.ttf", BitmapFont.class, contentFont);
-        
-        
+
+        FreeTypeFontLoaderParameter instructionsFont = new FreeTypeFontLoaderParameter();
+        instructionsFont.fontFileName = "GamePlayed.ttf";
+        instructionsFont.fontParameters.size = 25;
+        instructionsFont.fontParameters.color = Color.WHITE;
+        assetManager.load("GamePlayedInstructions.ttf", BitmapFont.class, instructionsFont);
+
+        FreeTypeFontLoaderParameter gameOverFont = new FreeTypeFontLoaderParameter();
+        gameOverFont.fontFileName = "GamePlayed.ttf";
+        gameOverFont.fontParameters.size = 60;
+        gameOverFont.fontParameters.color = Color.WHITE;
+        assetManager.load("GamePlayedName.ttf", BitmapFont.class, gameOverFont);
+
         FreeTypeFontLoaderParameter scoreLabelFont = new FreeTypeFontLoaderParameter();
         scoreLabelFont.fontFileName = "GamePlayed.ttf";
         scoreLabelFont.fontParameters.size = 15;

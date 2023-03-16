@@ -82,7 +82,7 @@ public class InstructionScreen extends AbstractScreen {
         Label.LabelStyle labelStyle2 = new Label.LabelStyle();
         labelStyle2.font = titleFont;
 
-        BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedContent.ttf", BitmapFont.class);
+        BitmapFont contentFont = Globals.getAssetManager().get("GamePlayedInstructions.ttf", BitmapFont.class);
         Label.LabelStyle labelStyleContent = new Label.LabelStyle();
         labelStyleContent.font = contentFont;
 
@@ -113,7 +113,7 @@ public class InstructionScreen extends AbstractScreen {
                 "Successfully completing the challenge will allow the player to try again and redeem their bad eating habits." +
                 "\n", labelStyleContent);
         // End of mock samples and code
-        instructions1.setFontScale(1.5f);
+        instructions1.setFontScale(1f);
         instructions1.setWrap(true);
 
         Table instructionsTable = new Table();
