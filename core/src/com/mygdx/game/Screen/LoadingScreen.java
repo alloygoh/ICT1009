@@ -31,6 +31,7 @@ public class LoadingScreen extends AbstractScreen {
 
     @Override
     public void show() {
+        return;
     }
 
     @Override
@@ -47,22 +48,22 @@ public class LoadingScreen extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
-
+        return;
     }
 
     @Override
     public void pause() {
-
+        return;
     }
 
     @Override
     public void resume() {
-
+        return;
     }
 
     @Override
     public void hide() {
-
+        return;
     }
 
     // disposing of stage is handled by parent class
