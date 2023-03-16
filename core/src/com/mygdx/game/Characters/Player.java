@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public abstract class Player extends CollidableActor implements iSaveable {
+
     private static Sound sfxLose = Globals.getAssetManager().get("sound/pvp-lose.mp3");
     private static Sound sfxDefended = Globals.getAssetManager().get("sound/pvp-win.mp3");
     private static Sound sfxCombo = Globals.getAssetManager().get("sound/combo-sound.mp3");
