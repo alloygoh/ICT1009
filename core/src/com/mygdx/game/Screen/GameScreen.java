@@ -286,8 +286,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void hide() {
-        
-
+        return;
     }
 
     @Override
@@ -558,8 +557,8 @@ public class GameScreen extends AbstractScreen {
         Player player1;
         Player player2;
         if (this.entities.size() == 0) {
-            player1 = new Guy(30, 60, 200, 0, 150, p1);
-            player2 = new Girl(30, 60, p2);
+            player1 = new Guy(40, 60, 200, 0, 150, p1);
+            player2 = new Girl(40, 60, p2);
         } else {
             player1 = (Player) this.entities.get(0);
             player1.setControl(p1);
