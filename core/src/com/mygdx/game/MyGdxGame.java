@@ -70,7 +70,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
         
         FontLoaderFactory fontFactory = new FontLoaderFactory("GamePlayed.ttf");
-        FreeTypeFontLoaderParameter titleFont = fontFactory.generateFont(130, Color.YELLOW);
+        FreeTypeFontLoaderParameter titleFont = fontFactory.generateFont(100, Color.YELLOW);
         assetManager.load("GamePlayedTitle.ttf", BitmapFont.class, titleFont);
 
         FreeTypeFontLoaderParameter contentFont = fontFactory.generateFont(15, Color.WHITE);
