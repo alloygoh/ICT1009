@@ -53,20 +53,17 @@ public class MainScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        
-
+        return;
     }
 
     @Override
     public void resume() {
-        
-
+        return;
     }
 
     @Override
     public void hide() {
-        
-
+        return;
     }
 
     // disposing of stage is handled by parent class
