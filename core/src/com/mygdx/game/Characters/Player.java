@@ -1,5 +1,6 @@
 package com.mygdx.game.Characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -20,14 +21,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class Player extends CollidableActor implements iSaveable {
+public abstract class Player extends CollidableActor implements iSaveable {
+
     private static Sound sfxLose = Globals.getAssetManager().get("sound/pvp-lose.mp3");
-    private int power;
+    private static Sound sfxDefended = Globals.getAssetManager().get("sound/pvp-win.mp3");
+    private static Sound sfxCombo = Globals.getAssetManager().get("sound/combo-sound.mp3");
+    private static Sound sfxLevelUp = Globals.getAssetManager().get("sound/level-up.mp3");
     private int lifeCount;
     private boolean isDead;
     private Vector2 originCoordinates;
     private int highScore;
+    private int level;
     private ArrayList<Class> foodsEaten;
+    private float power;
 
     public Player(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
             Controls control) {
@@ -35,9 +41,14 @@ public class Player extends CollidableActor implements iSaveable {
         this.highScore = 0;
         this.power = 0;
         this.lifeCount = 2;
+        this.level = 2;
         this.isDead = false;
         this.originCoordinates = new Vector2(x, y);
         this.foodsEaten = new ArrayList<Class>();
+    }
+    
+    public int getLevel(){
+        return this.level;
     }
 
     public int getLifeCount(){
@@ -45,7 +56,7 @@ public class Player extends CollidableActor implements iSaveable {
     }
 
     public int getPower() {
-        return this.power;
+        return (int)this.power;
     }
 
     public ArrayList<Class> getFoodsEaten(){
@@ -62,6 +73,9 @@ public class Player extends CollidableActor implements iSaveable {
     
     private void reset(){
         this.power = 0;
+        this.level = 2;
+        this.setMovementSpeed(150);
+        handleLevels();
         this.setX(this.originCoordinates.x);
         this.setY(this.originCoordinates.y);
     }
@@ -76,10 +90,69 @@ public class Player extends CollidableActor implements iSaveable {
         sfxLose.play(1.0f);
     }
     
+    protected abstract TextureRegionDrawable resolveImage();
+
+    protected void levelUp(){
+        this.level += 1;
+        this.setMovementSpeed(this.getMovementSpeed() + 50);
+        sfxLevelUp.play(1.0f); 
+    }
+    
+    protected void levelDown(){
+        this.level -= 1;
+        this.setMovementSpeed(Math.min(this.getMovementSpeed() - 30,100));
+    }
+    
+    protected void handleLevels(){
+        // < -60 level 0
+        // -59 till -1 level 1
+        // 0 - 70 level 2
+        // 71-150 level 3
+        // > 150 level 4
+        int targetLevel = 0;
+        if (power < -1 && power > -60){
+            targetLevel = 1;
+        } else if (power <= 70 && power >= 0){
+            targetLevel = 2;
+        }else if (power <= 150 && power >= 71){
+            targetLevel = 3;
+        }else if (power > 150){
+            targetLevel = 4;
+        }
+
+
+        if (targetLevel > level){
+            levelUp();
+        } else if(targetLevel < level){
+            levelDown();
+        }
+        TextureRegionDrawable targetDrawable = resolveImage();
+        this.setTexture(targetDrawable);
+    }
+    
+    private void exercise(){
+        // TODO
+        // insert sound here, maybe change drawable here too
+        this.power += 0.1;
+        handleLevels();
+    }
+    
+    @Override
+    public void processKeyStrokes(float delta){
+        // if exercise key is pressed, do not move
+        if (Gdx.input.isKeyPressed(this.getControl().getSpecialKey())) {
+            exercise();
+            this.directions.clear();
+            return;
+        }
+        super.processKeyStrokes(delta);
+    }
+
     private boolean checkCombo(){
         // combo consists of 2 carrots, 1 fruit and 1 toast
         if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2){
             this.foodsEaten.clear();
+            sfxCombo.play(1.0f); 
             return true;
         }
         if (this.foodsEaten.contains(Boba.class) || this.foodsEaten.contains(Pizza.class)  || this.foodsEaten.contains(Fries.class)){
@@ -104,6 +177,7 @@ public class Player extends CollidableActor implements iSaveable {
                     // combo bonus
                     this.power += 20;
                 }
+                handleLevels();
             }
         } else if (collidable instanceof Player && collidable != this) {
             // collided with another player
@@ -117,7 +191,7 @@ public class Player extends CollidableActor implements iSaveable {
             if (this.power > player.getPower()){
                 // win
                 if(this.highScore < this.power){
-                    this.highScore = this.power;
+                    this.highScore = (int)this.power;
                 }
                 return;
             }else if (this.power < player.getPower()){
@@ -144,7 +218,7 @@ public class Player extends CollidableActor implements iSaveable {
             Globals.restoreCountDown();
             return;
         } else if (event.equals("defended")){
-            // TODO: play sound
+            sfxDefended.play(1.0f);
             return;
         } else if (event.equals("reset position")){
             resetPosition();
@@ -163,8 +237,9 @@ public class Player extends CollidableActor implements iSaveable {
         float movementSpeed = (float) options.get("speed");
         Controls controls = (Controls) options.get("controls");
         Vector2 origin = (Vector2) options.get("origin");
-        int power = (int) options.get("power");
+        float power = (float) options.get("power");
         int life = (int) options.get("life");
+        int level = (int) options.get("level");
         int highScore = (int) options.get("highscore");
         this.setX(x);
         this.setY(y);
@@ -175,7 +250,9 @@ public class Player extends CollidableActor implements iSaveable {
         this.originCoordinates = origin;
         this.power = power;
         this.lifeCount = life;
+        this.level = level;
         this.highScore = highScore;
+        handleLevels();
     }
 
     @Override
@@ -186,6 +263,7 @@ public class Player extends CollidableActor implements iSaveable {
         options.put("origin", this.originCoordinates);
         options.put("power", this.power);
         options.put("life", this.lifeCount);
+        options.put("level", this.level);
         options.put("highscore", this.highScore);
         options.put("width", this.getWidth());
         options.put("height", this.getHeight());

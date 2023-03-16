@@ -7,6 +7,7 @@ import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -63,6 +64,8 @@ public class BattleScreen extends AbstractScreen {
         }
         if (Gdx.input.getInputProcessor() == null && countDown <= 0) {
             // reactivate input
+            Sound SFXstart = Globals.getAssetManager().get("sound/start.mp3");
+            SFXstart.play(1.0f);
             Gdx.input.setInputProcessor(this.getStage());
         }
     }
@@ -80,25 +83,21 @@ public class BattleScreen extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
         return;
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
         return;
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
         return;
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
         return;
     }
 
@@ -143,13 +142,13 @@ public class BattleScreen extends AbstractScreen {
         Label.LabelStyle battleLabelStyle = new Label.LabelStyle();
         battleLabelStyle.font = battleLabelFont;
 
-        BitmapFont timerFont = Globals.getAssetManager().get("scoreFont.ttf", BitmapFont.class);
+        BitmapFont timerFont = Globals.getAssetManager().get("battleLabelFont.ttf", BitmapFont.class);
         Label.LabelStyle timerStyle = new Label.LabelStyle();
         timerStyle.font = timerFont;
         this.countDownLabel = new Label("Starts in " + countDown, timerStyle);
         this.countDownLabel.setPosition(
                 (this.getStage().getViewport().getWorldWidth() - this.countDownLabel.getWidth()) / 2,
-                this.getStage().getViewport().getWorldHeight() - this.countDownLabel.getHeight() - 10);
+                this.getStage().getViewport().getWorldHeight() - this.countDownLabel.getHeight() - 30);
 
         int playerNumber = 1;
         if (player instanceof Girl) {
@@ -190,8 +189,6 @@ public class BattleScreen extends AbstractScreen {
                         screenManager.setScreen(GameScreen.class);
                     }
                 } else {
-                    // TODO
-                    // play failed sound
                     triggerLose();
                 }
                 return super.keyUp(event, keycode);

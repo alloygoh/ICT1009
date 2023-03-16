@@ -33,8 +33,8 @@ public class ControlSettings implements iSettings {
     }
 
     public void initDefaultControls() {
-        Controls player1Controls = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT);
-        Controls player2Controls = new Controls(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D);
+        Controls player1Controls = new Controls(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.ALT_RIGHT);
+        Controls player2Controls = new Controls(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D, Input.Keys.SPACE);
         controlSettingsMap.put(1, player1Controls);
         controlSettingsMap.put(2, player2Controls);
     }

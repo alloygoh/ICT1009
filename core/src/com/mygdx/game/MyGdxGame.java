@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.game.Factory.FontLoaderFactory;
 import com.mygdx.game.Manager.ScreenManager;
 import com.mygdx.game.Manager.SettingsManager;
 import com.mygdx.game.Screen.LoadingScreen;
@@ -61,58 +62,39 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         assetManager.load("sound/pvp-fight.mp3", Sound.class);
         assetManager.load("sound/pvp-lose.mp3", Sound.class);
         assetManager.load("sound/pvp-win.mp3", Sound.class);
+        assetManager.load("sound/start.mp3", Sound.class);
 
         // fonts
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-        FreeTypeFontLoaderParameter titleFont = new FreeTypeFontLoaderParameter();
-        titleFont.fontFileName = "GamePlayed.ttf";
-        titleFont.fontParameters.size = 130;
-        titleFont.fontParameters.borderWidth = 1;
-        titleFont.fontParameters.color = Color.YELLOW;
+        
+        FontLoaderFactory fontFactory = new FontLoaderFactory("GamePlayed.ttf");
+        FreeTypeFontLoaderParameter titleFont = fontFactory.generateFont(130, Color.YELLOW);
         assetManager.load("GamePlayedTitle.ttf", BitmapFont.class, titleFont);
 
-        FreeTypeFontLoaderParameter contentFont = new FreeTypeFontLoaderParameter();
-        contentFont.fontFileName = "GamePlayed.ttf";
-        contentFont.fontParameters.size = 15;
-        contentFont.fontParameters.color = Color.WHITE;
+        FreeTypeFontLoaderParameter contentFont = fontFactory.generateFont(15, Color.WHITE);
         assetManager.load("GamePlayedContent.ttf", BitmapFont.class, contentFont);
 
-        FreeTypeFontLoaderParameter instructionsFont = new FreeTypeFontLoaderParameter();
-        instructionsFont.fontFileName = "GamePlayed.ttf";
-        instructionsFont.fontParameters.size = 25;
-        instructionsFont.fontParameters.color = Color.WHITE;
+        FreeTypeFontLoaderParameter instructionsFont = fontFactory.generateFont(25, Color.WHITE);
         assetManager.load("GamePlayedInstructions.ttf", BitmapFont.class, instructionsFont);
 
-        FreeTypeFontLoaderParameter gameOverFont = new FreeTypeFontLoaderParameter();
-        gameOverFont.fontFileName = "GamePlayed.ttf";
-        gameOverFont.fontParameters.size = 60;
-        gameOverFont.fontParameters.color = Color.WHITE;
+        FreeTypeFontLoaderParameter gameOverFont = fontFactory.generateFont(60, Color.WHITE);
         assetManager.load("GamePlayedName.ttf", BitmapFont.class, gameOverFont);
-
-        FreeTypeFontLoaderParameter scoreLabelFont = new FreeTypeFontLoaderParameter();
-        scoreLabelFont.fontFileName = "GamePlayed.ttf";
-        scoreLabelFont.fontParameters.size = 15;
-        scoreLabelFont.fontParameters.color = Color.BLACK;
+   
+        FreeTypeFontLoaderParameter scoreLabelFont = fontFactory.generateFont(15, Color.BLACK);
         assetManager.load("scoreLabelFont.ttf", BitmapFont.class, scoreLabelFont);
 
-        FreeTypeFontLoaderParameter scoreFont = new FreeTypeFontLoaderParameter();
-        scoreFont.fontFileName = "GamePlayed.ttf";
-        scoreFont.fontParameters.size = 15;
-        scoreFont.fontParameters.color = Color.BLUE;
+        FreeTypeFontLoaderParameter scoreFont = fontFactory.generateFont(15, Color.BLUE);
         assetManager.load("scoreFont.ttf", BitmapFont.class, scoreFont);
 
-        FreeTypeFontLoaderParameter timerFont = new FreeTypeFontLoaderParameter();
-        timerFont.fontFileName = "GamePlayed.ttf";
-        timerFont.fontParameters.size = 15;
-        timerFont.fontParameters.color = Color.RED;
+        FreeTypeFontLoaderParameter timerFont = fontFactory.generateFont(15, Color.RED);
         assetManager.load("timerFont.ttf", BitmapFont.class, timerFont);
 
-        FreeTypeFontLoaderParameter battleFont = new FreeTypeFontLoaderParameter();
-        battleFont.fontFileName = "GamePlayed.ttf";
-        battleFont.fontParameters.size = 30;
-        battleFont.fontParameters.color = Color.RED;
+        FreeTypeFontLoaderParameter battleLabelFont = fontFactory.generateFont(20, Color.WHITE);
+        assetManager.load("battleLabelFont.ttf", BitmapFont.class, battleLabelFont);
+
+        FreeTypeFontLoaderParameter battleFont = fontFactory.generateFont(30, Color.RED);
         assetManager.load("battleFont.ttf", BitmapFont.class, battleFont);
 
         Globals.getLeaderboard().load();

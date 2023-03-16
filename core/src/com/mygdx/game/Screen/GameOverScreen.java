@@ -2,6 +2,7 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -102,6 +103,8 @@ public class GameOverScreen extends AbstractScreen{
     public void show() {
         // stage should control input:
         Gdx.input.setInputProcessor(this.getStage());
+        Sound SFXGameEnd = Globals.getAssetManager().get("sound/game-end.mp3");
+        SFXGameEnd.play(1.0f);
     }
 
     @Override
@@ -121,16 +124,16 @@ public class GameOverScreen extends AbstractScreen{
 
     @Override
     public void pause() {
-
+        return;
     }
 
     @Override
     public void resume() {
-
+        return;
     }
 
     @Override
     public void hide() {
-
+        return;
     }
 }

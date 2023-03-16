@@ -47,13 +47,15 @@ public class GameScreen extends AbstractScreen {
     private float timeSinceGeneration;
     private int maxObjects = 15;
     private static Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
-    public static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
+    private static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
+    private static Sound SFXFight = Globals.getAssetManager().get("sound/pvp-fight.mp3");
     private Label player1LifeLabel;
     private Label player2LifeLabel;
     private Label player1PowerLabel;
     private Label player2PowerLabel;
     private HashMap<Integer, ArrayList<Image>> comboLabelMap;
     private Label countDownLabel;
+    private boolean hasPlayedEffect = false;
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -171,8 +173,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
-
+        hasPlayedEffect = false;
     }
 
     private void populateHighScore() {
@@ -231,6 +232,11 @@ public class GameScreen extends AbstractScreen {
         refreshScore();
         // refresh timer
         refreshTimer(delta);
+        // play sound if fight time
+        if (Globals.getCountDown() <= 0 && !hasPlayedEffect){
+            SFXFight.play(1.0f);
+            hasPlayedEffect = true;
+        }
 
         // check if should end game
         for (Player player : players) {
@@ -270,19 +276,17 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
+        return;
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
+        return;
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
+        
 
     }
 
@@ -415,7 +419,15 @@ public class GameScreen extends AbstractScreen {
         BitmapFont timerLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
         Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
         timerLabelStyle.font = timerLabelFont;
-        this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
+        if(Globals.getCountDown() <= 0){
+            this.countDownLabel.setText("BATTLE!");
+            this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getPrefWidth()) / 2,
+                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        }else{
+            this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
+            this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getWidth()) / 2,
+                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        }
     }
 
     private void refreshScore() {
@@ -546,7 +558,7 @@ public class GameScreen extends AbstractScreen {
         Player player1;
         Player player2;
         if (this.entities.size() == 0) {
-            player1 = new Guy(30, 60, 200, 0, 100, p1);
+            player1 = new Guy(30, 60, 200, 0, 150, p1);
             player2 = new Girl(30, 60, p2);
         } else {
             player1 = (Player) this.entities.get(0);

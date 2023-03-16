@@ -44,20 +44,17 @@ public class InstructionScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
+        return;
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-
+        return;
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
-
+        return;
     }
 
     // disposing of stage is handled by parent class
