@@ -15,9 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Leaderboard.LeaderboardEntry;
 import com.mygdx.game.Utils.Globals;
 
-public class GameOverScreen extends AbstractScreen{
+public class GameOverScreen extends AbstractScreen {
 
-    private Skin skin;
+    private final Skin skin;
     Label titleLabel;
     TextField nameField;
 
@@ -27,9 +27,9 @@ public class GameOverScreen extends AbstractScreen{
         this.getCamera().update();
         initStage();
     }
-    
-    
-    private void addNewLeaderboardEntry(){
+
+
+    private void addNewLeaderboardEntry() {
         LeaderboardEntry entry = new LeaderboardEntry(this.nameField.getText(), Globals.getScore());
         Globals.getLeaderboard().reviseScoreboard(entry);
     }
@@ -60,7 +60,7 @@ public class GameOverScreen extends AbstractScreen{
 
         // end of fonts config
 
-        this.titleLabel = new Label("GAME OVER!\nSCORE: " + Globals.getScore() , labelStyle2);
+        this.titleLabel = new Label("GAME OVER!\nSCORE: " + Globals.getScore(), labelStyle2);
         titleLabel.setFontScale(1f);
 
         Label header = new Label("Name:  ", labelStyleContent);
@@ -128,16 +128,13 @@ public class GameOverScreen extends AbstractScreen{
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 }

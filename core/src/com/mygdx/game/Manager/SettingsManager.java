@@ -58,7 +58,6 @@ public class SettingsManager {
             // populate with default
             controlSettings.initDefaultControls();
         }
-        return;
     }
 
     public void writeToConfig() {
@@ -71,7 +70,6 @@ public class SettingsManager {
             objectOutputStream.close();
         } catch (IOException e) {
             // unable to write config, terminate
-            return;
         }
     }
 

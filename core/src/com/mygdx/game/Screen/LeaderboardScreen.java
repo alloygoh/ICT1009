@@ -15,7 +15,7 @@ import com.mygdx.game.Leaderboard.Leaderboard;
 import com.mygdx.game.Utils.Globals;
 
 public class LeaderboardScreen extends AbstractScreen {
-    private Skin skin;
+    private final Skin skin;
     private Table scoreTable;
 
     public LeaderboardScreen(Game game) {
@@ -49,34 +49,31 @@ public class LeaderboardScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 
-    private void generateLeaderboardDisplay(){
+    private void generateLeaderboardDisplay() {
         this.scoreTable.clear();
 
         // add buttons to table
         Leaderboard scoreBoard = Globals.getLeaderboard();
         for (int i = 1; i < scoreBoard.size() + 1; i++) {
             TextField nameField = new TextField(
-                    (String.valueOf(i) + ". " + scoreBoard.getLeaderboardEntryOfPosition(i).getName()), skin);
+                    (i + ". " + scoreBoard.getLeaderboardEntryOfPosition(i).getName()), skin);
             TextField scoreField = new TextField(String.valueOf(scoreBoard.getLeaderboardEntryOfPosition(i).getScore()),
                     skin);
             scoreTable.add(nameField);
             scoreTable.add(scoreField);
             scoreTable.row();
         }
-        
+
     }
 
     // disposing of stage is handled by parent class

@@ -10,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.Utils.Globals;
 
 public class LoadingScreen extends AbstractScreen {
-    private Skin skin;
+    private final Skin skin;
     private ProgressBar progressBar;
     private Label loadingLabel;
-    private OnLoadListener onLoadListener;
-    private AssetManager assetManager;
+    private final OnLoadListener onLoadListener;
+    private final AssetManager assetManager;
 
     public interface OnLoadListener {
         void onLoad();
@@ -31,7 +31,6 @@ public class LoadingScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        return;
     }
 
     @Override
@@ -48,22 +47,18 @@ public class LoadingScreen extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
-        return;
     }
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 
     // disposing of stage is handled by parent class

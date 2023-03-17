@@ -49,7 +49,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         // load other assets
         assetManager.load("comic/skin/comic-ui.atlas", TextureAtlas.class);
         assetManager.load("comic/skin/comic-ui.json", Skin.class);
-        
+
         // sounds
         assetManager.load("sound/bad-food.mp3", Sound.class);
         assetManager.load("sound/combo-sound.mp3", Sound.class);
@@ -68,7 +68,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         FileHandleResolver resolver = new InternalFileHandleResolver();
         assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         assetManager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-        
+
         FontLoaderFactory fontFactory = new FontLoaderFactory("GamePlayed.ttf");
         FreeTypeFontLoaderParameter titleFont = fontFactory.generateFont(100, Color.YELLOW);
         assetManager.load("GamePlayedTitle.ttf", BitmapFont.class, titleFont);
@@ -81,7 +81,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
 
         FreeTypeFontLoaderParameter gameOverFont = fontFactory.generateFont(60, Color.WHITE);
         assetManager.load("GamePlayedName.ttf", BitmapFont.class, gameOverFont);
-   
+
         FreeTypeFontLoaderParameter scoreLabelFont = fontFactory.generateFont(15, Color.BLACK);
         assetManager.load("scoreLabelFont.ttf", BitmapFont.class, scoreLabelFont);
 

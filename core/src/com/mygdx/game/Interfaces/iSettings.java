@@ -3,7 +3,7 @@ package com.mygdx.game.Interfaces;
 import java.io.Serializable;
 
 public interface iSettings extends Serializable {
-    public void initDefault();
+    void initDefault();
 
-    public Serializable getSerializableValue();
+    Serializable getSerializableValue();
 }

@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Align;
 
 
 public class InstructionScreen extends AbstractScreen {
-    private Skin skin;
+    private final Skin skin;
 
     public InstructionScreen(Game game) {
         super(game);
@@ -48,17 +48,14 @@ public class InstructionScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 
     // disposing of stage is handled by parent class
@@ -123,7 +120,7 @@ public class InstructionScreen extends AbstractScreen {
         instructionsTable.setPosition(this.getStage().getWidth() / 2f - instructionsTable.getWidth() / 2f, this.getStage().getHeight() / 2f - instructionsTable.getHeight() / 2f);
         instructionsTable.align(Align.topLeft);
         ScrollPane instructionsPane = new ScrollPane(instructions1, skin);
-        instructionsPane.setScrollingDisabled(true,false);
+        instructionsPane.setScrollingDisabled(true, false);
         instructionsPane.setForceScroll(false, true); // Allow scrolling only vertically
         instructionsPane.setWidth(1000);
         instructionsTable.add(instructionsPane).expand().fill();

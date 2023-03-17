@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class GameStateManager {
     private ArrayList<iSaveable> saveables;
-    private HashMap<Class, ArrayList<HashMap>> stash;
+    private final HashMap<Class, ArrayList<HashMap>> stash;
 
     public GameStateManager() {
         this(new ArrayList<iSaveable>());
@@ -70,12 +70,11 @@ public class GameStateManager {
             objectOutputStream.close();
         } catch (IOException e) {
             // unable to write config, terminate
-            return;
         }
     }
 
     private void initSaveable(Class<? extends iSaveable> saveableClass, HashMap<String, Object> options) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-        saveables.add((iSaveable) saveableClass.getConstructor().newInstance());
+        saveables.add(saveableClass.getConstructor().newInstance());
         saveables.get(saveables.size() - 1).populate(options);
     }
 

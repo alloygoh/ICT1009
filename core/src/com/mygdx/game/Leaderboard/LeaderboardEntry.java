@@ -6,7 +6,9 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry> {
     private int score;
     private String name;
 
-    public LeaderboardEntry() {}
+    public LeaderboardEntry() {
+    }
+
     public LeaderboardEntry(String name, int score) {
         this.name = name;
         this.score = score;

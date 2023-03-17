@@ -6,12 +6,12 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
 public class Guy extends Player {
-    private static TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
-    private static TextureRegionDrawable drawableObese = new TextureRegionDrawable(atlas.findRegion("player1-obese"));
-    private static TextureRegionDrawable drawableFat = new TextureRegionDrawable(atlas.findRegion("player1-fat"));
-    private static TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player1-base"));
-    private static TextureRegionDrawable drawableStrong = new TextureRegionDrawable(atlas.findRegion("player1-strong"));
-    private static TextureRegionDrawable drawableBuff = new TextureRegionDrawable(atlas.findRegion("player1-buff"));
+    private static final TextureAtlas atlas = Globals.getAssetManager().get("characters.atlas", TextureAtlas.class);
+    private static final TextureRegionDrawable drawableObese = new TextureRegionDrawable(atlas.findRegion("player1-obese"));
+    private static final TextureRegionDrawable drawableFat = new TextureRegionDrawable(atlas.findRegion("player1-fat"));
+    private static final TextureRegionDrawable drawable = new TextureRegionDrawable(atlas.findRegion("player1-base"));
+    private static final TextureRegionDrawable drawableStrong = new TextureRegionDrawable(atlas.findRegion("player1-strong"));
+    private static final TextureRegionDrawable drawableBuff = new TextureRegionDrawable(atlas.findRegion("player1-buff"));
 
     public Guy() {
         this(30, 60);
@@ -42,14 +42,14 @@ public class Guy extends Player {
     }
 
     public Guy(TextureRegionDrawable drawable, float width, float height, float x, float y, float movementSpeed,
-            Controls control) {
+               Controls control) {
         super(drawable, width, height, x, y, movementSpeed, control);
     }
-    
+
     @Override
-    protected TextureRegionDrawable resolveImage(){
+    protected TextureRegionDrawable resolveImage() {
         TextureRegionDrawable[] selection = {drawableObese, drawableFat, drawable, drawableStrong, drawableBuff};
         return selection[this.getLevel()];
     }
-        
+
 }

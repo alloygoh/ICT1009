@@ -41,7 +41,6 @@ public class MovingImageActor extends AbstractActor {
 
     @Override
     public void reactToEvent(String event, Object others) {
-        return;
     }
 
 }

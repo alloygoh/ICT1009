@@ -1,6 +1,7 @@
 package com.mygdx.game.Screen;
 
 import java.lang.Math;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -34,27 +35,27 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class GameScreen extends AbstractScreen {
-    private SpriteBatch batch;
-    private ShapeRenderer renderer;
-    private ArrayList<AbstractActor> entities;
-    private ArrayList<BaseObject> objectList;
-    private Viewport viewport;
-    private SettingsManager settingsManager;
-    private ScreenManager screenManager;
-    private HashMap<Class, ArrayList<BaseObject>> stash;
-    private ArrayList<Player> players;
-    private Random random;
+    private final SpriteBatch batch;
+    private final ShapeRenderer renderer;
+    private final ArrayList<AbstractActor> entities;
+    private final ArrayList<BaseObject> objectList;
+    private final Viewport viewport;
+    private final SettingsManager settingsManager;
+    private final ScreenManager screenManager;
+    private final HashMap<Class, ArrayList<BaseObject>> stash;
+    private final ArrayList<Player> players;
+    private final Random random;
     private float timeSinceGeneration;
-    private int maxObjects = 15;
-    private static Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
-    private static Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
-    private static Sound SFXFight = Globals.getAssetManager().get("sound/pvp-fight.mp3");
-    private static Sound bgmFight = Globals.getAssetManager().get("sound/pvp-bgm.mp3");
+    private final int maxObjects = 15;
+    private static final Sound SFXcountDown = Globals.getAssetManager().get("sound/countdown.mp3");
+    private static final Sound bgm = Globals.getAssetManager().get("sound/meow-defence.mp3");
+    private static final Sound SFXFight = Globals.getAssetManager().get("sound/pvp-fight.mp3");
+    private static final Sound bgmFight = Globals.getAssetManager().get("sound/pvp-bgm.mp3");
     private Label player1LifeLabel;
     private Label player2LifeLabel;
     private Label player1PowerLabel;
     private Label player2PowerLabel;
-    private HashMap<Integer, ArrayList<Image>> comboLabelMap;
+    private final HashMap<Integer, ArrayList<Image>> comboLabelMap;
     private Label countDownLabel;
     private boolean hasPlayedEffect = false;
 
@@ -158,11 +159,8 @@ public class GameScreen extends AbstractScreen {
         float maxX = this.getStage().getViewport().getWorldWidth() - actor.getWidth();
         float maxY = this.getStage().getViewport().getWorldHeight() - actor.getHeight();
         Vector2 forecastedPosition = actor.getForecastedPosition();
-        if (forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0
-                || forecastedPosition.y < 0) {
-            return true;
-        }
-        return false;
+        return forecastedPosition.x > maxX || forecastedPosition.y > maxY || forecastedPosition.x < 0
+                || forecastedPosition.y < 0;
     }
 
     public void correctMovement(Actor actor) {
@@ -236,13 +234,13 @@ public class GameScreen extends AbstractScreen {
         // refresh timer
         refreshTimer(delta);
         // play sound if fight time
-        if (Globals.getCountDown() <= 0 && !hasPlayedEffect){
+        if (Globals.getCountDown() <= 0 && !hasPlayedEffect) {
             SFXFight.play(1.0f);
             bgm.stop();
             long fightID = bgmFight.play(0.5f);
             bgmFight.stop();
             fightID = bgmFight.play(0.5f);
-            bgmFight.setLooping(fightID,true);
+            bgmFight.setLooping(fightID, true);
             hasPlayedEffect = true;
         }
 
@@ -284,17 +282,15 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        
+
 
     }
 
@@ -427,14 +423,14 @@ public class GameScreen extends AbstractScreen {
         BitmapFont timerLabelFont = Globals.getAssetManager().get("scoreLabelFont.ttf", BitmapFont.class);
         Label.LabelStyle timerLabelStyle = new Label.LabelStyle();
         timerLabelStyle.font = timerLabelFont;
-        if(Globals.getCountDown() <= 0){
+        if (Globals.getCountDown() <= 0) {
             this.countDownLabel.setText("BATTLE!");
             this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getPrefWidth()) / 2,
-                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
-        }else{
+                    this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+        } else {
             this.countDownLabel.setText("Time till battle: " + Globals.getCountDown());
             this.countDownLabel.setPosition((this.getStage().getViewport().getWorldWidth() - countDownLabel.getWidth()) / 2,
-                this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
+                    this.getStage().getViewport().getWorldHeight() - countDownLabel.getHeight());
         }
     }
 
@@ -608,6 +604,6 @@ public class GameScreen extends AbstractScreen {
         long bgmID = bgm.play(0.5f);
         bgm.stop();
         bgmID = bgm.play(0.5f);
-        bgm.setLooping(bgmID,true);
+        bgm.setLooping(bgmID, true);
     }
 }

@@ -18,9 +18,9 @@ import com.mygdx.game.Utils.Globals;
 import java.util.ArrayList;
 
 public class MainScreen extends AbstractScreen {
-    private Skin skin;
-    private SettingsManager settingsManager;
-    private ScreenManager screenManager;
+    private final Skin skin;
+    private final SettingsManager settingsManager;
+    private final ScreenManager screenManager;
 
     public MainScreen(Game game) {
         super(game);
@@ -53,17 +53,14 @@ public class MainScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 
     // disposing of stage is handled by parent class
@@ -175,7 +172,7 @@ public class MainScreen extends AbstractScreen {
         mainTable.add(exitButton);
 
         this.getStage().addActor(mainTable);
-        
+
         // add game over screen to cache
         Globals.getScreenManager().addScreen(new GameOverScreen(getGame()));
     }

@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.mygdx.game.Utils.Controls;
 
 public class MovingShapeActor extends AbstractActor {
-    private String shape;
-    private Color color;
+    private final String shape;
+    private final Color color;
     private ShapeRenderer renderer;
 
     public MovingShapeActor(ShapeRenderer renderer, String shape, float width, float height, Color color) {
@@ -61,7 +61,6 @@ public class MovingShapeActor extends AbstractActor {
     }
 
     public void reactToEvent(String event, Object others) {
-        return;
     }
 
 }

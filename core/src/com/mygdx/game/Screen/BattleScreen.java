@@ -23,15 +23,15 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
 public class BattleScreen extends AbstractScreen {
-    private Skin skin;
-    private ScreenManager screenManager;
-    private Random random;
-    private Player player;
-    private int powerDiff;
-    private ArrayList<Player> players;
-    private ArrayList<TextField> directions;
+    private final Skin skin;
+    private final ScreenManager screenManager;
+    private final Random random;
+    private final Player player;
+    private final int powerDiff;
+    private final ArrayList<Player> players;
+    private final ArrayList<TextField> directions;
     private float countDown;
-    private float maxTimeout = 6f;
+    private final float maxTimeout = 6f;
     private Label countDownLabel;
 
     public BattleScreen(Game game, Player player, int powerDiff, ArrayList<Player> players) {
@@ -75,7 +75,7 @@ public class BattleScreen extends AbstractScreen {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         this.getStage().act();
         refreshCount(delta);
-        if(exceedTime()){
+        if (exceedTime()) {
             triggerLose();
         }
         this.getStage().draw();
@@ -83,22 +83,18 @@ public class BattleScreen extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
-        return;
     }
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 
     private ArrayList<Integer> generateSequence() {
@@ -124,8 +120,8 @@ public class BattleScreen extends AbstractScreen {
         }
         Globals.getScreenManager().setScreen(GameScreen.class);
     }
-    
-    private boolean exceedTime(){
+
+    private boolean exceedTime() {
         // exceeded max timeout (5 secs)
         return Math.abs(this.countDown) > maxTimeout;
     }

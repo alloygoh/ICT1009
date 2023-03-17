@@ -16,9 +16,9 @@ import com.mygdx.game.Utils.Globals;
 
 public class PauseScreen extends AbstractScreen {
 
-    private Skin skin;
-    private SettingsManager settingsManager;
-    private ScreenManager screenManager;
+    private final Skin skin;
+    private final SettingsManager settingsManager;
+    private final ScreenManager screenManager;
 
     public PauseScreen(Game game) {
         super(game);
@@ -52,17 +52,14 @@ public class PauseScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-       return; 
     }
 
     @Override
     public void resume() {
-        return;    
     }
 
     @Override
     public void hide() {
-        return;    
     }
 
     // disposing of stage is handled by parent class

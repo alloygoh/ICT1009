@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public abstract class AbstractScreen implements Screen {
-    private Game game;
+    private final Game game;
     private Stage stage;
-    private OrthographicCamera camera;
+    private final OrthographicCamera camera;
 
     public AbstractScreen(Game game) {
         this.game = game;

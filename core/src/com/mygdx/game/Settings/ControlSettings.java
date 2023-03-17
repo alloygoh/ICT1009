@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class ControlSettings implements iSettings {
 
-    private HashMap<Integer, Controls> controlSettingsMap;
+    private final HashMap<Integer, Controls> controlSettingsMap;
 
     public ControlSettings() {
         this.controlSettingsMap = new HashMap<>();

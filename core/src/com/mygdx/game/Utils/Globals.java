@@ -30,20 +30,20 @@ public class Globals {
     public static void setCountDown(float countDown) {
         Globals.countDown = countDown;
     }
-    
-    public static void restoreCountDown(){
+
+    public static void restoreCountDown() {
         Globals.countDown = 30f;
     }
 
     public static float getCountDown() {
         return countDown;
     }
-    
-    public static boolean isInBattle(){
+
+    public static boolean isInBattle() {
         return Globals.inBattle;
     }
-    
-    public static void setInBattle(boolean inBattle){
+
+    public static void setInBattle(boolean inBattle) {
         Globals.inBattle = inBattle;
     }
 
@@ -71,5 +71,7 @@ public class Globals {
         return assetManager;
     }
 
-    public static Leaderboard getLeaderboard() { return leaderboard; }
+    public static Leaderboard getLeaderboard() {
+        return leaderboard;
+    }
 }

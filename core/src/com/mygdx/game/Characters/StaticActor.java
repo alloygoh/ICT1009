@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class StaticActor extends Actor {
-    private TextureRegionDrawable drawable;
-    private ShapeRenderer renderer;
+    private final TextureRegionDrawable drawable;
+    private final ShapeRenderer renderer;
     private Color color;
     private String shape;
 

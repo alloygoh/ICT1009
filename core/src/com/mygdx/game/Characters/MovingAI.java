@@ -7,7 +7,7 @@ import com.mygdx.game.Utils.Direction;
 import java.util.Random;
 
 public class MovingAI extends CollidableActor {
-    private Random random;
+    private final Random random;
     private int directionCount;
 
     public MovingAI(TextureRegionDrawable texture, float width, float height) {
@@ -38,8 +38,8 @@ public class MovingAI extends CollidableActor {
             return;
         }
         super.act(delta);
-        this.directionCount -=1;
-        
+        this.directionCount -= 1;
+
     }
 
     public void generateRandomMovement() {

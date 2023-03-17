@@ -18,8 +18,8 @@ import com.mygdx.game.Utils.Controls;
 import com.mygdx.game.Utils.Globals;
 
 public class SettingsScreen extends AbstractScreen {
-    private Skin skin;
-    private SettingsManager settingsManager;
+    private final Skin skin;
+    private final SettingsManager settingsManager;
 
     public SettingsScreen(Game game, SettingsManager settingsManager) {
         super(game);
@@ -51,17 +51,14 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void pause() {
-        return;
     }
 
     @Override
     public void resume() {
-        return;
     }
 
     @Override
     public void hide() {
-        return;
     }
 
     // disposing of stage is handled by parent class

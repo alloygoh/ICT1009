@@ -60,7 +60,7 @@ public class Leaderboard {
         Json json = new Json();
         if (file.exists()) {
             this.entries = json.fromJson(ArrayList.class, LeaderboardEntry.class, file);
-        } 
+        }
     }
 
 }
