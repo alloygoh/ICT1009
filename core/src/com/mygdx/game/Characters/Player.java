@@ -110,11 +110,11 @@ public abstract class Player extends CollidableActor implements iSaveable {
         // 71-150 level 3
         // > 150 level 4
         int targetLevel = 0;
-        if (power < -1 && power > -60){
+        if (power < 0){
             targetLevel = 1;
-        } else if (power <= 70 && power >= 0){
+        } else if (power <= 70){
             targetLevel = 2;
-        }else if (power <= 150 && power >= 71){
+        }else if (power <= 150){
             targetLevel = 3;
         }else if (power > 150){
             targetLevel = 4;
@@ -133,7 +133,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
     private void exercise(){
         // TODO
         // insert sound here, maybe change drawable here too
-        this.power += 0.1;
+        this.power += 0.01;
         handleLevels();
     }
     

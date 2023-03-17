@@ -5,7 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.Utils.Globals;
 import com.badlogic.gdx.utils.Align;
@@ -91,7 +95,7 @@ public class InstructionScreen extends AbstractScreen {
 
         Label instructions1 = new Label("\nHelp Bobby and Candice improve to be a better version of themselves!" +
                 "\n\nPlayer 1 and Player 2 will control Bobby and Candice respectively.\n" +
-                "Please adjust the controls through the Settings screen in the main menu.\n" +
+                "\nPlease adjust the controls through the Settings screen in the main menu.\n" +
                 "Different foods will regularly spawn in the arena.\n" +
                 "Consuming healthy foods will gain points and level up your character.\n" +
                 "Consuming unhealthy foods will result in a loss of points.\n\n" +
@@ -101,13 +105,14 @@ public class InstructionScreen extends AbstractScreen {
                 "\tCarrot = 15pts\t\t      Fries = -20pts\n" +
                 "\tApple = 20pts\t\t       Boba = -20pts\n" +
                 "\nEach player will have 2 lives before being eliminated." +
-                "\nThere is a grace period at the start of the game. Players are recommended to consume the right foods during this time frame.\n" +
+                "\n\nThere is a grace period at the start of the game. Players are recommended to consume the right foods during this time frame.\n" +
                 "\nOnce the grace period has ended, players will lose their invulnerability and be subjected to being defeated by the other player." +
-                "\nWhen Bobby or Candice have consumed enough healthy food, they will level up and attain increased movement speed.\n" +
-                "\nUnhealthy foods will weaken them overtime.\n" +
-                "When Bobby or Candice has fallen, the weaker player will have a chance to prevent a loss of life.\n" +
+                "\n\nWhen Bobby or Candice have consumed enough healthy food, they will level up and attain increased movement speed.\n" +
+                "Unhealthy foods will weaken them overtime.\n" +
+                "\nWhen Bobby or Candice has fallen, the weaker player will have a chance to prevent a loss of life.\n" +
                 "The player has to complete the sequence of keystrokes presented on the screen in a set amount of time.\n" +
-                "Successfully completing the challenge will allow the player to try again and redeem their bad eating habits." +
+                "Successfully completing the challenge will allow the player to try again and redeem their bad eating habits.\n" +
+                "\nPlayers are able to use the EXERCISE button to increase their character's fitness and power level. However, characters will be immobile and vulnerable while exercising.\n" +
                 "\n", labelStyleContent);
         // End of mock samples and code
         instructions1.setFontScale(1f);

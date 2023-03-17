@@ -175,6 +175,8 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void show() {
         hasPlayedEffect = false;
+        bgmFight.stop();
+        bgm.play(0.5f);
     }
 
     private void populateHighScore() {
@@ -237,9 +239,9 @@ public class GameScreen extends AbstractScreen {
         if (Globals.getCountDown() <= 0 && !hasPlayedEffect){
             SFXFight.play(1.0f);
             bgm.stop();
-            long fightID = bgmFight.play(0.7f);
+            long fightID = bgmFight.play(0.5f);
             bgmFight.stop();
-            fightID = bgmFight.play(0.7f);
+            fightID = bgmFight.play(0.5f);
             bgmFight.setLooping(fightID,true);
             hasPlayedEffect = true;
         }
@@ -601,11 +603,11 @@ public class GameScreen extends AbstractScreen {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        bgmFight.stop();
+        // account for 3 sec delay above
+        Globals.setCountDown(33f);
         long bgmID = bgm.play(0.5f);
         bgm.stop();
         bgmID = bgm.play(0.5f);
         bgm.setLooping(bgmID,true);
-
     }
 }
