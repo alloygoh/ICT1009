@@ -64,7 +64,7 @@ public class GameScreen extends AbstractScreen {
     private Label player2PowerLabel;
     private Label countDownLabel;
     private boolean hasPlayedEffect = false;
-    private static Texture backgroundTexture = new Texture("chopping-board.jpg");
+    private static Texture backgroundTexture = new Texture("sky.png");
     private static Sprite backgroundSprite = new Sprite(backgroundTexture);
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
@@ -219,7 +219,7 @@ public class GameScreen extends AbstractScreen {
             screenManager.setScreen(PauseScreen.class);
         }
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
-        ScreenUtils.clear(169, 169, 169, 0);
+        ScreenUtils.clear(118, 167, 169, 0);
 
         batch.begin();
         backgroundSprite.draw(batch);
