@@ -7,7 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -45,6 +47,7 @@ public class GameScreen extends AbstractScreen {
     private static final Sound bgmFight = Globals.getAssetManager().get("sound/pvp-bgm.mp3");
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
+    private final Sprite backgroundSprite;
     private final ArrayList<AbstractActor> entities;
     private final ArrayList<BaseObject> objectList;
     private final Viewport viewport;
@@ -63,6 +66,7 @@ public class GameScreen extends AbstractScreen {
     private Label countDownLabel;
     private boolean hasPlayedEffect = false;
 
+
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
         float screenWidth = Gdx.graphics.getWidth();
@@ -74,6 +78,7 @@ public class GameScreen extends AbstractScreen {
         this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
+        this.backgroundSprite = new Sprite(Globals.getAssetManager().get("background.png", Texture.class));
         // player 1 & 2 combo images
         this.comboLabelMap = new HashMap<Integer, ArrayList<Image>>();
         this.comboLabelMap.put(0, new ArrayList<Image>());
@@ -212,7 +217,11 @@ public class GameScreen extends AbstractScreen {
             screenManager.setScreen(PauseScreen.class);
         }
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
-        ScreenUtils.clear(169, 169, 169, 0);
+        ScreenUtils.clear(118, 167, 169, 0);
+
+        batch.begin();
+        backgroundSprite.draw(batch);
+        batch.end();
 
         for (AbstractActor actor : entities) {
             if (actor instanceof MovingAI) {
@@ -575,6 +584,10 @@ public class GameScreen extends AbstractScreen {
         for (Actor actor : entities) {
             this.getStage().addActor(actor);
         }
+
+        // background
+        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundSprite.setPosition(0, 0);
 
         // score overlay
         initScoreTable();

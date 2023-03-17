@@ -77,6 +77,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
         this.level = 2;
         this.setMovementSpeed(150);
         handleLevels();
+        this.foodsEaten.clear();
         this.setX(this.originCoordinates.x);
         this.setY(this.originCoordinates.y);
     }

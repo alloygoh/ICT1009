@@ -8,7 +8,9 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
@@ -50,6 +52,8 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         assetManager.load("comic/skin/comic-ui.atlas", TextureAtlas.class);
         assetManager.load("comic/skin/comic-ui.json", Skin.class);
 
+        assetManager.load("background.png", Texture.class);
+
         // sounds
         assetManager.load("sound/bad-food.mp3", Sound.class);
         assetManager.load("sound/combo-sound.mp3", Sound.class);
@@ -88,7 +92,7 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         FreeTypeFontLoaderParameter scoreFont = fontFactory.generateFont(15, Color.BLUE);
         assetManager.load("scoreFont.ttf", BitmapFont.class, scoreFont);
 
-        FreeTypeFontLoaderParameter timerFont = fontFactory.generateFont(15, Color.RED);
+        FreeTypeFontLoaderParameter timerFont = fontFactory.generateFont(15, new Color(112 / 255f, 1 / 255f, 1 / 255f, 1));
         assetManager.load("timerFont.ttf", BitmapFont.class, timerFont);
 
         FreeTypeFontLoaderParameter battleLabelFont = fontFactory.generateFont(20, Color.WHITE);
