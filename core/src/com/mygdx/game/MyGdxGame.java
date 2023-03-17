@@ -8,7 +8,9 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
@@ -49,6 +51,8 @@ public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
         // load other assets
         assetManager.load("comic/skin/comic-ui.atlas", TextureAtlas.class);
         assetManager.load("comic/skin/comic-ui.json", Skin.class);
+
+        assetManager.load("background.jpg", Texture.class);
 
         // sounds
         assetManager.load("sound/bad-food.mp3", Sound.class);

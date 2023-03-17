@@ -47,6 +47,7 @@ public class GameScreen extends AbstractScreen {
     private static final Sound bgmFight = Globals.getAssetManager().get("sound/pvp-bgm.mp3");
     private final SpriteBatch batch;
     private final ShapeRenderer renderer;
+    private final Sprite backgroundSprite;
     private final ArrayList<AbstractActor> entities;
     private final ArrayList<BaseObject> objectList;
     private final Viewport viewport;
@@ -64,8 +65,7 @@ public class GameScreen extends AbstractScreen {
     private Label player2PowerLabel;
     private Label countDownLabel;
     private boolean hasPlayedEffect = false;
-    private static Texture backgroundTexture = new Texture("sky.png");
-    private static Sprite backgroundSprite = new Sprite(backgroundTexture);
+    
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -78,6 +78,7 @@ public class GameScreen extends AbstractScreen {
         this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
+        this.backgroundSprite = new Sprite(Globals.getAssetManager().get("background.jpg", Texture.class));
         // player 1 & 2 combo images
         this.comboLabelMap = new HashMap<Integer, ArrayList<Image>>();
         this.comboLabelMap.put(0, new ArrayList<Image>());
@@ -93,9 +94,6 @@ public class GameScreen extends AbstractScreen {
         this.entities = (ArrayList<AbstractActor>) entities;
         this.players = new ArrayList<Player>();
         this.objectList = new ArrayList<>();
-
-        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        backgroundSprite.setPosition(0,0);
 
         initStage();
         this.getCamera().update();
@@ -275,11 +273,6 @@ public class GameScreen extends AbstractScreen {
         this.getStage().draw();
 
     }
-
-    /*public void renderBackground()
-    {
-        backgroundSprite.draw(spr)
-    }*/
 
     // to remove actor from stage
     private void freeActor(Actor actor) {
@@ -591,6 +584,10 @@ public class GameScreen extends AbstractScreen {
         for (Actor actor : entities) {
             this.getStage().addActor(actor);
         }
+
+        // background
+        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundSprite.setPosition(0,0);
 
         // score overlay
         initScoreTable();
