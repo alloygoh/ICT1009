@@ -133,7 +133,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
     private void exercise(){
         // TODO
         // insert sound here, maybe change drawable here too
-        this.power += 0.1;
+        this.power += 0.01;
         handleLevels();
     }
     
