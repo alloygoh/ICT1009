@@ -15,12 +15,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.mygdx.game.Factory.FontLoaderFactory;
-import com.mygdx.game.Manager.ScreenManager;
-import com.mygdx.game.Manager.SettingsManager;
-import com.mygdx.game.Screen.LoadingScreen;
-import com.mygdx.game.Screen.MainScreen;
-import com.mygdx.game.Utils.Globals;
+import com.mygdx.game.Game.Factory.FontLoaderFactory;
+import com.mygdx.game.Game.Screen.LoadingScreen;
+import com.mygdx.game.Game.Screen.MainScreen;
+import com.mygdx.game.Game.Utils.Globals;
+import com.mygdx.game.Engine.Manager.ScreenManager;
+import com.mygdx.game.Engine.Manager.SettingsManager;
 
 public class MyGdxGame extends Game implements LoadingScreen.OnLoadListener {
     private AssetManager assetManager;
