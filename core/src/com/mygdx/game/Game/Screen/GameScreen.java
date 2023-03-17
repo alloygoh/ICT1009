@@ -7,7 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -62,6 +64,8 @@ public class GameScreen extends AbstractScreen {
     private Label player2PowerLabel;
     private Label countDownLabel;
     private boolean hasPlayedEffect = false;
+    private static Texture backgroundTexture = new Texture("chopping-board.jpg");
+    private static Sprite backgroundSprite = new Sprite(backgroundTexture);
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -89,6 +93,9 @@ public class GameScreen extends AbstractScreen {
         this.entities = (ArrayList<AbstractActor>) entities;
         this.players = new ArrayList<Player>();
         this.objectList = new ArrayList<>();
+
+        backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        backgroundSprite.setPosition(0,0);
 
         initStage();
         this.getCamera().update();
@@ -214,6 +221,10 @@ public class GameScreen extends AbstractScreen {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
         ScreenUtils.clear(169, 169, 169, 0);
 
+        batch.begin();
+        backgroundSprite.draw(batch);
+        batch.end();
+
         for (AbstractActor actor : entities) {
             if (actor instanceof MovingAI) {
                 continue;
@@ -264,6 +275,11 @@ public class GameScreen extends AbstractScreen {
         this.getStage().draw();
 
     }
+
+    /*public void renderBackground()
+    {
+        backgroundSprite.draw(spr)
+    }*/
 
     // to remove actor from stage
     private void freeActor(Actor actor) {
