@@ -78,7 +78,7 @@ public class GameScreen extends AbstractScreen {
         this.random = new Random();
         this.batch = new SpriteBatch();
         this.renderer = new ShapeRenderer();
-        this.backgroundSprite = new Sprite(Globals.getAssetManager().get("background.jpg", Texture.class));
+        this.backgroundSprite = new Sprite(Globals.getAssetManager().get("background.png", Texture.class));
         // player 1 & 2 combo images
         this.comboLabelMap = new HashMap<Integer, ArrayList<Image>>();
         this.comboLabelMap.put(0, new ArrayList<Image>());
