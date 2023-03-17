@@ -65,7 +65,7 @@ public class GameScreen extends AbstractScreen {
     private Label player2PowerLabel;
     private Label countDownLabel;
     private boolean hasPlayedEffect = false;
-    
+
 
     public GameScreen(Game game, SettingsManager settingsManager, ArrayList entities) {
         super(game);
@@ -587,7 +587,7 @@ public class GameScreen extends AbstractScreen {
 
         // background
         backgroundSprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        backgroundSprite.setPosition(0,0);
+        backgroundSprite.setPosition(0, 0);
 
         // score overlay
         initScoreTable();
