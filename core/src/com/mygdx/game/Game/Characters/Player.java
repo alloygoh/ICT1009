@@ -111,8 +111,10 @@ public abstract class Player extends CollidableActor implements iSaveable {
         // 0 - 70 level 2
         // 71-150 level 3
         // > 150 level 4
-        int targetLevel = 0;
-        if (power < 0) {
+        int targetLevel;
+	if (power < -60) {
+            targetLevel = 0;
+	} else if (power < 0) {
             targetLevel = 1;
         } else if (power <= 70) {
             targetLevel = 2;
