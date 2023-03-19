@@ -1,0 +1,505 @@
+@startuml
+class com.mygdx.game.Game.Objects.Fruit {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawable
+}
+class com.mygdx.game.Engine.Settings.ControlSettings {
+- HashMap<Integer,Controls> controlSettingsMap
++ void addControlSetting(int,Controls)
++ void changeControlSetting(int,Controls)
++ Controls getControlOf(int)
++ void initDefaultControls()
++ void initDefault()
++ Serializable getSerializableValue()
+}
+class com.mygdx.game.Game.Characters.Guy {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawableObese
+- {static} TextureRegionDrawable drawableFat
+- {static} TextureRegionDrawable drawable
+- {static} TextureRegionDrawable drawableStrong
+- {static} TextureRegionDrawable drawableBuff
+# TextureRegionDrawable resolveImage()
+}
+interface com.mygdx.game.Engine.Interfaces.iSaveable {
+~ void populate(HashMap<String,Object>)
+~ HashMap<String,Object> stashOptions()
+}
+class com.mygdx.game.Engine.Characters.StaticActor {
+- TextureRegionDrawable drawable
+- ShapeRenderer renderer
+- Color color
+- String shape
++ void draw(Batch,float)
+}
+class com.mygdx.game.Engine.Manager.GameStateManager {
+- HashMap<Class,ArrayList<HashMap>> stash
+- ArrayList<iSaveable> saveables
+- void buildStash()
++ void updateSaveables(ArrayList<iSaveable>)
++ boolean hasSavedState()
++ void saveState()
+- void initSaveable(Class<? extends iSaveable>,HashMap<String,Object>)
++ ArrayList<iSaveable> loadState()
+}
+abstract class com.mygdx.game.Engine.Characters.AbstractActor {
+# ArrayList<Direction> directions
+# float movementSpeed
+- Controls control
++ Vector2 getForecastedPosition()
++ void act(float)
++ {abstract}void reactToEvent(String,Object)
++ ArrayList<Direction> getDirections()
++ float getMovementSpeed()
++ void setMovementSpeed(float)
++ Controls getControl()
++ void setControl(Controls)
++ void moveUp(float)
++ void moveDown(float)
++ void moveLeft(float)
++ void moveRight(float)
++ void processKeyStrokes(float)
+}
+class com.mygdx.game.Game.Utils.Globals {
+- {static} AssetManager assetManager
+- {static} SettingsManager settingsManager
+- {static} ScreenManager screenManager
+- {static} GameStateManager gameStateManager
+- {static} Leaderboard leaderboard
+- {static} int score
+- {static} float countDown
+- {static} boolean inBattle
++ {static} void restoreCountDown()
++ {static} float getCountDown()
++ {static} void setCountDown(float)
++ {static} boolean isInBattle()
++ {static} void setInBattle(boolean)
++ {static} int getScore()
++ {static} void setScore(int)
++ {static} GameStateManager getGameStateManager()
++ {static} ScreenManager getScreenManager()
++ {static} SettingsManager getSettingsManager()
++ {static} AssetManager getAssetManager()
++ {static} Leaderboard getLeaderboard()
+}
+class com.mygdx.game.Game.Screen.GameScreen {
+- {static} Sound SFXcountDown
+- {static} Sound bgm
+- {static} Sound SFXFight
+- {static} Sound bgmFight
+- SpriteBatch batch
+- ShapeRenderer renderer
+- Sprite backgroundSprite
+- ArrayList<AbstractActor> entities
+- ArrayList<BaseObject> objectList
+- Viewport viewport
+- SettingsManager settingsManager
+- ScreenManager screenManager
+- HashMap<Class,ArrayList<BaseObject>> stash
+- ArrayList<Player> players
+- Random random
+- int maxObjects
+- HashMap<Integer,ArrayList<Image>> comboLabelMap
+- float timeSinceGeneration
+- Label player1LifeLabel
+- Label player2LifeLabel
+- Label player1PowerLabel
+- Label player2PowerLabel
+- Label countDownLabel
+- boolean hasPlayedEffect
+- void initBattle(Player,Player)
+- void governCollisions()
++ void governBorders()
++ boolean exceedingBorder(AbstractActor)
++ void correctMovement(Actor)
++ void show()
+- void populateHighScore()
++ void render(float)
+- void freeActor(Actor)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void dispose()
+- void addToStash(BaseObject)
+- boolean checkCollision(BaseObject,ArrayList<BaseObject>)
+- ArrayList<BaseObject> generateGameObjects()
+- BaseObject generateNewObject()
+- void resetComboVisibility()
+- void refreshTimer(float)
+- void refreshScore()
+- void initScoreTable()
++ void initStage()
+}
+class com.mygdx.game.MyGdxGame {
+- AssetManager assetManager
+- Globals globals
+- SettingsManager settingsManager
+- ScreenManager screenManager
++ void create()
+- void initAssets()
++ void onLoad()
++ void render()
++ void dispose()
+}
+class com.mygdx.game.Engine.Leaderboard.Leaderboard {
+- int MAX_ENTRIES
+- ArrayList<LeaderboardEntry> entries
++ String toString()
++ int size()
++ LeaderboardEntry getLeaderboardEntryOfPosition(int)
++ void reviseScoreboard(LeaderboardEntry)
++ void save()
++ void load()
+}
+interface com.mygdx.game.Engine.Interfaces.iCollidable {
+~ Rectangle getBounds()
+~ boolean isIdle()
+~ boolean collidesWith(iCollidable)
+~ void handleCollision(iCollidable)
+}
+enum com.mygdx.game.Engine.Utils.Direction {
++  UP
++  DOWN
++  LEFT
++  RIGHT
++  IDLE
+}
+class com.mygdx.game.Game.Screen.LeaderboardScreen {
+- Skin skin
+- Table scoreTable
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
+- void generateLeaderboardDisplay()
++ void initStage()
+}
+class com.mygdx.game.Engine.Characters.MovingAI {
+- Random random
+- int directionCount
++ void setDirectionCount(int)
++ void act(float)
++ void generateRandomMovement()
++ void moveRandomly(float)
+}
+class com.mygdx.game.Engine.Utils.Controls {
+- int up
+- int down
+- int left
+- int right
+- int specialKey
++ int getSpecialKey()
++ void setSpecialKey(int)
++ int getUp()
++ void setUp(int)
++ int getDown()
++ void setDown(int)
++ int getLeft()
++ void setLeft(int)
++ int getRight()
++ void setRight(int)
+}
+class com.mygdx.game.Engine.Utils.Controls.Presets {
++ {static} Controls DEFAULT
++ {static} Controls NONE
+}
+abstract class com.mygdx.game.Engine.Characters.CollidableActor {
+- boolean collided
++ boolean isIdle()
++ Rectangle getBounds()
++ boolean collidesWith(iCollidable)
++ void reactToEvent(String,Object)
++ void act(float)
++ void handleCollision(iCollidable)
++ boolean isCollided()
++ void setCollided(boolean)
+}
+class com.mygdx.game.Game.Objects.Toast {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawable
+}
+class com.mygdx.game.Game.Objects.Carrot {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawable
+}
+class com.mygdx.game.Game.Objects.Boba {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawable
+}
+class com.mygdx.game.Game.Screen.MainScreen {
+- Skin skin
+- SettingsManager settingsManager
+- ScreenManager screenManager
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void initStage()
+}
+class com.mygdx.game.Game.Screen.InstructionScreen {
+- Skin skin
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void initStage()
+}
+class com.mygdx.game.Game.Objects.BaseObject {
+- {static} Sound sfxGoodConsume
+- {static} Sound sfxBadConsume
+- int powerPoints
+- boolean shouldDisappear
++ int getPowerPoints()
++ boolean shouldDisappear()
++ void resetStatus()
+- void playSound()
++ void reactToEvent(String,Object)
+}
+class com.mygdx.game.Game.Factory.FontLoaderFactory {
+- String fontName
++ FreeTypeFontLoaderParameter generateFont(int,Color)
+}
+class com.mygdx.game.Game.Screen.LoadingScreen {
+- Skin skin
+- AssetManager assetManager
+- ProgressBar progressBar
+- Label loadingLabel
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void initStage()
+}
+interface com.mygdx.game.Game.Screen.LoadingScreen.OnLoadListener {
+~ void onLoad()
+}
+class com.mygdx.game.Game.Screen.PauseScreen {
+- Skin skin
+- SettingsManager settingsManager
+- ScreenManager screenManager
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void initStage()
+}
+class com.mygdx.game.Game.Screen.SettingsScreen {
+- Skin skin
+- SettingsManager settingsManager
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void initStage()
+}
+class com.mygdx.game.Engine.Characters.MovingShapeActor {
+- String shape
+- Color color
+- ShapeRenderer renderer
++ void draw(Batch,float)
++ void setRenderer(ShapeRenderer)
++ void reactToEvent(String,Object)
+}
+class com.mygdx.game.Game.Characters.Girl {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawableObese
+- {static} TextureRegionDrawable drawableFat
+- {static} TextureRegionDrawable drawable
+- {static} TextureRegionDrawable drawableStrong
+- {static} TextureRegionDrawable drawableBuff
+# TextureRegionDrawable resolveImage()
+}
+class com.mygdx.game.Game.Objects.Pizza {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawable
+}
+interface com.mygdx.game.Engine.Interfaces.iSettings {
+~ void initDefault()
+~ Serializable getSerializableValue()
+}
+class com.mygdx.game.Engine.Characters.MovingImageActor {
+- TextureRegionDrawable texture
++ void setTexture(TextureRegionDrawable)
++ void draw(Batch,float)
++ void reactToEvent(String,Object)
+}
+class com.mygdx.game.Game.Screen.GameOverScreen {
+- Skin skin
+~ Label titleLabel
+~ TextField nameField
+- void addNewLeaderboardEntry()
++ void initStage()
++ void show()
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
+}
+abstract class com.mygdx.game.Game.Characters.Player {
+- {static} Sound sfxLose
+- {static} Sound sfxDefended
+- {static} Sound sfxCombo
+- {static} Sound sfxLevelUp
+- ArrayList<Class> foodsEaten
+- int lifeCount
+- boolean isDead
+- Vector2 originCoordinates
+- int highScore
+- int level
+- float power
++ int getLevel()
++ int getLifeCount()
++ int getPower()
++ ArrayList<Class> getFoodsEaten()
++ int getHighScore()
++ boolean isDead()
+- void reset()
+- void resetPosition()
+- void loseLife()
+# {abstract}TextureRegionDrawable resolveImage()
+# void levelUp()
+# void levelDown()
+# void handleLevels()
+- void exercise()
++ void processKeyStrokes(float)
+- boolean checkCombo()
++ void handleCollision(iCollidable)
++ void reactToEvent(String,Object)
++ void populate(HashMap<String,Object>)
++ HashMap<String,Object> stashOptions()
+}
+class com.mygdx.game.Engine.Manager.SettingsManager {
+- ControlSettings controlSettings
+- ArrayList<iSettings> masterSettings
++ ControlSettings getControlSettings()
+- void populateSettings()
+- ArrayList serializeAllSettings()
++ void readFromConfig()
++ void writeToConfig()
+}
+class com.mygdx.game.Game.Screen.BattleScreen {
+- Skin skin
+- ScreenManager screenManager
+- Random random
+- Player player
+- int powerDiff
+- ArrayList<Player> players
+- ArrayList<TextField> directions
+- float maxTimeout
+- float countDown
+- Label countDownLabel
++ void show()
+- void refreshCount(float)
++ void render(float)
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
+- ArrayList<Integer> generateSequence()
+- void triggerLose()
+- boolean exceedTime()
++ void initStage()
+}
+abstract class com.mygdx.game.Engine.Screen.AbstractScreen {
+- Game game
+- OrthographicCamera camera
+- Stage stage
++ Game getGame()
++ Stage getStage()
++ void setStage(Stage)
++ OrthographicCamera getCamera()
++ {abstract}void initStage()
++ void dispose()
+}
+class com.mygdx.game.Engine.Leaderboard.LeaderboardEntry {
+- int score
+- String name
++ int getScore()
++ String getName()
++ int compareTo(LeaderboardEntry)
++ String toString()
+}
+class com.mygdx.game.Engine.Manager.ScreenManager {
+- HashMap<Class,AbstractScreen> screensMap
+- Game game
+- AbstractScreen previousScreen
++ void addScreen(AbstractScreen)
++ Screen getScreen(Class)
++ void setScreen(Class)
++ AbstractScreen getPreviousScreen()
++ void disposeScreen(AbstractScreen)
++ void disposeAll()
+}
+class com.mygdx.game.Engine.Addons.Gravity {
++ {static} int GRAVITY_LIGHT
++ {static} int GRAVITY_MEDIUM
++ {static} int GRAVITY_HEAVY
+- {static} int gravityLevel
++ {static} void invokeGravity(AbstractActor,float)
++ {static} void invokeGravity(int,AbstractActor,float)
++ void setGravityLevel(int)
+}
+class com.mygdx.game.Game.Objects.Fries {
+- {static} TextureAtlas atlas
+- {static} TextureRegionDrawable drawable
+}
+
+
+com.mygdx.game.Game.Objects.BaseObject <|-- com.mygdx.game.Game.Objects.Fruit
+com.mygdx.game.Engine.Interfaces.iSettings <|.. com.mygdx.game.Engine.Settings.ControlSettings
+com.mygdx.game.Game.Characters.Player <|-- com.mygdx.game.Game.Characters.Guy
+com.badlogic.gdx.scenes.scene2d.Actor <|-- com.mygdx.game.Engine.Characters.StaticActor
+com.badlogic.gdx.scenes.scene2d.Actor <|-- com.mygdx.game.Engine.Characters.AbstractActor
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.GameScreen
+com.badlogic.gdx.Game <|-- com.mygdx.game.MyGdxGame
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.LeaderboardScreen
+com.mygdx.game.Engine.Characters.CollidableActor <|-- com.mygdx.game.Engine.Characters.MovingAI
+com.mygdx.game.Engine.Utils.Controls +.. com.mygdx.game.Engine.Utils.Controls.Presets
+com.mygdx.game.Engine.Interfaces.iCollidable <|.. com.mygdx.game.Engine.Characters.CollidableActor
+com.mygdx.game.Engine.Characters.MovingImageActor <|-- com.mygdx.game.Engine.Characters.CollidableActor
+com.mygdx.game.Game.Objects.BaseObject <|-- com.mygdx.game.Game.Objects.Toast
+com.mygdx.game.Game.Objects.BaseObject <|-- com.mygdx.game.Game.Objects.Carrot
+com.mygdx.game.Game.Objects.BaseObject <|-- com.mygdx.game.Game.Objects.Boba
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.MainScreen
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.InstructionScreen
+com.mygdx.game.Engine.Characters.MovingAI <|-- com.mygdx.game.Game.Objects.BaseObject
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.LoadingScreen
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.PauseScreen
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.SettingsScreen
+com.mygdx.game.Engine.Characters.AbstractActor <|-- com.mygdx.game.Engine.Characters.MovingShapeActor
+com.mygdx.game.Game.Characters.Player <|-- com.mygdx.game.Game.Characters.Girl
+com.mygdx.game.Game.Objects.BaseObject <|-- com.mygdx.game.Game.Objects.Pizza
+java.io.Serializable <|-- com.mygdx.game.Engine.Interfaces.iSettings
+com.mygdx.game.Engine.Characters.AbstractActor <|-- com.mygdx.game.Engine.Characters.MovingImageActor
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.GameOverScreen
+com.mygdx.game.Engine.Interfaces.iSaveable <|.. com.mygdx.game.Game.Characters.Player
+com.mygdx.game.Engine.Characters.CollidableActor <|-- com.mygdx.game.Game.Characters.Player
+com.mygdx.game.Engine.Screen.AbstractScreen <|-- com.mygdx.game.Game.Screen.BattleScreen
+com.badlogic.gdx.Screen <|.. com.mygdx.game.Engine.Screen.AbstractScreen
+com.mygdx.game.Game.Objects.BaseObject <|-- com.mygdx.game.Game.Objects.Fries
+com.mygdx.game.Engine.Characters.AbstractActor o-- com.mygdx.game.Engine.Utils.Controls
+com.mygdx.game.MyGdxGame o-- com.mygdx.game.Engine.Settings
+com.mygdx.game.MyGdxGame o-- com.mygdx.game.Game.Screen
+com.mygdx.game.MyGdxGame o-- com.mygdx.game.Game.Utils
+com.mygdx.game.MyGdxGame o-- com.mygdx.game.Engine.Leaderboard
+com.mygdx.game.MyGdxGame o-- com.mygdx.game.Game.Objects
+com.mygdx.game.MyGdxGame o-- com.mygdx.game.Game.Characters
+com.mygdx.game.MyGdxGame *-- com.mygdx.game.Game.Factory.FontLoaderFactory
+com.mygdx.game.MyGdxGame *-- com.mygdx.game.Engine.Manager.GameStateManager
+com.mygdx.game.MyGdxGame *-- com.mygdx.game.Engine.Manager.ScreenManager
+com.mygdx.game.MyGdxGame *-- com.mygdx.game.Engine.Manager.SettingsManager
+@enduml
