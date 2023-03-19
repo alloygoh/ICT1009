@@ -111,10 +111,10 @@ public abstract class Player extends CollidableActor implements iSaveable {
         // 0 - 70 level 2
         // 71-150 level 3
         // > 150 level 4
-        int targetLevel;
-	if (power < -60) {
+        int targetLevel = 0;
+        if (power < -60) {
             targetLevel = 0;
-	} else if (power < 0) {
+        } else if (power < 0) {
             targetLevel = 1;
         } else if (power <= 70) {
             targetLevel = 2;
@@ -123,7 +123,6 @@ public abstract class Player extends CollidableActor implements iSaveable {
         } else if (power > 150) {
             targetLevel = 4;
         }
-
 
         if (targetLevel > level) {
             levelUp();
@@ -152,12 +151,14 @@ public abstract class Player extends CollidableActor implements iSaveable {
 
     private boolean checkCombo() {
         // combo consists of 2 carrots, 1 fruit and 1 toast
-        if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class)) && Collections.frequency(this.foodsEaten, Carrot.class) == 2) {
+        if (this.foodsEaten.containsAll(Arrays.asList(Carrot.class, Toast.class, Fruit.class))
+                && Collections.frequency(this.foodsEaten, Carrot.class) == 2) {
             this.foodsEaten.clear();
             sfxCombo.play(1.0f);
             return true;
         }
-        if (this.foodsEaten.contains(Boba.class) || this.foodsEaten.contains(Pizza.class) || this.foodsEaten.contains(Fries.class)) {
+        if (this.foodsEaten.contains(Boba.class) || this.foodsEaten.contains(Pizza.class)
+                || this.foodsEaten.contains(Fries.class)) {
             this.foodsEaten.clear();
         }
         if (this.foodsEaten.size() > 4) {
@@ -197,7 +198,8 @@ public abstract class Player extends CollidableActor implements iSaveable {
                 }
                 return;
             } else if (this.power < player.getPower()) {
-                // since forecasting is the method for detecting collisions, the other player does not see collision if idle
+                // since forecasting is the method for detecting collisions, the other player
+                // does not see collision if idle
                 // manually trigger collision event
                 player.reactToEvent("collision", this);
                 return;
