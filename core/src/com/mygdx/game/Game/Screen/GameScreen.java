@@ -572,8 +572,14 @@ public class GameScreen extends AbstractScreen {
             player2 = new Girl(30, 60, p2);
         } else {
             player1 = (Player) this.entities.get(0);
-            player1.setControl(p1);
             player2 = (Player) this.entities.get(1);
+            if (player1 instanceof Girl) {
+                // swap
+                Player temp = player1;
+                player1 = player2;
+                player2 = temp;
+            }
+            player1.setControl(p1);
             player2.setControl(p2);
         }
 
