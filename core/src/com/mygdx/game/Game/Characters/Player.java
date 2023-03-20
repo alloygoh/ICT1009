@@ -245,6 +245,10 @@ public abstract class Player extends CollidableActor implements iSaveable {
         int life = (int) options.get("life");
         int level = (int) options.get("level");
         int highScore = (int) options.get("highscore");
+        ArrayList<Class> foods = (ArrayList) options.get("foods");
+        for (Class c : foods) {
+            this.foodsEaten.add(c);
+        }
         this.setX(x);
         this.setY(y);
         this.setWidth(width);
@@ -269,6 +273,7 @@ public abstract class Player extends CollidableActor implements iSaveable {
         options.put("life", this.lifeCount);
         options.put("level", this.level);
         options.put("highscore", this.highScore);
+        options.put("foods", this.getFoodsEaten());
         options.put("width", this.getWidth());
         options.put("height", this.getHeight());
         options.put("speed", this.getMovementSpeed());
